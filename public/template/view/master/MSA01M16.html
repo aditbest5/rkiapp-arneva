@@ -1,0 +1,390 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        fnInquery();
+        selKoperasi();
+    }
+
+
+    function selKoperasi() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selKoperasi",
+            kop_id: $("#login_kop_id").val()
+        },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_kopId");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["nama_koperasi"];
+                        option.value = myArr[i]["idx"];
+                        x.add(option, x[i]);
+                    }
+                }
+            }).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, 'warning', 'Warning');
+                // Handle error here
+            });
+    }
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            $('#t2_kode_suplier').val("");
+            $('#t2_kode_suplier').removeAttr('readonly');
+            $('#t2_nama_suplier').val("");
+            $('#t2_alamat').val("");
+            $('#t2_nomor_telpon').val("");
+            $('#t2_status').val("");
+            $('#t2_kopId').val("");
+
+            getNUmber();
+        }
+    }
+
+    function getNUmber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selSuplierNomor"
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t2_kode_suplier').val(myArr[0]["noSuplier"]);
+                        $('#t2_kode_suplier').attr('readonly', 'readonly');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+        }
+    }
+
+    function _changeTab(kode_gudang, nama_gudang, alamat, nomor_telpon, status, kopid) {
+        $('#t2_kode_suplier').val(kode_gudang);
+        $('#t2_kode_suplier').attr('readonly', 'readonly');
+        $('#t2_nama_suplier').val(nama_gudang);
+        $('#t2_alamat').val(alamat);
+        $('#t2_nomor_telpon').val(nomor_telpon);
+        $('#t2_status').val(status);
+        $('#t2_kopId').val(kopid);
+        // tab_query
+        $('#tab_entry').click();
+
+    }
+
+    function _deleteRow(kode_suplier) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Delete This Data ?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "delSuplier",
+                    kode_suplier: kode_suplier
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salertFunction(myArr["desc"], 'success', 'Success', "fnInquery", "");
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            }
+        })
+
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selSuplier",
+                kop_id: $("#login_kop_id").val(),
+                kode_suplier: "",
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["idx"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b = b + "<td>" + c + "</td> ";
+                            b = b + " <td>" + myArr[i]["kode_suplier"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_suplier"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["alamat"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nomor_telpon"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["status"] + "</td> ";
+                            b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["kode_suplier"] + "','" + myArr[i]["nama_suplier"] + "','" + myArr[i]["alamat"] + "','" + myArr[i]["nomor_telpon"] + "','" + myArr[i]["status"] + "','" + myArr[i]["kopId"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                            b = b + "          </button>&nbsp;&nbsp;<button onclick=\"_deleteRow('" + myArr[i]["kode_suplier"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" + "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+
+                    }
+                    swalFinishLoading();
+                    var table = $('#fix-header').DataTable();
+                    table.destroy();
+                    document.getElementById("tableResult").innerHTML = b;
+                    isiTable = b;
+                    $('#fix-header').DataTable({
+                        fixedHeader: true
+                    });
+
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            var userIns = $('#login_userId').val();
+            var kode_suplier = $('#t2_kode_suplier').val();
+            var nama_suplier = $('#t2_nama_suplier').val();
+            var alamat = $('#t2_alamat').val();
+            var nomor_telpon = $('#t2_nomor_telpon').val();
+            var status = $('#t2_status').val();
+            var kopId = $('#t2_kopId').val();
+
+            if (kode_suplier != "") {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "InsSuplier",
+                    userIns: userIns,
+                    kopId: kopId,
+                    kode_suplier: kode_suplier,
+                    nama_suplier: nama_suplier,
+                    alamat: alamat,
+                    nomor_telpon: nomor_telpon,
+                    status: status
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salertFunction(myArr["desc"], 'success', 'Success', "clearForm", "");
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            } else {
+                salert("Tolong Tekan Tombol New Dahulu", 'warning', 'Warning');
+            }
+
+        }
+    }
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px ;">
+            <li class="nav-item" style="width: calc(100% / 2.7) !important;">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+                <div class="slide"></div>
+            </li>
+
+            <li class="nav-item" style="width: calc(100% / 2.7) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content ">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+
+                <div class="row mt-2">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>No.</td>
+                                                <td>Kode Suplier</td>
+                                                <td>Nama Suplier</td>
+                                                <td>Alamat Suplier</td>
+                                                <td>No Telpon</td>
+                                                <td>Aktif ?</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row mt-2">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Kode Suplier</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_kode_suplier" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nama Suplier</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_nama_suplier" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Alamat</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_alamat" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nomor Telpon</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_nomor_telpon" alt="maximal 10 char"
+                                    class="form-control " maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Status</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t2_status" class="form-control ">
+                                    <option value="">Chosee..</option>
+                                    <option value="AKTIF">AKTIF</option>
+                                    <option value="NOTAKTIF">TIDAK AKTIF</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Koperasi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t2_kopId" class="form-control ">
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

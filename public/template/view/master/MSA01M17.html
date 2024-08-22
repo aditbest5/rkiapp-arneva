@@ -1,0 +1,560 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        fnInquery();
+        //selDefault();
+    }
+
+
+    function settingDefault() {
+        //selDefault();
+        //selKoperasi();
+        //selToko('');
+    }
+
+    function toMoney() {
+        if ($("#t2_harga_modal").val() == "") {
+        } else {
+            $("#t2_string_harga_modal").text("Rp " + parseInt($("#t2_harga_modal").val()).toLocaleString());
+        }
+    }
+
+    function toMoney2() {
+        if ($("#t2_harga_jual").val() == "") {
+        } else {
+            $("#t2_string_harga_jual").text("Rp " + parseInt($("#t2_harga_jual").val()).toLocaleString());
+        }
+    }
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            $('#t2_tipe').val("");
+            $('#t2_kode_layanan').val("");
+            $('#t2_kode_biller').val("");
+            $('#t2_fello_product_id').val("");
+            $('#t2_product').val("");
+            $('#t2_biller_name').val("");
+            $('#t2_product_name').val("");
+            $('#t2_denum').val("");
+            $('#t2_harga_modal').val("");
+            $('#t2_harga_jual').val("");
+
+            $('#t2_kode_biller').prop("readonly", false);
+            $('#t2_fello_product_id').prop("readonly", false);
+            //$('#t2_product').prop("readonly", false);
+            $('#t2_biller_name').prop("readonly", false);
+            $('#t2_product_name').prop("readonly", false);
+
+            $('#t2_tipe').prop("disabled", false);
+            $('#t2_kode_layanan').prop("disabled", false);
+        }
+    }
+
+    function getNumber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selNomorKodeBarang",
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t2_kode_barang').val(myArr[0]["noBrg"]);
+                        $('#t2_kode_barang').attr('readonly', 'readonly');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+
+        }
+    }
+
+
+    function _changeTab(tipe_name, kode_layanan, kode_biller, product_id, concat_id, denum, harga_modal, harga, biller_name, product_name) {
+        $('#tab_entry').click();
+        $('#tab_entry').text('Edit Data');
+        $('#t2_tipe').val(tipe_name);
+        $('#t2_kode_layanan').val(kode_layanan);
+        $('#t2_kode_biller').val(kode_biller);
+        $('#t2_fello_product_id').val(product_id);
+        $('#t2_product').val(concat_id);
+        $('#t2_biller_name').val(biller_name);
+        $('#t2_product_name').val(product_name);
+        $('#t2_denum').val(denum);
+        $('#t2_harga_modal').val(harga_modal);
+        $('#t2_harga_jual').val(harga);
+
+
+
+        $('#t2_kode_biller').prop("readonly", true);
+        $('#t2_fello_product_id').prop("readonly", true);
+        $('#t2_product').prop("readonly", true);
+        $('#t2_biller_name').prop("readonly", true);
+        $('#t2_product_name').prop("readonly", true);
+
+        $('#t2_tipe').prop("disabled", true);
+        $('#t2_kode_layanan').prop("disabled", true);
+    }
+
+    function _del(param) {
+        $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+            kop_id: $("#login_kop_id").val(),
+            cmd: "delPriceFello",
+            concat_id: param[0]
+        }, function (data, status) {
+            //alert("Data: " + data + "\nStatus: " + status);
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            console.log(myArr.length);
+            if (myArr["sts"] == "OK") {
+                salertFunction(myArr["desc"], 'success', 'Success', "fnInquery", "");
+            } else {
+                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+            }
+        }).fail(function (e) {
+            console.log(e);
+            // Handle error here
+            swalFinishLoading();
+        });
+    }
+
+    function _action(tipe, idx) {
+        var param = [idx];
+        if (tipe == "DELETE") {
+            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+        }
+    }
+
+    function inq() {
+        $('#tab_entry').text('Tambah Data');
+        $('#t2_kode_barang').val("");
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selPriceFello",
+            kop_id: $("#login_kop_id").val(),
+            toko_id: $("#login_toko_id").val()
+        }, function (data, status) {
+            //alert("Data: " + data + "\nStatus: " + status);
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["concat_id"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                    b = b + " <td>" + myArr[i]["tipe_name"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["kode_layanan"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["kode_biller"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["product_id"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["concat_id"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["denum"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["biller_name"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["product_name"] + "</td> ";
+                    b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["tipe"] + "','" + myArr[i]["kode_layanan"] + "','" + myArr[i]["kode_biller"] + "',";
+                    b = b + " '" + myArr[i]["product_id"] + "','" + myArr[i]["concat_id"] + "',";
+                    b = b + " '" + myArr[i]["denum"] + "','" + myArr[i]["harga_modal"] + "','" + myArr[i]["harga"] + "',";
+                    b = b + " '" + myArr[i]["biller_name"] + "','" + myArr[i]["product_name"] + "')\"  ";
+
+                    b = b + "   class='btn btn-warning btn-icon btn_grid' title='EDIT'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                    b = b + "          </button>&nbsp;&nbsp;<button onclick=\"_action('DELETE','" + myArr[i]["concat_id"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+
+                }
+
+            }
+            swalFinishLoading();
+            var table = $('#fix-header').DataTable();
+            table.destroy();
+            document.getElementById("tableResult").innerHTML = b;
+            isiTable = b;
+            $('#fix-header').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            inq();
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+
+            var tipe = $('#t2_tipe').val();
+            var tipe_name = $("#t2_tipe option:selected").text();
+            var kode_layanan = $('#t2_kode_layanan').val();
+            var kode_biller = $('#t2_kode_biller').val();
+            var fello_product_id = $('#t2_fello_product_id').val();
+            var product = $('#t2_product').val();
+            var biller_name = $('#t2_biller_name').val();
+            var product_name = $('#t2_product_name').val();
+            var denum = $('#t2_denum').val();
+            var harga_jual = $('#t2_harga_jual').val();
+            var harga_modal = $('#t2_harga_modal').val();
+
+            if (tipe == "" || kode_layanan == "" || kode_biller == "" || fello_product_id == "") {
+                salert("Harap Lengkapi Data Dahulu !!", 'error', 'Error');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "InsFelloPrice",
+                    userIns: $('#login_userId').val(),
+                    kop_id: $("#login_kop_id").val(),
+                    tipe: tipe,
+                    tipe_name: tipe_name,
+                    kode_layanan: kode_layanan,
+                    kode_biller: kode_biller,
+                    fello_product_id: fello_product_id,
+                    product: product,
+                    biller_name: biller_name,
+                    product_name: product_name,
+                    denum: denum,
+                    harga: harga_jual,
+                    harga_modal: harga_modal,
+                }, function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    console.log(myArr.length);
+                    if (myArr["sts"] == "OK") {
+                        salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "clearForm", "");
+                    } else {
+                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+            }
+
+        }
+    }
+
+
+    function getConcatId() {
+        var product = $('#t2_tipe').val() + $('#t2_kode_layanan').val() + $('#t2_kode_biller').val() + $('#t2_fello_product_id').val();
+        //alert(product);
+        $('#t2_product').val(product);
+    }
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+            settingDefault();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+
+        //alert("tab");
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+
+            <li class="nav-item  " style="width: calc(100% / 3.1) !important;" onclick="inq()">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+            </li>
+
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!-- Parameter Section 1 -->
+                        <div class="form-group row frm_grp">
+                            <div class="col-sm-8">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left txt_hris"></label>
+                            <div class="col-sm-8">
+                                <!-- <input type="date" id="tgl2" anem="expire" class="form-control txt_hris"
+                                        > -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                        <li><i class="feather icon-minimize full-card" onclick="gridAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-maximize full-card" onclick="openAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-download full-card" onclick="exportExcel();"></i>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>Tipe</td>
+                                                <td>Kode Layanan</td>
+                                                <td>Kode Biller</td>
+                                                <td>Fello Product Id</td>
+                                                <td>Product Id</td>
+                                                <td>Denum</td>
+                                                <td>Harga</td>
+                                                <td>Biller Name</td>
+                                                <td>Product Name</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Tipe Layanan</label>
+                            <div class="col-sm-8">
+
+                                <select class="form-control" id="t2_tipe"
+                                    style="width:100%;padding: 2px;font-weight: bold;" onchange="getConcatId()"
+                                    id="t2_tipe">
+                                    <option value="">Pilih..</option>
+                                    <option value="06">Telekomunikasi</option>
+                                    <option value="07">PDAM</option>
+                                    <option value="08">Transportation</option>
+                                    <option value="09">Voucher Game</option>
+                                    <option value="10">Remittance</option>
+                                    <option value="11">Multifinance</option>
+                                    <option value="12">Pajak</option>
+                                    <option value="13">BPJS</option>
+                                    <option value="14">Donasi</option>
+                                    <option value="16">Intek</option>
+                                    <option value="17">PDAM Spek 1</option>
+                                    <option value="27">PDAM Spek 2</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Kode Layanan</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" style="width:100%;padding: 2px;font-weight: bold;"
+                                    onchange="getConcatId()" id="t2_kode_layanan">
+                                    <option value="">Pilih..</option>
+                                    <option value="3">Prepaid</option>
+                                    <option value="4">Postpaid</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="10">Kode Biller</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="t2_kode_biller" class="form-control " onkeyup="getConcatId()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="10">Fello Product
+                                Id</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="t2_fello_product_id" class="form-control " onkeyup="getConcatId()" >
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="25">ProductId </label>
+                            <div class="col-sm-8">
+                                <input type="text" id="t2_product" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="50">Biller Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="t2_biller_name" min="0" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="50">Product
+                                Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="t2_product_name" min="0" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left " maxlength="50">Denum
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="number" id="t2_denum" min="0" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Harga Modal</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="t2_harga_modal" data-bind="value:t2_harga_modal"
+                                    onkeyup="toMoney()" class="form-control ">
+                                <span id="t2_string_harga_modal" style="font-size:25px;font-weight:bold;">Rp
+                                    0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Harga Jual</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="t2_harga_jual" data-bind="value:t2_harga_jual"
+                                    onkeyup="toMoney2()" class="form-control ">
+                                <span id="t2_string_harga_jual" style="font-size:25px;font-weight:bold;">Rp
+                                    0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

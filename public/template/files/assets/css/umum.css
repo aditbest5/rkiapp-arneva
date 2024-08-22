@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'Avenir LT Std 95 Black';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Avenir LT Std 95 Black'), url('AvenirLTStd-Black.woff') format('woff');
+}
+
+.mybox {
+    border: 2px solid white;
+    background-color: white;
+    box-shadow: 5px 3px 8px #888888;
+}
+
+.judul {
+    font-size: 35px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-align: center;
+    font-family: 'Avenir LT Std 95 Black';
+    font-weight: bold;
+}
+
+.judul2 {
+    font-size: 20px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    font-family: 'Avenir LT Std 95 Black';
+    font-weight: bold;
+}
+
+.boxs {
+    margin: 3px 3px 3px 3px;
+}
+
+.box-judul {
+    font-family: 'Avenir LT Std 95 Black';
+    background-color: white;
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid white;
+    background-color: white;
+    box-shadow: 5px 3px 8px #888888;
+}
+
+.box-content {
+    background-color: white;
+    font-size: 85px;
+    font-family: 'Avenir LT Std 95 Black';
+    font-weight: bold;
+    text-align: center;
+}
+
+.box-content2 {
+    background-color: white;
+    font-size: 15px;
+    font-family: 'Avenir LT Std 95 Black';
+    font-weight: bold;
+}
+.box_kosong{font-size:5px;margin:auto;border:1px solid grey;}
+.box_isi{font-size:40px;margin:auto;border:1px solid grey;}
+.box_border_white{border:1px solid #fff}
+.box_border_black{border:1px solid rgb(199, 198, 198)}

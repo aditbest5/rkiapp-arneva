@@ -1,0 +1,533 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning'); 
+        //selFacCd();
+        chart();
+    }
+
+
+
+
+
+    function getDetail(masterCode) {
+        //alert("tab 2");
+        swalStartLoading();
+        $.post("master", {
+            cmd: "selCodeDetail",
+            kop_id: $("#login_kop_id").val(),
+            masterCode: masterCode
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName2"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailDesc"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailIdx"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                        if (myArr[i]["deleteYn"] == "Y") {
+                            b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                        } else {
+                            b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                        }
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+
+                }
+
+                swalFinishLoading();
+                var table = $('#fix-header2').DataTable();
+                table.destroy();
+
+                $('#tableResult2').html(b);
+                isiTable = b;
+                $('#fix-header2').DataTable({
+                    fixedHeader: true
+                });
+
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+    }
+
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            $('#t2_useYn').removeAttr('readonly');
+            $('#t2_namaKoperasi').removeAttr('readonly');
+            $('#t2_kopId').removeAttr('readonly');
+            $('#t2_detailIdx').removeAttr('readonly');
+            $('#t2_detailDesc').removeAttr('readonly');
+            $('#t2_detailName2').removeAttr('readonly');
+            $('#t2_detailName').removeAttr('readonly');
+            $('#t2_detailCode').removeAttr('readonly');
+            $('#t2_detailCode').attr('readonly', 'readonly');
+            $('#t2_detailIdx').attr('readonly', 'readonly');
+
+            //clear
+            $('#t2_detailIdx').val("");
+            $('#t2_detailDesc').val("");
+            $('#t2_detailName2').val("");
+            $('#t2_detailName').val("");
+            $('#t2_detailCode').val("");
+
+            //getNUmber();
+        }
+    }
+
+    function getNUmber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            $.post("master", {
+                cmd: "selCodeDetailNomor",
+                kop_id: $("#login_kop_id").val(),
+                masterCode: $("#t2_masterCode").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t2_detailCode').val(myArr[0]["noCodeDetail"]);
+                        $('#t2_detailCode').attr('readonly', 'readonly');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'error', 'Error');
+                });
+        }
+    }
+
+    function _changeTab(eidtYn, masterCode, masterName, masterName2, groupDesc) {
+        if (eidtYn == "N") {
+            salert("Tidak Bisa Tambah Data", 'error', 'Error');
+
+        } else {
+            $('#t2_masterCode').val(masterCode);
+            $('#t2_masterCode').attr('readonly', 'readonly');
+            $('#t2_masterName').val(masterName);
+            $('#t2_masterName').attr('readonly', 'readonly');
+            $('#t2_masterName2').val(masterName2);
+            $('#t2_masterName2').attr('readonly', 'readonly');
+            $('#t2_groupDesc').val(groupDesc);
+            $('#t2_groupDesc').attr('readonly', 'readonly');
+
+            $('#t2_useYn').attr('readonly', 'readonly');
+            $('#t2_namaKoperasi').attr('readonly', 'readonly');
+            $('#t2_kopId').attr('readonly', 'readonly');
+            $('#t2_detailIdx').attr('readonly', 'readonly');
+            $('#t2_detailDesc').attr('readonly', 'readonly');
+            $('#t2_detailName2').attr('readonly', 'readonly');
+            $('#t2_detailName').attr('readonly', 'readonly');
+            $('#t2_detailCode').attr('readonly', 'readonly');
+
+
+
+            // tab_query
+            $('#tab_entry').click();
+            getDetail(masterCode);
+        }
+
+
+    }
+
+
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            //alert("tab 2");
+            swalStartLoading();
+            $.post("tr", {
+                cmd: "selDataBarangInventory",
+                kop_id: $("#login_kop_id").val(),
+                barcode: "",
+                year: $("#year").val(),
+                month: $("#month").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + c + "</td> ";
+                            b = b + " <td>" + myArr[i]["idx"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["stock"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["inQty"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["outQty"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["endQty"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+
+                    }
+                    swalFinishLoading();
+                    var table = $('#fix-header').DataTable();
+                    table.destroy();
+                    document.getElementById("tableResult").innerHTML = b;
+                    isiTable = b;
+                    $('#fix-header').DataTable({
+                        fixedHeader: true
+                    });
+
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            var userIns = $('#login_userId').val();
+            var kop_id = "";
+            if (userIns == "ADMIN") {
+                kop_id = $("#t2_kopId").val();
+            } else {
+                kop_id = $("#login_kop_id").val();
+            }
+
+            var masterCode = $('#t2_masterCode').val();
+            var useYn = $('#t2_useYn').val();
+            var detailDesc = $('#t2_detailDesc').val();
+            var detailName2 = $('#t2_detailName2').val();
+            var detailName = $('#t2_detailName').val();
+            var detailCode = $('#t2_detailCode').val();
+
+
+            if (masterCode == "") {
+                salert("Tolong Pilih Code Master Dahulu", 'error', 'Error');
+            } else {
+
+
+                swalStartLoading();
+                $.post("master", {
+                    cmd: "InsCodeDetail",
+                    userIns: userIns,
+                    kop_id: kop_id,
+                    masterCode: masterCode,
+                    useYn: useYn,
+                    detailCode: detailCode,
+                    detailName: detailName,
+                    detailName2: detailName2,
+                    detailDesc: detailDesc
+
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salert("Save Complete !", 'success', 'Success');
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                        swalFinishLoading();
+                        clearForm();
+                        getDetail(masterCode);
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            }
+
+        }
+    }
+
+
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+
+        //alert("tab");
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist"  style="display: flex !important;" >
+
+            <li class="nav-item" style="width: calc(100% / 2.1) !important;" >
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; Search Data </a>
+                <div class="slide"></div>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-12 ">
+                        <div class="card bg-simple-c-yellow update-card">
+                            <div class="card-block">
+                                <div class="row align-items-end">
+                                    <div class="col-8">
+                                        <h4 class="text-white">1 item</h4>
+                                        <h6 class="text-white m-b-0">Minimum Stock </h6>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <div class="chartjs-size-monitor">
+                                            <div class="chartjs-size-monitor-expand">
+                                                <div class=""></div>
+                                            </div>
+                                            <div class="chartjs-size-monitor-shrink">
+                                                <div class=""></div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-auto text-right">
+                                            <i class="feather icon-calendar f-50 text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="text-white m-b-0"><i
+                                        class="feather icon-clock text-white f-14 m-r-10"></i>update
+                                    : 2:15 am</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card bg-success update-card">
+                            <div class="card-block">
+                                <div class="row align-items-end">
+                                    <div class="col-8">
+                                        <h4 class="text-white">20 Item</h4>
+                                        <h6 class="text-white m-b-0">Paling Laris</h6>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <div class="chartjs-size-monitor">
+                                            <div class="chartjs-size-monitor-expand">
+                                                <div class=""></div>
+                                            </div>
+                                            <div class="chartjs-size-monitor-shrink">
+                                                <div class=""></div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-auto text-right">
+                                            <i class="feather icon-calendar f-50 text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="text-white m-b-0"><i
+                                        class="feather icon-clock text-white f-14 m-r-10"></i>update
+                                    : 2:15 am</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card bg-danger update-card">
+                            <div class="card-block">
+                                <div class="row align-items-end">
+                                    <div class="col-8">
+                                        <h4 class="text-white">6 Item</h4>
+                                        <h6 class="text-white m-b-0">Fast Move</h6>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <div class="chartjs-size-monitor">
+                                            <div class="chartjs-size-monitor-expand">
+                                                <div class=""></div>
+                                            </div>
+                                            <div class="chartjs-size-monitor-shrink">
+                                                <div class=""></div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-auto text-right">
+                                            <i class="feather icon-server f-50 text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="text-white m-b-0"><i
+                                        class="feather icon-clock text-white f-14 m-r-10"></i>update
+                                    : 2:15 am</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="card bg-simple-c-blue update-card">
+                            <div class="card-block">
+                                <div class="row align-items-end">
+                                    <div class="col-8">
+                                        <h4 class="text-white">5 Item</h4>
+                                        <h6 class="text-white m-b-0">Slow Move</h6>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <div class="chartjs-size-monitor">
+                                            <div class="chartjs-size-monitor-expand">
+                                                <div class=""></div>
+                                            </div>
+                                            <div class="chartjs-size-monitor-shrink">
+                                                <div class=""></div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-auto text-right">
+                                            <i class="feather icon-pie-chart f-50 text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <p class="text-white m-b-0"><i
+                                        class="feather icon-clock text-white f-14 m-r-10"></i>update
+                                    : 2:15 am</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <canvas id="bar-chart" style="display: block; width:100%; height: 450px;" ></canvas>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function chart() {
+        // Bar chart
+        new Chart(document.getElementById("bar-chart"), {
+            type: 'bar',
+            data: {
+                labels: ["20221101", "20221102", "20221103", "20221104", "20221105"],
+                datasets: [
+                    {
+                        label: "Transaki Pos Perhari (Rp)",
+                        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+                        data: [500000, 700000, 1000000, 900000, 600000,10000]
+                    }
+                ]
+            },
+            options: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Transaksi Pos Bulan Ini'
+                }
+            }
+        });
+
+    }
+</script>

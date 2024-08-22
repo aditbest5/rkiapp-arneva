@@ -1,0 +1,1106 @@
+<script>
+    var isiTable;
+    var struk;
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        var d = new Date();
+        var curr_date = d.getDate();
+        var strDate = "" + curr_date;
+        if (strDate.length == 1) {
+            strDate = "0" + strDate;
+        }
+        var curr_month = d.getMonth() + 1;
+        var strMonth = "" + curr_month;
+        if (strMonth.length == 1) {
+            strMonth = "0" + strMonth;
+        }
+        var curr_year = d.getFullYear();
+        $('#t1_tgl_awal').val(curr_year + "-" + strMonth + "-" + strDate);
+        $('#t1_tgl_akhir').val(curr_year + "-" + strMonth + "-" + strDate);
+    }
+
+
+    function printStruckPPOBMulti(idx, bit48) {
+        //alert(idx);
+        if (idx == "06") {
+            struk = " <body onload='window.print()'> ";
+            struk = struk + " <div class='ticket' > Contoh Pulsa ";
+            struk = struk + "     <table border='1' width='100%'> ";
+            struk = struk + "     <tr><td colspan='2'>Waktu Lunas : " + bit48.substring(94, 108) + "</td></tr> ";
+            struk = struk + "     <tr><td colspan='2'>Voucher Nominal : " + bit48.substring(18, 30) + "</td></tr> ";
+            struk = struk + "     <tr><td colspan='2'>Nomor Telpon : " + bit48.substring(4, 8) + bit48.substring(8, 18) + "</td></tr> ";
+            struk = struk + "     <tr><td colspan='2'>JPA REF : " + bit48.substring(62, 94) + "</td></tr> ";
+            struk = struk + "     <tr><td colspan='2'>Serial Number : " + bit48.substring(46, 62) + "</td></tr> ";
+            struk = struk + "     <tr><td colspan='2' style='text-align:center' >BUKTI PEMBAYARAN PEMBELIAN PULSA</td></tr> ";
+            struk = struk + "     <tr><td>1</td><td  >	&nbsp;</td></tr> ";
+            struk = struk + "     </td></tr> ";
+            struk = struk + "     <tr><td>3</td><td  style='text-align:center' >TERIMA KASIH</td></tr> ";
+            struk = struk + "     </table> ";
+            struk = struk + " </div> ";
+            struk = struk + "</body>  ";
+        } else if (idx == "07") {
+            struk = " <body onload='window.print()'> "; //PDAM ada 3 Struk
+            struk = struk + " <div class='ticket' > Contoh PDAM ";
+            struk = struk + "     <table border='1' width='100%'> ";
+            struk = struk + "     <tr><td colspan='2' style='text-align:center' >BUKTI PEMBAYARAN TAGIHAN PDAM</td></tr> ";
+            struk = struk + "     <tr><td colspan='2'>&nbsp;</td></tr> ";
+            struk = struk + "     <tr><td>1</td><td>NO REK : " + bit48.substring(0, 14) + " </td></tr> ";
+            struk = struk + "     <tr><td>1</td><td>RP TAG : " + bit48.substring(108, 120) + "</td></tr> ";
+            struk = struk + "     <tr><td>2</td><td>BLN/TH : " + bit48.substring(15, 27) + " </td></tr> ";
+            struk = struk + "     <tr><td>3</td><td>NAMA : " + bit48.substring(27, 57) + "</td></tr> ";
+            struk = struk + "     <tr><td>7</td><td>TANGGAL LUNAS : " + bit48.substring(300, 314) + "</td></tr> ";
+            struk = struk + "     <tr><td>9</td><td>JPA REF : " + bit48.substring(76, 108) + "</td></tr> ";
+            struk = struk + "     <tr><td>1</td><td>&nbsp;</td></tr> ";
+            struk = struk + "     <tr><td>2</td><td style='text-align:center' > PDAM menyatakan struk ini sebagai bukti pembayaran yang sah, mohon disimpan.</td> ";
+            struk = struk + "     <tr><td>8</td><td>BIAYA ADMIN : " + bit48.substring(120, 128) + "</td></tr> ";
+            struk = struk + "     <tr><td>9</td><td>TOTAL BAYAR : " + bit48.substring(76, 108) + "</td></tr> ";
+            struk = struk + "     </td></tr> ";
+            struk = struk + "     <tr><td>3</td><td style='text-align:center' >TERIMA KASIH</td></tr> ";
+            struk = struk + "     </table> ";
+            struk = struk + " </div> ";
+            struk = struk + "</body>  ";
+        }
+        var newWin = window.frames["printf"];
+        newWin.document.body.innerHTML = '';
+        newWin.document.write(struk);
+        newWin.focus();
+        newWin.print();
+    }
+
+
+    function felloLibraryMesage(bit, bitval, bitremark, cmd) {
+        var a = "";
+        //transaksi payment dan inquery
+        if (cmd == "felloPlnPostPaidReversal") {
+            if (bitval == "00") {
+                a = " Transaksi Reversal Berhasil_TRANSAKSI SUKSES_Sukses";
+            } else if (bitval == "06") {
+                a = "Unknown Error, bisa berupa error tekhnis atau error lainnya _ TRANSAKSI GAGAL _ Suspect";
+            } else if (bitval == "14") {
+                a = "NOMOR REGISTRASI YANG ANDA MASUKKAN SALAH, MOHON TELITI KEMBALI. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "15") {
+                a = "NOMOR REGISTRASI YANG ANDA MASUKKAN SALAH, MOHON TELITI KEMBALI. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "16") {
+                a = "KONSUMEN ….. DIBLOKIR HUBUNGI PLN _ TAGIHAN GAGAL _ Gagal";
+            } else if (bitval == "22") {
+                a = "Unpaid Transaction, dipergunakan untuk meresponse pesan payment reversal, jika data pembayaran yang ingin dibatalkan masih belum terbayarkan. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "34") {
+                a = "TAGIHAN SUDAH TERBAYAR. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "48") {
+                a = "NOMOR REGISTRASI KADALUWARSA, MOHON HUBUNGI PLN	NOMOR REGISTRASI KADALUWARSA, MOHON HUBUNGI PLN _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "61") {
+                a = "Deposit tidak mencukupi untuk melakukan transaksi	SALDO ANDA TIDAK MENCUKUPI _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "63") {
+                a = "KONSUMEN ….. DIBLOKIR HUBUNGI PLN	PELANGGAN ….. DIBLOKIR HUBUNGI PLN  _ TRANSAKSI GAGAL _ Suspect";
+            } else if (bitval == "77") {
+                a = "NOMOR REGISTRASI YANG ANDA MASUKKAN SALAH, MOHON TELITI KEMBALI.	NOMOR REGISTRASI YANG ANDA MASUKKAN SALAH, MOHON TELITI KEMBALI. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "94") {
+                a = "Reversal telah dilakukan _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "96") {
+                a = "Reversal gagal,tidak ada pembayaran untuk no.registrasi ini _ TAGIHAN GAGAL _ Gagal";
+            } else if (bitval == "97") {
+                a = "Waktu reversal telah melampui batas waktu yang ditentukan _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "98") {
+                a = "Invalid Reference Number, Nomor Referensi tidak sama, dipergunakan saat meresponse proses payment _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "99") {
+                a = "Invalid Amount Bill, Rupiah tagihan tidak sama. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "89") {
+                a = "Payment melebihi batas waktu yang ditentukan _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "58") {
+                a = "Transaksi Payment tidak diperbolehkan _ TAGIHAN GAGAL _ Gagal";
+            } else if (bitval == "88") {
+                a = "Kode produk belum terdaftar di gateway, silahkan hubungi tim Jatelindo _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "31") {
+                a = "Kode bank belum terdaftar, silahkan hubungin tim Jatelindo _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "73") {
+                a = "Kode produk belum terdaftar di TID,  silahkan hubungi tim Jatelindo _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "13") {
+                a = "Application Server is Down _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "17") {
+                a = "Unknown MTI _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "18") {
+                a = "Application Server Response timeout _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "06") {
+                a = "Other Error / Exception _ TRANSAKSI GAGAL _ Gagal";
+            }
+
+        } else if (cmd == "felloMultiBillerReversal") {
+            if (bitval == "00") {
+                a = " Transaksi  Berhasil_TRANSAKSI SUKSES_Sukses";
+            } else if (bitval == "03") {
+                a = "Invalid Merchant Type _ TRANSAKSI GAGAL _ GAGAL";
+            } else if (bitval == "06") {
+                a = "Unknown error _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "07") {
+                a = "Transaksi gagal, Silahkan ulangi lagi _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "09") {
+                a = "Request in progress _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "12") {
+                a = "Invalid transaction _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "13") {
+                a = "Application Server is down _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "14") {
+                a = "Unidentified/invalid Phone/ID number _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "18") {
+                a = "Request timeout _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "21") {
+                a = "Unknown MTI / Jenis pesan tidak disupport oleh biller. _ TRANSAKSI GAGAL _ GAGAL";
+            } else if (bitval == "22") {
+                a = "Unpaid transaction, jika pesan reversal dikirimkan tanpa pelunasan sebelumnya. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "23") {
+                a = "Seat already taken / not available. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "24") {
+                a = "Cant cancel payment, ticket has been printed or ticket can’t be reversed. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "25") {
+                a = "Cant update pax, ticket has been paid _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "26") {
+                a = "Data penumpang / pembeli tidak lengkap / invalid _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "27") {
+                a = "Jadwal tidak tersedia. _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "30") {
+                a = "ISO packet composition failure _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "31") {
+                a = "ID bank belum terdaftar _ TRANSAKSI GAGAL _ GAGAL";
+            } else if (bitval == "32") {
+                a = "ID Switcher belum terdaftar _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "33") {
+                a = "Kode biller / produk belum terdaftar _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "34") {
+                a = "Transaksi sudah lunas _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "35") {
+                a = "Sudah Terdaftar _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "43") {
+                a = "blocked / expired phone number _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "44") {
+                a = "Voucher out of stock _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "55") {
+                a = "Kesalahan Security pada Biller _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "58") {
+                a = "Transaction not permitted to terminal _ TRANSAKSI GAGAL _ GAGAL";
+            } else if (bitval == "61") {
+                a = "Deposit tidak mencukupi / invalid _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "73") {
+                a = "Unable to route transaction _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "90") {
+                a = "Cut - off is in process _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "88") {
+                a = "Too close to previous transactions _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "96") {
+                a = "System malfunction _ TRANSAKSI GAGAL _ Gagal";
+            } else if (bitval == "98") {
+                a = "Invalid reference number _ TRANSAKSI GAGAL _ Gagal";
+            }
+        }
+
+        var res = a.split("_")
+        if (bitval == "00") {
+            salert(res[1], "success", "Success");
+            //$("#modalPpobFelloJumlahUang").prop('readonly', false);
+        } else {
+            salert(res[0], "warning", res[1]);
+        }
+    }
+
+
+
+
+    function showModal(Descripsi, Biller, Transaksi, Tanggal, Amount, Dibayar, Kembalian, Bayar, Biller_Provider, Biller_Status, sts, productCode) {
+        $("#Descripsi").text(Descripsi);
+        $("#Biller").text(Biller);
+        $("#Transaksi").text(Transaksi);
+        $("#Tanggal").text(Tanggal);
+        $("#Amount").text(Amount);
+        $("#Dibayar").text(Dibayar);
+        $("#Kembalian").text(Kembalian);
+        $("#Bayar").text(Bayar);
+        $("#Biller_Provider").text(Biller_Provider);
+        $("#Biller_Status").text(Biller_Status);
+        $("#Status").text(sts);
+
+        if (Biller == "PLN_PREPAID") {
+            $("#plnPrepaidUnsold").show();
+        } else {
+            $("#plnPrepaidUnsold").hide();
+        }
+        //alert(productCode);
+        if (productCode.substring(0, 2) == "06" || productCode == "PLN_PREPAID") {
+            $("#advice").show();
+            $("#reversal").hide();
+        } else if (productCode.substring(0, 2) == "07" || productCode == "PLN_NONTAGLIST" || productCode == "PLN_POSTPAID") {
+            $("#advice").hide();
+            $("#reversal").show();
+        } else if (productCode.substring(0, 2) == "17" || productCode.substring(0, 2) == "27") {
+            $("#advice").show();
+            $("#reversal").hide();
+        }/* else {
+            $("#advice").hide();
+            $("#reversal").show();
+        }*/
+        if (Biller_Status == "SUCCESS") {
+            $("#advice").hide();
+            $("#reversal").hide();
+        }
+        $("#modalPpobDetail").modal("show");
+    }
+
+    function Advice() {
+        var idx = $("#Descripsi").text();
+        var Biller = $("#Biller").text();
+        hideModal();
+        if (Biller == "PLN_PREPAID") {
+
+            $.ajax({
+                url: 'api/fello',
+                type: 'POST',
+                data: {
+                    "cmd": "felloPlnReversal",
+                    "kop_id": $("#login_kop_id").val(),
+                    "ppob_id": idx
+                }, dataType: 'json',
+                success: function (data) {
+                    //console.log(data);
+                    if (data.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        //Transaksi Advice
+                        $.ajax({
+                            url: 'api/fello',
+                            type: 'POST',
+                            data: {
+                                "cmd": "felloPlnReversalExecute",
+                                "kop_id": $("#login_kop_id").val(),
+                                "ppob_id": idx,
+                                "act": "felloPlnPostPaidPayment",
+                                mti_MessageTypeIdentification: "0220",
+                                bit2_PrimaryAccountNumber: data.bit2,
+                                bit3_ProcessingCode: "172000",
+                                bit4_TransactionAmount: data.bit4,
+                                bit7_TransmissionDateTime: data.bit7,
+                                bit11_STAN: data.bit11,
+                                bit12_LocalTransactionTime: data.bit12,
+                                bit13_LocalTransactionDate: data.bit13,
+                                bit15_SettlementDate: data.bit15,
+                                bit18_MerchantType: data.bit18,
+                                bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                bit37_RetrievalReferenceNumber: data.bit37,
+                                //bit39_ResponseCode:,
+                                bit41_TerminalID: data.bit41,
+                                bit42_AcceptorIdentification: data.bit42,
+                                bit48_AdditionalDataPrivate: data.bit48 + $("#UnSoldToken").val(),//pembelian baru
+                                bit49_TransactionCurrencyCode: data.bit49,
+                                bit61_DataTambahanBiller: "",
+                                bit62_Data62: "",
+                                bit63_DataLoket: "",
+                                bit90_OriginalDataElement: "0200" + data.bit11 + data.bit7 + "0000000000800000000000"
+                            }, dataType: 'json',
+                            success: function (data) {
+                                //console.log(data);
+                                //console.log (data[39])
+                                if (data.length == 0) {
+                                    salert("Tidak Ada Data", 'warning', 'Warning');
+                                } else {
+                                    console.log(data);
+                                    if (data["bit39"] != "00") {
+                                        salert("Ada kendala Dalam Transaksi Dengan Note: " + data["bit39"], 'error', 'Error');
+
+                                        //Repeat Advice Sama Dengan Advice
+                                        if (data["bit39"] == "18") {
+                                            $.ajax({
+                                                url: 'api/fello',
+                                                type: 'POST',
+                                                data: {
+                                                    "cmd": "felloMultiBillerReversalExecute",
+                                                    "kop_id": $("#login_kop_id").val(),
+                                                    "ppob_id": idx,
+                                                    mti_MessageTypeIdentification: "0221",
+                                                    bit2_PrimaryAccountNumber: data.bit2,
+                                                    bit3_ProcessingCode: "173000",
+                                                    bit4_TransactionAmount: data.bit4,
+                                                    bit7_TransmissionDateTime: data.bit7,
+                                                    bit11_STAN: data.bit11,
+                                                    bit12_LocalTransactionTime: data.bit12,
+                                                    bit13_LocalTransactionDate: data.bit13,
+                                                    bit15_SettlementDate: data.bit15,
+                                                    bit18_MerchantType: data.bit18,
+                                                    bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                                    bit37_RetrievalReferenceNumber: data.bit37,
+                                                    //bit39_ResponseCode:,
+                                                    bit41_TerminalID: data.bit41,
+                                                    bit42_AcceptorIdentification: data.bit42,
+                                                    bit48_AdditionalDataPrivate: data.bit48 + $("#UnSoldToken").val(),//pembelian baru,
+                                                    bit49_TransactionCurrencyCode: data.bit49,
+                                                    bit61_PrivateUse: "",
+                                                    bit62_PrivateUse: "",
+                                                    bit63_DataLoket: ""
+                                                }, dataType: 'json',
+                                                success: function (data) {
+                                                    //console.log (data["bit39"])
+                                                    if (data.length == 0) {
+                                                        salert("Tidak Ada Data", 'warning', 'Warning');
+                                                    } else {
+                                                        console.log(data);
+                                                        if (data["bit39"] != "00") {
+                                                            //salert("Ada kendala Dalam Transaksi Dengan Note: " + data[39], 'error', 'Error');
+                                                            felloLibraryMesage("bit39", data["bit39"], "", "felloPlnPostPaidReversal");
+                                                        } else {
+                                                            salertFunction("Transaksi  Repeat Advice Berhasil ", "success", "Success", 'fnInquery', '');
+                                                            //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                    } else {
+                                        salertFunction("Transaksi  Advice Berhasil ", "success", "Success", 'fnInquery', '');
+                                        //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: 'api/fello',
+                type: 'POST',
+                data: {
+                    "cmd": "felloMultiBillerReversal",
+                    "kop_id": $("#login_kop_id").val(),
+                    "ppob_id": idx,
+                }, dataType: 'json',
+                success: function (data) {
+                    //console.log(data);
+                    if (data.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        //Transaksi Advice
+                        $.ajax({
+                            url: 'api/fello',
+                            type: 'POST',
+                            data: {
+                                "cmd": "felloMultiBillerReversalExecute",
+                                "kop_id": $("#login_kop_id").val(),
+                                "ppob_id": idx,
+                                mti_MessageTypeIdentification: "0220",
+                                bit2_PrimaryAccountNumber: data.bit2,
+                                bit3_ProcessingCode: "172000",
+                                bit4_TransactionAmount: data.bit4,
+                                bit7_TransmissionDateTime: data.bit7,
+                                bit11_STAN: data.bit11,
+                                bit12_LocalTransactionTime: data.bit12,
+                                bit13_LocalTransactionDate: data.bit13,
+                                bit15_SettlementDate: data.bit15,
+                                bit18_MerchantType: data.bit18,
+                                bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                bit37_RetrievalReferenceNumber: data.bit37,
+                                //bit39_ResponseCode:,
+                                bit41_TerminalID: data.bit41,
+                                bit42_AcceptorIdentification: data.bit42,
+                                bit48_AdditionalDataPrivate: data.bit48,
+                                bit49_TransactionCurrencyCode: data.bit49,
+                                bit61_PrivateUse: "",
+                                bit62_PrivateUse: "",
+                                bit63_DataLoket: ""
+                            }, dataType: 'json',
+                            success: function (data) {
+                                //console.log(data);
+                                //console.log (data[39])
+                                if (data.length == 0) {
+                                    salert("Tidak Ada Data", 'warning', 'Warning');
+                                } else {
+                                    console.log(data);
+                                    if (data[39] != "00") {
+                                        //salert("Ada kendala Dalam Transaksi Dengan Note: " + data[39], 'error', 'Error');
+                                        felloLibraryMesage("bit39", data[39], "", "felloMultiBillerReversal");
+
+                                        //Repeat Advice Sama Dengan Advice
+                                        if (data[39] == "18") {
+                                            $.ajax({
+                                                url: 'api/fello',
+                                                type: 'POST',
+                                                data: {
+                                                    "cmd": "felloMultiBillerReversalExecute",
+                                                    "kop_id": $("#login_kop_id").val(),
+                                                    "ppob_id": idx,
+                                                    mti_MessageTypeIdentification: "0220",
+                                                    bit2_PrimaryAccountNumber: data.bit2,
+                                                    bit3_ProcessingCode: "172000",
+                                                    bit4_TransactionAmount: data.bit4,
+                                                    bit7_TransmissionDateTime: data.bit7,
+                                                    bit11_STAN: data.bit11,
+                                                    bit12_LocalTransactionTime: data.bit12,
+                                                    bit13_LocalTransactionDate: data.bit13,
+                                                    bit15_SettlementDate: data.bit15,
+                                                    bit18_MerchantType: data.bit18,
+                                                    bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                                    bit37_RetrievalReferenceNumber: data.bit37,
+                                                    //bit39_ResponseCode:,
+                                                    bit41_TerminalID: data.bit41,
+                                                    bit42_AcceptorIdentification: data.bit42,
+                                                    bit48_AdditionalDataPrivate: data.bit48,
+                                                    bit49_TransactionCurrencyCode: data.bit49,
+                                                    bit61_PrivateUse: "",
+                                                    bit62_PrivateUse: "",
+                                                    bit63_DataLoket: ""
+                                                }, dataType: 'json',
+                                                success: function (data) {
+                                                    //console.log(data);
+                                                    //console.log (data[39])
+                                                    if (data.length == 0) {
+                                                        salert("Tidak Ada Data", 'warning', 'Warning');
+                                                    } else {
+                                                        console.log(data);
+                                                        if (data[39] != "00") {
+                                                            //salert("Ada kendala Dalam Transaksi Dengan Note: " + data[39], 'error', 'Error');
+                                                            felloLibraryMesage("bit39", data[39], "", "felloMultiBillerReversal");
+                                                        } else {
+                                                            salertFunction("Transaksi  Repeat Advice Berhasil ", "success", "Success", 'fnInquery', '');
+                                                            //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                    } else {
+                                        salertFunction("Transaksi  Advice Berhasil ", "success", "Success", 'fnInquery', '');
+                                        //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+
+    function Reversal() {
+        var idx = $("#Descripsi").text();
+        var Biller = $("#Biller").text();
+        hideModal();
+
+        if (Biller == "PLN_NONTAGLIST" || Biller == "PLN_POSTPAID") {
+
+            $.ajax({
+                url: 'api/fello',
+                type: 'POST',
+                data: {
+                    "cmd": "felloPlnReversal",
+                    "kop_id": $("#login_kop_id").val(),
+                    "ppob_id": idx
+                }, dataType: 'json',
+                success: function (data) {
+                    //console.log(data);
+                    if (data.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        //Transaksi Reversal
+                        $.ajax({
+                            url: 'api/fello',
+                            type: 'POST',
+                            data: {
+                                "cmd": "felloPlnReversalExecute",
+                                "kop_id": $("#login_kop_id").val(),
+                                "ppob_id": idx,
+                                "act": "felloPlnPostPaidPayment",
+                                mti_MessageTypeIdentification: "0400",
+                                bit2_PrimaryAccountNumber: data.bit2,
+                                bit3_ProcessingCode: "000200",
+                                bit4_TransactionAmount: data.bit4,
+                                bit7_TransmissionDateTime: data.bit7,
+                                bit11_STAN: data.bit11,
+                                bit12_LocalTransactionTime: data.bit12,
+                                bit13_LocalTransactionDate: data.bit13,
+                                bit15_SettlementDate: data.bit15,
+                                bit18_MerchantType: data.bit18,
+                                bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                bit37_RetrievalReferenceNumber: data.bit37,
+                                //bit39_ResponseCode:,
+                                bit41_TerminalID: data.bit41,
+                                bit42_AcceptorIdentification: data.bit42,
+                                bit48_AdditionalDataPrivate: data.bit48,
+                                bit49_TransactionCurrencyCode: data.bit49,
+                                bit61_DataTambahanBiller: "",
+                                bit62_Data62: "",
+                                bit63_DataLoket: "",
+                                bit90_OriginalDataElement: "0200" + data.bit11 + data.bit7 + "0000000000800000000000"
+                            }, dataType: 'json',
+                            success: function (data) {
+                                //console.log(data);
+                                //console.log (data[39])
+                                if (data.length == 0) {
+                                    salert("Tidak Ada Data", 'warning', 'Warning');
+                                } else {
+                                    console.log(data);
+                                    if (data["bit39"] != "00") {
+                                        //salert("Ada kendala Dalam Transaksi Dengan Note: " + data["bit39"], 'error', 'Error');
+                                        felloLibraryMesage("bit39", data["bit39"], "", "felloPlnPostPaidReversal");
+
+                                        //Repeat Reversal
+                                        if (data["bit39"] == "18") {
+                                            $.ajax({
+                                                url: 'api/fello',
+                                                type: 'POST',
+                                                data: {
+                                                    "cmd": "felloPlnReversalExecute",
+                                                    "kop_id": $("#login_kop_id").val(),
+                                                    "ppob_id": idx,
+                                                    "act": "felloPlnPostPaidPayment",
+                                                    mti_MessageTypeIdentification: "0420",
+                                                    bit2_PrimaryAccountNumber: data.bit2,
+                                                    bit3_ProcessingCode: "000300",
+                                                    bit4_TransactionAmount: data.bit4,
+                                                    bit7_TransmissionDateTime: data.bit7,
+                                                    bit11_STAN: data.bit11,
+                                                    bit12_LocalTransactionTime: data.bit12,
+                                                    bit13_LocalTransactionDate: data.bit13,
+                                                    bit15_SettlementDate: data.bit15,
+                                                    bit18_MerchantType: data.bit18,
+                                                    bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                                    bit37_RetrievalReferenceNumber: data.bit37,
+                                                    //bit39_ResponseCode:,
+                                                    bit41_TerminalID: data.bit41,
+                                                    bit42_AcceptorIdentification: data.bit42,
+                                                    bit48_AdditionalDataPrivate: data.bit48,
+                                                    bit49_TransactionCurrencyCode: data.bit49,
+                                                    bit61_DataTambahanBiller: "",
+                                                    bit62_Data62: "",
+                                                    bit63_DataLoket: ""
+                                                }, dataType: 'json',
+                                                success: function (data) {
+                                                    //console.log(data);
+                                                    //console.log (data[39])
+                                                    if (data.length == 0) {
+                                                        salert("Tidak Ada Data", 'warning', 'Warning');
+                                                    } else {
+                                                        console.log(data);
+                                                        if (data["bit39"] != "00") {
+                                                            //alert("2" + data["bit39"]);
+                                                            //salert("Ada kendala Dalam Transaksi Dengan Note: " + data["bit39"], 'error', 'Error');
+                                                            felloLibraryMesage("bit39", data["bit39"], "", "felloPlnPostPaidReversal");
+                                                        } else {
+                                                            salertFunction("Transaksi  Repeat Reversal Berhasil ", "success", "Success", 'fnInquery', '');
+                                                            //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                    } else {
+                                        salertFunction("Transaksi  Reversal Berhasil ", "success", "Success", 'fnInquery', '');
+                                        //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: 'api/fello',
+                type: 'POST',
+                data: {
+                    "cmd": "felloMultiBillerReversal",
+                    "kop_id": $("#login_kop_id").val(),
+                    "ppob_id": idx,
+                }, dataType: 'json',
+                success: function (data) {
+                    //console.log(data);
+                    if (data.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $.ajax({
+                            url: 'api/fello',
+                            type: 'POST',
+                            data: {
+                                "cmd": "felloMultiBillerReversalExecute",
+                                "kop_id": $("#login_kop_id").val(),
+                                "ppob_id": idx,
+                                mti_MessageTypeIdentification: "0400",
+                                bit2_PrimaryAccountNumber: data.bit2,
+                                bit3_ProcessingCode: "000200",
+                                bit4_TransactionAmount: data.bit4,
+                                bit7_TransmissionDateTime: data.bit7,
+                                bit11_STAN: data.bit11,
+                                bit12_LocalTransactionTime: data.bit12,
+                                bit13_LocalTransactionDate: data.bit13,
+                                bit15_SettlementDate: data.bit15,
+                                bit18_MerchantType: data.bit18,
+                                bit32_AcquiringInstitutionIdentificationCode: data.bit32,
+                                bit37_RetrievalReferenceNumber: data.bit37,
+                                //bit39_ResponseCode:,
+                                bit41_TerminalID: data.bit41,
+                                bit42_AcceptorIdentification: data.bit42,
+                                bit48_AdditionalDataPrivate: data.bit48,
+                                bit49_TransactionCurrencyCode: data.bit49,
+                                bit61_DataTambahanBiller: "",
+                                bit62_Data62: "",
+                                bit63_DataLoket: ""
+                            }, dataType: 'json',
+                            success: function (data) {
+                                //console.log(data);
+                                //console.log (data[39])
+                                if (data.length == 0) {
+                                    salert("Tidak Ada Data", 'warning', 'Warning');
+                                } else {
+                                    console.log(data);
+                                    if (data[39] != "00") {
+                                        //salert("Ada kendala Dalam Transaksi Dengan Note: " + data[39], 'error', 'Error');
+                                        felloLibraryMesage("bit39", data[39], "", "felloMultiBillerReversal");
+
+                                        //Untuk Reversal Repeat
+                                        if (data[39] == "18") {
+                                            $.ajax({
+                                                url: 'api/fello',
+                                                type: 'POST',
+                                                data: {
+                                                    "cmd": "felloMultiBillerReversalExecute",
+                                                    "kop_id": $("#login_kop_id").val(),
+                                                    "ppob_id": idx,
+                                                    mti_MessageTypeIdentification: "0420",
+                                                    bit2_PrimaryAccountNumber: data[2],
+                                                    bit3_ProcessingCode: "000300",
+                                                    bit4_TransactionAmount: data[4],
+                                                    bit7_TransmissionDateTime: data[7],
+                                                    bit11_STAN: data[11],
+                                                    bit12_LocalTransactionTime: data[12],
+                                                    bit13_LocalTransactionDate: data[13],
+                                                    bit15_SettlementDate: data[15],
+                                                    bit18_MerchantType: data[18],
+                                                    bit32_AcquiringInstitutionIdentificationCode: data[32],
+                                                    bit37_RetrievalReferenceNumber: data[37],
+                                                    //bit39_ResponseCode:,
+                                                    bit41_TerminalID: data[41],
+                                                    bit42_AcceptorIdentification: data[42],
+                                                    bit48_AdditionalDataPrivate: data[48],
+                                                    bit49_TransactionCurrencyCode: data[49],
+                                                    bit61_DataTambahanBiller: "",
+                                                    bit62_Data62: "",
+                                                    bit63_DataLoket: ""
+                                                }, dataType: 'json',
+                                                success: function (data) {
+                                                    //console.log(data);
+                                                    //console.log (data[39])
+                                                    if (data.length == 0) {
+                                                        salert("Tidak Ada Data", 'warning', 'Warning');
+                                                    } else {
+                                                        console.log(data);
+                                                        if (data[39] != "00") {
+                                                            felloLibraryMesage("bit39", data[39], "", "felloMultiBillerReversal");
+                                                        } else {
+                                                            salertFunction("Transaksi  Reversal Repeat Berhasil ", "success", "Success", 'fnInquery', '');
+                                                            //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                    } else {
+                                        salertFunction("Transaksi  Reversal Berhasil ", "success", "Success", 'fnInquery', '');
+                                        //printStruckPPOBMulti(data[2].substring(0, 2), data[48]);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+
+    function hideModal() {
+        $("#modalPpobDetail").modal("hide");
+    }
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+                cmd: "selPpobResult",
+                tgl_awal: $('#t1_tgl_awal').val(),
+                tgl_akhir: $('#t1_tgl_akhir').val(),
+                kop_id: $("#login_kop_id").val()
+            }, function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                var appYn = "warning";
+                var icon = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (myArr[i]["apiStsProvider"] == "SUCCESS") {
+                            appYn = "success";
+                            icon = "fa-circle-check";
+                        } else {
+                            appYn = "warning";
+                            icon = "fa-circle-exclamation";
+                        }
+                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + c + "</td> ";
+                        b = b + " <td>" + myArr[i]["ppob_id"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["BillerName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["ProductName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["dateIns"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["account"] + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["real_amount"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["dibayar"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["kembalian"]).toLocaleString() + "</td> ";
+                        //b = b + " <td>" + parseInt(myArr[i]["total_item"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + myArr[i]["tipeBayarNm"] + "</td> ";
+                        b = b + " <td class='text-" + appYn + " rounded font-weight-bold' >" + myArr[i]["apiProvider"] + "</td> ";
+                        b = b + " <td class='text-" + appYn + " rounded font-weight-bold' >" + myArr[i]["apiStsProvider"] + "</td> ";
+                        b = b + " <td>" + "<button onclick=\"showModal('" + myArr[i]["ppob_id"] + "','" + myArr[i]["BillerName"] + "','" + myArr[i]["ProductName"] + "','" + myArr[i]["tglTran"] + "','" + parseInt(myArr[i]["real_amount"]).toLocaleString() + "',   ";
+                        b = b + " '" + parseInt(myArr[i]["dibayar"]).toLocaleString() + "','" + parseInt(myArr[i]["kembalian"]).toLocaleString() + "','" + myArr[i]["tipeBayarNm"] + "','" + myArr[i]["apiProvider"] + "','" + myArr[i]["apiStsProvider"] + "','" + myArr[i]["sts"] + "','" + myArr[i]["productCode"] + "' )\" ";
+                        b = b + " class='btn btn-" + appYn + "' rounded  > <i class='fa-solid " + icon + "' style='font-size:20px;margin-right: 0px !important;' ></i> </button>" + "</td> ";
+
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+
+                }
+                swalFinishLoading();
+                var table = $('#fix-header').DataTable();
+                table.destroy();
+                document.getElementById("tableResult").innerHTML = b;
+                isiTable = b;
+                $('#fix-header').DataTable({
+                    fixedHeader: true
+                });
+
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+
+        } else if (a[1].className.search("active") > 0) {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+                cmd: "selPpobMobileResult",
+                tgl_awal: $('#t2_tgl_awal').val(),
+                tgl_akhir: $('#t2_tgl_akhir').val(),
+                kop_id: $("#login_kop_id").val()
+            }, function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                var appYn = "warning";
+                var verify = "warning";
+
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (myArr[i]["appYn"] == "APPROVE") {
+                            appYn = "success";
+                        } else {
+                            appYn = "warning";
+                        }
+                        if (myArr[i]["verify"] == "VERIFY") {
+                            verify = "success";
+                        } else {
+                            verify = "warning";
+                        }
+
+                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult1','" + myArr[i]["ppob_id"] + "')\"  onmouseover=\"changeColor(this,'#tableResult1');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + c + "</td> ";
+                        b = b + " <td>" + myArr[i]["ppob_id"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["productCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["dateIns"] + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["real_amount"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["dibayar"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["kembalian"]).toLocaleString() + "</td> ";
+                        //b = b + " <td>" + parseInt(myArr[i]["total_item"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + myArr[i]["tipeBayarNm"] + "</td> ";
+                        b = b + " <td> <span class='text-" + appYn + " rounded font-weight-bold' title='" + myArr[i]["appYn"] + "'  > " + myArr[i]["appYn"] + "</span></td> ";
+                        b = b + " <td> <span class='text-" + verify + " rounded font-weight-bold' title='" + myArr[i]["verify"] + "'  > " + myArr[i]["verify"] + "</span></td> ";
+                        b = b + " <td>" + myArr[i]["apiProvider"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["apiStsProvider"] + "</td> ";
+                        //b = b + " <td>" + "<button onclick=\"_app('" + myArr[i]["noSimpan"] + "','" + myArr[i]["appYn"] + "','" + myArr[i]["verify"] + "')\"   class='btn btn-info btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-check'></i>";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+
+                }
+                swalFinishLoading();
+                var table = $('#fix-header1').DataTable();
+                table.destroy();
+                document.getElementById("tableResult1").innerHTML = b;
+                isiTable = b;
+                $('#fix-header1').DataTable({
+                    fixedHeader: true
+                });
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+        }
+    }
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+            <li class="nav-item" style="width: calc(100% / 2.1) !important;">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; Data From Core </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item" style="width: calc(100% / 2.1) !important;">
+                <a class="nav-link " data-toggle="tab" href="#query1" role="tab" id="tab_query1">
+                    <i class="icofont icofont-search"></i>&nbsp; Data From Mobile</a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content ">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row mt-2">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right ">Tanggal Awal</label>
+                            <div class="col-sm-8">
+                                <input type="date" id="t1_tgl_awal" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right ">Tanggal Akhir</label>
+                            <div class="col-sm-8">
+                                <input type="date" id="t1_tgl_akhir" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card card-block">
+                            <div class="dt-responsive table-responsive" id="cardBlock">
+                                <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                    <thead class="bg-rki">
+                                        <tr id="tableHeader" class="text-white">
+                                            <td>No</td>
+                                            <td>Transaksi Id</td>
+                                            <td>Biller</td>
+                                            <td>Transaksi</td>
+                                            <td>Tanggal </td>
+                                            <td>Nomor</td>
+                                            <td>Amount</td>
+                                            <td>Dibayar</td>
+                                            <td>Kembalian</td>
+                                            <td>Bayar</td>
+                                            <!--<td>Approve</td>
+                                                <td>Verify</td>-->
+                                            <td>Biller Provider</td>
+                                            <td>Biller Status</td>
+                                            <td>Action</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableResult">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane " id="query1" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <!-- Parameter Section 1 -->
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right ">Tanggal Awal</label>
+                            <div class="col-sm-8">
+                                <input type="date" id="t2_tgl_awal" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right ">Tanggal Akhir</label>
+                            <div class="col-sm-8">
+                                <input type="date" id="t2_tgl_akhir" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group row frm_grp">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                        <li><i class="feather icon-minimize full-card" onclick="gridAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-maximize full-card" onclick="openAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-download full-card" onclick="exportExcel();"></i>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header1" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader1" class="text-white">
+                                                <td>No</td>
+                                                <td>Descripsi</td>
+                                                <td>Transaksi</td>
+                                                <td>Tanggal </td>
+                                                <td>Nomor</td>
+                                                <td>Amount</td>
+                                                <td>Dibayar</td>
+                                                <td>Kembalian</td>
+                                                <td>Bayar</td>
+                                                <td>Approve</td>
+                                                <td>Verify</td>
+                                                <td>Biller Provider</td>
+                                                <td>Biller Status</td>
+                                                <!--<td>Action</td>-->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult1">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal " id="modalPpobDetail">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <span style="font-weight:bold ;">Detail PPOB</span> <button type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body ">
+                <div class="row ">
+                    <div class=" col-12 col-md-6 col-sm-6">Descripsi : <span id="Descripsi">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Biller : <span id="Biller">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Transaksi : <span id="Transaksi">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Tanggal : <span id="Tanggal">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Amount : <span id="Amount">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Dibayar : <span id="Dibayar">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Kembalian : <span id="Kembalian">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Bayar : <span id="Bayar">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Biller Provider : <span id="Biller_Provider">&nbsp;</span>
+                    </div>
+                    <div class=" col-12 col-md-6 col-sm-6">Biller Status : <span id="Biller_Status">&nbsp;</span></div>
+                    <div class=" col-12 col-md-6 col-sm-6">Status : <span id="Status">&nbsp;</span></div>
+                    <div id="plnPrepaidUnsold" class=" col-12 col-md-6 col-sm-6">UnSold Token :
+                        <select id="UnSoldToken">
+                            <option value="0">Tidak Ada Token UnSold</option>
+                            <option value="1">1 Token UnSold</option>
+                            <option value="2">2 Token UnSold</option>
+                        </select>
+                    </div>
+                    <div class=" col-12 text-center mt-2">
+                        <!-- <button class='btn btn-success rounded' id="reprint"> <i
+                                class="fa-solid fa-print"></i>&nbsp;&nbsp; Reprint </button> -->
+                        <button class='btn btn-warning rounded' id="advice" onclick="Advice()"> <i
+                                class="fa-solid fa-circle-question"></i>&nbsp;&nbsp;Advice</button>
+                        <button class='btn btn-danger rounded' id="reversal" onclick="Reversal()"> <i
+                                class="fa-solid fa-clock-rotate-left"></i>&nbsp;&nbsp;Reversal</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<iframe id="printf" name="printf" style="display:none;"></iframe>

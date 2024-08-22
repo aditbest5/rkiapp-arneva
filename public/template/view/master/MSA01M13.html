@@ -1,0 +1,522 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        fnInquery();
+        tipeToko();
+        selKoperasi();
+
+    }
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            $('#t2_toko_id').val("");
+            $('#t2_toko_id').attr('readonly', 'readonly');
+            //$('#t2_kop_id').val("");
+
+            $('#t2_nama_toko').val("");
+            $('#t2_alamat').val("");
+            $('#t2_no_telp').val("");
+            $('#t2_aktif').val("");
+
+            getNumber();
+        }
+    }
+
+    function tipeToko() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selTipeToko"
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                const myArr = JSON.parse(data);
+                //console.log(myArr);
+                var b = "";
+                var x = document.getElementById("t2_jenis_toko");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
+                }
+            }).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, 'warning', 'Warning');
+                // Handle error here
+            });
+    }
+
+    function selKoperasi() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selKoperasi",
+            kop_id: $("#login_kop_id").val()
+        },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_kop_id");
+                $('#t2_kop_id')
+                    .empty()
+                    /*.append('<option selected="selected" disabled value="">Chosee..</option>') */
+                    ;
+                if (myArr.length == 0) {
+                    //salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    $('#t2_kop_id').prop('disabled', false);
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["nama_koperasi"];
+                        option.value = myArr[i]["idx"];
+                        x.add(option, x[i]);
+                    }
+                }
+            }).fail(function (e) {
+                console.log(e);
+                //salert("Error: " + e, 'error', 'Warning');
+            });
+
+    }
+
+    function getNumber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selTokoNomor"
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t2_toko_id').val(myArr[0]["noTok"]);
+                        $('#t2_toko_id').attr('readonly', 'readonly');
+                        selKoperasi();
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+        }
+    }
+
+    function _changeTab(toko_id, kop_id, tokoName, alamat, no_telp, aktif, jenis_toko) {
+        $('#t2_toko_id').val(toko_id);
+        $('#t2_toko_id').attr('readonly', 'readonly');
+        $('#t2_kop_id').val(kop_id);
+        $('#t2_kop_id').prop('disabled', true);
+        $('#t2_nama_toko').val(tokoName);
+        $('#t2_alamat').val(alamat);
+        $('#t2_no_telp').val(no_telp);
+        $('#t2_aktif').val(aktif);
+        $('#t2_jenis_toko').val(jenis_toko);
+        // tab_query
+        $('#tab_entry').click();
+        $('#tab_entry').text('Edit Data');
+    }
+
+    function _action(tipe, idx) {
+        var param = [idx];
+        if (tipe == "DELETE") {
+            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+        }
+    }
+
+    function _del(param) {
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+            cmd: "delToko",
+            toko_id: param[0]
+        },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr["sts"] == "OK") {
+                    salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
+                } else {
+                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                }
+            }).fail(function (e) {
+                console.log(e);
+                // Handle error here
+            });
+    }
+
+    function inq() {
+        //alert("tab 2");
+        $('#tab_entry').text('Tambah Data');
+        swalStartLoading();
+        $('#t2_toko_id').val("");
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selToko",
+            kop_id: $("#login_kop_id").val(),
+            toko_id: $("#login_toko_id").val()
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["idx"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + myArr[i]["toko_id"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_toko"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["alamat"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["no_telp"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["strJenisToko"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["aktif"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                        b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["toko_id"] + "','" + myArr[i]["kop_id"] + "','" + myArr[i]["nama_toko"] + "','" + myArr[i]["alamat"] + "','" + myArr[i]["no_telp"] + "','" + myArr[i]["aktif"] + "','" + myArr[i]["jenis_toko"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='EDIT'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                        b = b + "          </button>&nbsp;&nbsp;<button onclick=\"_action('DELETE','" + myArr[i]["toko_id"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" + "</td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+                }
+                swalFinishLoading();
+                var table = $('#fix-header').DataTable();
+                table.destroy();
+                document.getElementById("tableResult").innerHTML = b;
+                isiTable = b;
+                $('#fix-header').DataTable({
+                    fixedHeader: true
+                });
+
+
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            inq();
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+
+            var kop_id = $('#t2_kop_id').val();
+            var toko_id = $('#t2_toko_id').val();
+            var userIns = $('#login_userId').val();
+            var nama_toko = $('#t2_nama_toko').val();
+            var alamat = $('#t2_alamat').val();
+            var no_telp = $('#t2_no_telp').val();
+            var aktif = $('#t2_aktif').val();
+            var jenis_toko = $('#t2_jenis_toko').val();
+            if (toko_id == "") {
+                salert("Error ! Tolong Tekan Tombol New Dahulu", 'warning', 'Warning');
+
+            } else if (kop_id == "") {
+                salert("Error ! Tolong Isi Koperasi Dahulu", 'warning', 'Warning');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "insToko",
+                    toko_id: toko_id,
+                    kop_id: kop_id,
+                    userIns: userIns,
+                    nama_toko: nama_toko,
+                    alamat: alamat,
+                    no_telp: no_telp,
+                    aktif: aktif,
+                    jenis_toko: jenis_toko
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salertFunction(myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', 'clearForm', '');
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            }
+
+
+        }
+    }
+
+
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+
+        //alert("tab");
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;" onclick="inq();">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+                <div class="slide"></div>
+            </li>
+
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Edit Data </a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!-- Parameter Section 1 -->
+                        <div class="form-group row frm_grp">
+                            <div class="col-sm-8">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right txt_hris"></label>
+                            <div class="col-sm-8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                        <li><i class="feather icon-minimize full-card" onclick="gridAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-maximize full-card" onclick="openAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-download full-card" onclick="exportExcel();"></i>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>Kode</td>
+                                                <td>Nama Toko</td>
+                                                <td>Alamat Toko</td>
+                                                <td>No Telpon</td>
+                                                <td>Bentuk</td>
+                                                <td>Aktif ?</td>
+                                                <td>Nama Koperasi</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Kode Toko</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" style="width:50%;" id="t2_toko_id" class="form-control txt_hris"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Nama Toko</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_nama_toko" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Nama Koperasi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t2_kop_id" class="form-control combobox_hris" disabled>
+                                    <option value="fsdfsd">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Alamat</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_alamat" class="form-control txt_hris">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">No Telpon</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_no_telp" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Bentuk</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="jenis_toko" id="t2_jenis_toko" class="form-control combobox_hris">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Status active</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t2_aktif" class="form-control combobox_hris">
+                                    <option value="">Chosee..</option>
+                                    <option value="Y">YES</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

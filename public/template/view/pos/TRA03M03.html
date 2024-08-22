@@ -1,0 +1,492 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        //selKoperasi();
+
+    }
+
+    function toMoney() {
+        if ($("#t2_dibayar").val() == "") {
+
+        } else {
+            var bayar = $("#t2_jumlah_bayar").val();
+            var dibayar = $("#t2_dibayar").val();
+            var kembalian = parseInt(dibayar) - parseInt(bayar);
+            $("#t2_kembalian").val(kembalian);
+            $("#t2_str_dibayar").text("Rp " + parseInt($("#t2_dibayar").val()).toLocaleString());
+            $("#t2_str_kembalian").text("Rp " + kembalian.toLocaleString());
+        }
+    }
+
+    function openModalAnggota() {
+        $("#modalAnggota").modal("show");
+    }
+
+    function hideModalAnggota() {
+        $("#modalAnggota").modal("hide");
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#t2_image_bukti')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    function verifyData() {
+        var fd = new FormData();
+        var files = $('#fileToUpload')[0].files;
+        var userIns = $('#login_userId').val();
+        var kop_id = $('#login_kop_id').val();
+        var pos_id = $('#t2_pos_id').val();
+        var sts = $('#t2_sts').val();
+        var dibayar = $('#t2_dibayar').val();
+        var kembalian = $('#t2_kembalian').val();
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
+            cmd: "insPosSimpleMobileMaster",
+            userIns: userIns,
+            kop_id: kop_id,
+            pos_id: pos_id,
+            sts: sts,
+            dibayar: dibayar,
+            kembalian: kembalian
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                console.log(myArr.length);
+                if (myArr["sts"] == "OK") {
+                    if (files.length == 0) {
+                        salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "clearForm", "");
+                    } else {
+                        // Check file selected or not
+                        fd.append('fileToUpload', files[0]);
+                        fd.append('fileName', kode_barang);
+                        fd.append('cmd', "uploadImage");
+                        fd.append('folder', "bukti");
+
+                        $.ajax({
+                            /* url: 'http://103.232.66.72:82/test/upload.php', */
+                            url: "api/umum/",
+                            type: 'post',
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            cors: true,
+                            success: function (response) {
+                                if (response != 0) {
+                                    console.log(response);
+                                    const myArr = JSON.parse(response);
+                                    if (myArr["sts"] == "OK") {
+                                        salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "clearForm", "");
+                                    } else {
+                                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                                    }
+                                } else {
+                                    salert('file not uploaded', 'error', 'Error');
+                                }
+                            },
+                        });
+                    }
+                } else {
+                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                }
+
+
+            }).fail(function (e) {
+                console.log(e);
+                // Handle error here
+                swalFinishLoading();
+            });
+    }
+
+    function saveComplete() {
+        $('#tab_query').click();
+        fnInquery();
+        clearForm();
+    }
+
+
+    function _changeTab(pos_id, real_amount, dibayar, kembalian, tipebayar, jatuh_tempo, nama, sts) {
+        $('#tab_entry').click();
+        $('#t2_pos_id').val(pos_id);
+        $('#t2_tipebayar').val(tipebayar);
+        $('#t2_nama').val(nama);
+        $('#t2_jatuh_tempo').val(jatuh_tempo);
+        $('#t2_jumlah_bayar').val(real_amount);
+        $('#t2_kembalian').val(kembalian);
+        $('#t2_str_jumlah_bayar').text("Rp " + parseInt(real_amount).toLocaleString());
+        $('#t2_str_kembalian').text("Rp " + parseInt(kembalian).toLocaleString());
+
+        $('#t2_dibayar').val(dibayar);
+        $('#t2_sts').val(sts);
+
+        var d = new Date();
+        var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+        $('#t2_image_bukti').attr("src", "https://storage.googleapis.com/atous-product-images/bukti/" + pos_id + ".jpg?imageRefresh=" + pktr);
+    }
+
+    function clearForm() {
+        $('#t2_pos_id').val("");
+        $('#t2_tipebayar').val("");
+        $('#t2_nama').val("");
+        $('#t2_jatuh_tempo').val("");
+        $('#t2_jumlah_bayar').val("0");
+        $('#t2_kembalian').val("0");
+        $('#t2_dibayar').val("0");
+        $('#t2_sts').val("");
+        $('#t2_str_jumlah_bayar').text("Rp ");
+        $('#t2_str_kembalian').text("Rp ");
+        $('#t2_str_dibayar').text("Rp ");
+
+        $('#t2_image_bukti').attr("src", "../template/files/assets/images/admin.jpg");
+    }
+
+    function inq() {
+        if ($('#t1_tgl_awal').val().length == 0 || $('#t1_tgl_akhir').val().length == 0) {
+            salert("Tolong Isi Tanggal Lebih Dahulu ", 'warning', 'Warning');
+            return;
+        }
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+            cmd: "selPosMobileCore",
+            tgl_awal: $('#t1_tgl_awal').val(),
+            tgl_akhir: $('#t1_tgl_akhir').val(),
+            kop_id: $('#login_kop_id').val(),
+            toko_id: $('#login_toko_id').val(),
+            sts: $('#sts').val()
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                var sts = "info";
+
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (myArr[i]["sts"] == "WAITING") {
+                            sts = "warning";
+                        } else if (myArr[i]["sts"] == "SUCCESS") {
+                            sts = "success";
+                        } else {
+                            sts = "danger";
+                        }
+
+                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + c + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["pos_id"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["transactionDate"] + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["real_amount"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["dibayar"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["kembalian"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + myArr[i]["strTipebayar"] + "</td> ";
+
+                        b = b + " <td> <span class='text-" + sts + " font-weight-bold' title='" + myArr[i]["sts"] + "'  > " + myArr[i]["sts"] + "</span></td> ";
+
+                        if (myArr[i]["sts"] == "WAITING") {
+                            b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["pos_id"] + "','" + myArr[i]["real_amount"] + "','" + myArr[i]["dibayar"] + "','" + myArr[i]["kembalian"] + "','" + myArr[i]["strTipebayar"] + "','" + myArr[i]["transactionDate"] + "','" + myArr[i]["nama"] + "','" + myArr[i]["sts"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                            b = b + " </td> ";
+
+                        } else {
+                            b = b + "<td>&nbsp;</td> ";
+                        }
+                        b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+
+                }
+                swalFinishLoading();
+                var table = $('#fix-header').DataTable();
+                table.destroy();
+                document.getElementById("tableResult").innerHTML = b;
+                isiTable = b;
+                $('#fix-header').DataTable({
+                    fixedHeader: true
+                });
+
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            inq();
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            if ($('#t2_kembalian').val() < 0) {
+                salert("Uang yang dibayar masih kurang !", 'warning', 'Warning');
+            } else if ($('#t2_dibayar').val() == 0 || $('#t2_dibayar').val() == "0" || $('#t2_dibayar').val() == "") {
+                salert("Tolong isi jumlah yang dibayar dahulu !", 'warning', 'Warning');
+            } else {
+                salertOptionFunction(" Data Akan Di Konfirmasi ?", "question", 'Apakah Anda Yakin ?', "verifyData", "")
+            }
+
+        }
+    }
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px ;">
+            <li class="nav-item  " style="width: calc(100% / 2.8) !important;" onclick="inq()">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+                <div class="slide"></div>
+            </li>
+
+            <li class="nav-item" style="width: calc(100% / 2.8) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Approve Data </a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Tanggal Awal</label>
+                            <input type="date" id="t1_tgl_awal" class="form-control ">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <label>Tanggal Akhir</label>
+                            <input type="date" id="t1_tgl_akhir" class="form-control ">
+
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Status Transaksi</label>
+                            <select name="sts" id="sts" class="form-control ">
+                                <option value="WAITING">WAITING</option>
+                                <option value="SUCCESS">SUCCESS</option>
+                                <option value="EXPIRED">EXPIRED</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>No</td>
+                                                <td>Nama Anggota</td>
+                                                <td>No Transaksi </td>
+                                                <td>Jatuh Tempo</td>
+                                                <td>Jumlah Bayar</td>
+                                                <td>DiBayar</td>
+                                                <td>Kembalian</td>
+                                                <td>Tipe Bayar</td>
+                                                <td>Status</td>
+                                                <td>Action</td>
+                                                <td>Nama Koperasi</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row">
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Kode Transaksi</label>
+                            <input type="text" id="t2_pos_id" class="form-control " readonly>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Tipe Bayar</label>
+                            <input type="text" id="t2_tipebayar" class="form-control " readonly>
+
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Nama Anggota</label>
+                            <input type="text" id="t2_nama" readonly class="form-control ">
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Jatuh Tempo</label>
+                            <input type="text" id="t2_jatuh_tempo" class="form-control " readonly>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Jumlah Bayar</label>
+                            <input type="text" id="t2_jumlah_bayar" class="form-control " readonly>
+                            <span id="t2_str_jumlah_bayar" style="font-size:25px;font-weight:bold;">Rp
+                                0</span>
+
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Kembalian</label>
+                            <input type="text" id="t2_kembalian" class="form-control " readonly>
+                            <span id="t2_str_kembalian" style="font-size:25px;font-weight:bold;">Rp
+                                0</span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Di Bayar</label>
+                            <input type="text" onkeyup="toMoney()" id="t2_dibayar" class="form-control ">
+                            <span id="t2_str_dibayar" style="font-size:25px;font-weight:bold;">Rp
+                                0</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group ">
+                            <label class="">Status</label>
+                            <select id="t2_sts" class="form-control ">
+                                <option value="WAITING">WAITING</option>
+                                <option value="SUCCESS">SUCCESS</option>
+                                <option value="EXPIRED">EXPIRED</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row p-3">
+                    <div class="col-3 col-sm-3">
+
+                    </div>
+                    <div class="col-12 col-sm-6 "><!--<button onclick="uploadImage22()">testUpload</button>-->
+                        <form id="uploadImage" runat="server" method="post" enctype="multipart/form-data">
+                            Upload Bukti Transaksi
+                            <br>
+                            <input type="file" accept=".jpg" class="form-control" id="fileToUpload" name="fileToUpload"
+                                onchange="readURL(this);">
+
+                            <br>
+                            <center>
+                                <img src="../template/files/assets/images/admin.jpg" id="t2_image_bukti" class="rounded"
+                                    alt="Upload Your Image Maksimal 500 Kb" title=" Upload Your Image Maksimal 500 Kb"
+                                    width="304" height="300">
+                            </center>
+                        </form>
+                    </div>
+                    <div class="col-3 col-sm-3">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

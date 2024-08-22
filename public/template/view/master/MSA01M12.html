@@ -1,0 +1,310 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        fnInquery();
+    }
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            $('#t2_userId').val("");
+            $('#t2_userId').removeAttr('readonly');
+            $('#t2_userNm').val("");
+            $('#t2_userPwd').val("");
+            $('#t2_aktif').val("");
+            $('#t2_tipeUser').val("");
+            getNUmber();
+        }
+    }
+
+
+    function _changeTab(userId, userNm, userPwd, aktif, level) {
+
+        $('#t2_userId').val(userId);
+        $('#t2_userId').attr('readonly', 'readonly');
+        $('#t2_userNm').val(userNm);
+        $('#t2_userPwd').val(userPwd);
+        $('#t2_aktif').val(aktif);
+        $('#t2_tipeUser').val(level);
+        // tab_query
+        $('#tab_entry').click();
+
+    }
+
+
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            //alert("tab 2");
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+                cmd: "selClosing",
+                kop_id: $("#login_kop_id").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            if (i == 3) {
+                                b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                                b = b + "<td colspan='5' >&nbsp;</td>";
+                                b = b + "</tr>";
+                            }
+                            b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + myArr[i]["item"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["ket"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["tgl"] + "</td> ";
+                            b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
+                            b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["item"] + "','" + myArr[i]["ket"] + "','" + myArr[i]["tgl"] + "')\"   class='btn btn-info btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-list'></i>";
+                            b = b + "          </button>" + "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+                    }
+                    $("#tableResult").html(b);
+                    isiTable = b;
+                    swalFinishLoading();
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function viewData() {
+
+        //alert("tab 2");
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+            cmd: "selClosingByDate",
+            kop_id: $("#login_kop_id").val(),
+            tgl_awal: $("#tgl_awal").val(),
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (i == 3) {
+                            b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
+                            b = b + "<td colspan='5' >&nbsp;</td>";
+                            b = b + "</tr>";
+                        }
+                        b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + myArr[i]["item"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["ket"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["tgl"] + "</td> ";
+                        b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
+                        b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["item"] + "','" + myArr[i]["ket"] + "','" + myArr[i]["tgl"] + "')\"   class='btn btn-info btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-list'></i>";
+                        b = b + "          </button>" + "</td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+                }
+                $("#tableResult2").html(b);
+                isiTable = b;
+                swalFinishLoading();
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+
+        //alert("tab");
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data Transaksi </a>
+                <div class="slide"></div>
+            </li>
+
+
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!-- Parameter Section 1 -->
+                        <div class="form-group row frm_grp">
+                            <div class="col-sm-8">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right txt_hris"></label>
+                            <div class="col-sm-8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <h5>Data Summary Transaksi Per Hari Ini</h5>
+                                        <br>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <div style="width:50%;">
+
+                                        <div class="input-group mb-3">
+                                            <span style="font-size: 20px;font-weight: bold;">Data Summary History
+                                                Transaksi
+                                                : </span>
+                                            <input type="date" class="form-control" id="tgl_awal">
+                                            <div class="input-group-append">
+                                                <button onclick="viewData();" class="btn btn-info" type="button"> <i
+                                                        class='fa fa-search'>
+                                                    </i>View Data</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <br>
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <tbody id="tableResult2">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

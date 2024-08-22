@@ -1,0 +1,523 @@
+<script>
+    var isiTable;
+    var isiBarcode;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+        fnInquery();
+    }
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            var d = new Date();
+            var barcode = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+            $("#t2_barcode").val(barcode);
+            $("#t2_barcode_qty").val("");
+            $("#t2_packing_qty").val("");
+        }
+    }
+
+    function searchBarang() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selBarang",
+            kop_id: $("#login_kop_id").val(),
+            toko_id: $("#login_toko_id").val()
+        }, function (data, status) {
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setAnggota('" + myArr[i]["idx"] + "','" + myArr[i]["nama_barang"] + "','" + myArr[i]["harga_jual"] + "');\" >";
+                    b = b + " <td>" + myArr[i]["idx"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga_jual"] + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+            }
+            var table = $('#fix-header-modal').DataTable();
+            table.destroy();
+            $('#modalResult').html(b);
+            $('#fix-header-modal').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+    function setAnggota(idx, nama, harga) {
+        $("#t2_kode_barang").val(idx);
+        $("#t2_nama_barang").val(nama);
+        $("#t2_harga").val(harga);
+        var d = new Date();
+        var barcode = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+        $("#t2_barcode").val(barcode);
+        hideModalAnggota();
+    }
+
+    function openModalBarang() {
+        $("#tableResult2").html("");
+        $("#modalBarang").modal("show");
+    }
+
+    function hideModalAnggota() {
+        $("#modalBarang").modal("hide");
+    }
+
+    function _changeTab(kode_barang, nama_barang, harga, barcode, tgl_produksi, tgl_expired, barcode_qty, packing_qty) {
+        $('#t2_kode_barang').val(kode_barang);
+        $('#t2_kode_barang').attr('readonly', 'readonly');
+        $('#t2_nama_barang').val(nama_barang);
+        $('#t2_harga').val(harga);
+        $('#t2_barcode').val(barcode);
+        $('#t2_tgl_produksi').val(tgl_produksi);
+        $('#t2_tgl_produksi').attr('readonly', 'readonly');
+        $('#t2_tgl_expired').val(tgl_expired);
+        $('#t2_tgl_expired').attr('readonly', 'readonly');
+        $('#t2_barcode_qty').val(barcode_qty);
+        $('#t2_barcode_qty').attr('readonly', 'readonly');
+        $('#t2_packing_qty').val(packing_qty);
+        $('#t2_packing_qty').attr('readonly', 'readonly');
+        // tab_query
+        $('#tab_entry').click();
+        $('#tab_entry').text('Edit Data');
+        showDetail(barcode);
+    }
+
+    function _action(tipe, idx) {
+        var param = [idx];
+        if (tipe == "DELETE") {
+            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+        }
+    }
+
+    function _del(param) {
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+            cmd: "delKoperasi",
+            idx: param[0]
+        }, function (data, status) {
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr["sts"] == "OK") {
+                salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
+            } else {
+                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+            }
+        }).fail(function (e) {
+            console.log(e);
+        });
+    }
+
+    function inq() {
+        $('#tab_entry').text('Tambah Data');
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selBarcode",
+            kop_id: $("#login_kop_id").val(),
+            tgl_awal: $('#t1_tgl_awal').val(),
+            tgl_akhir: $('#t1_tgl_akhir').val(),
+        }, function (data, status) {
+            //alert("Data: " + data + "\nStatus: " + status);
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["idx"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                    b = b + " <td>" + myArr[i]["barcode"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["tanggal_produksi"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["tanggal_kadaluarsa"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                    b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["kode_barang"] + "','" + myArr[i]["nama_barang"] + "','" + myArr[i]["harga"] + "','" + myArr[i]["barcode"] + "', ";
+                    b = b + "    '" + myArr[i]["tanggal_produksi"] + "','" + myArr[i]["tanggal_kadaluarsa"] + "','" + myArr[i]["barcode_qty"] + "','" + myArr[i]["packing_qty"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                    b = b + "          </button></td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+            }
+            swalFinishLoading();
+            var table = $('#fix-header').DataTable();
+            table.destroy();
+            $("#tableResult").html(b);
+            isiTable = b;
+            $('#fix-header').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+    function showDetail() {
+        var barcode=$("#t2_barcode").val();
+        swalStartLoading();
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selBarcodeDetail",
+            kop_id: $("#login_kop_id").val(),
+            barcode: barcode
+        }, function (data, status) {
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult2','" + myArr[i]["idx"] + "')\"  onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
+                    b = b + " <td>" + myArr[i]["generate_barcode"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["sequence"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["packing_qty"] + "</td> ";
+                    //b = b + " <td><button onclick=\"_print('PRINT','" + myArr[i]["idx"] + "')\"   title='DELETE' class='btn btn-info btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-print'></i></button>" + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+            }
+            swalFinishLoading();
+            var table = $('#fix-header2').DataTable();
+            table.destroy();
+            $("#tableResult2").html(b);
+            isiBarcode = data;
+            $('#fix-header2').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            inq();
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            var kop_id = $('#login_kop_id').val();
+            var toko_id = $('#login_toko_id').val();
+            var userIns = $('#login_userId').val();
+            var kode_barang = $('#t2_kode_barang').val();
+            var nama_barang = $('#t2_nama_barang').val();
+            var harga = $('#t2_harga').val();
+            var barcode = $('#t2_barcode').val();
+            var tgl_produksi = $('#t2_tgl_produksi').val();
+            var tgl_expired = $('#t2_tgl_expired').val();
+            var barcode_qty = $('#t2_barcode_qty').val();
+            var packing_qty = $('#t2_packing_qty').val();
+            if (barcode_qty == "" || packing_qty == "" || barcode_qty == 0 || packing_qty == 0) {
+                salert("Harap Lengkapi dahulu ", 'warning', 'Warning');
+                return;
+            }
+            if (barcode_qty > 100) {
+                salert("Maksimal Barcode Qty 100 ", 'warning', 'Warning');
+                return;
+            }
+            if (kode_barang != "") {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "insBarangRutin",
+                    kop_id: kop_id,
+                    toko_id: toko_id,
+                    userIns: userIns,
+                    kode_barang: kode_barang,
+                    nama_barang: nama_barang,
+                    harga: harga,
+                    barcode: barcode,
+                    tgl_produksi: tgl_produksi,
+                    tgl_expired: tgl_expired,
+                    barcode_qty: barcode_qty,
+                    packing_qty: packing_qty
+                }, function (data, status) {
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    console.log(myArr.length);
+                    if (myArr["sts"] == "OK") {
+                        salertFunction(myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', 'showDetail', '');
+                    } else {
+                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+            } else {
+                salert("Error ! Cari Barang Dahulu", 'warning', 'Warning');
+            }
+        }
+    }
+
+    function fnNew() {
+        $("#tableResult2").html("");
+        var d = new Date();
+        var barcode = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+        $("#t2_barcode").val(barcode);
+        $("#t2_barcode_qty").val("");
+        $("#t2_packing_qty").val("");
+        $('#t2_kode_barang').val("");
+        $('#t2_nama_barang').val("");
+        $('#t2_harga').val("");
+        $('#t2_barcode').val("");
+        $('#t2_tgl_produksi').val("");
+        $('#t2_tgl_produksi').attr('readonly', false);
+        $('#t2_tgl_expired').val("");
+        $('#t2_tgl_expired').attr('readonly', false);
+        $('#t2_barcode_qty').val("");
+        $('#t2_barcode_qty').attr('readonly', false);
+        $('#t2_packing_qty').val("");
+        $('#t2_packing_qty').attr('readonly', false);
+    }
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            window.open("/template/label.php?arrData="+isiBarcode);
+        }
+    }
+
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;" onclick="inq();">
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Edit Data </a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Awal</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="t1_tgl_awal" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Akhir</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="t1_tgl_akhir" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>Barcode</td>
+                                                <td>Nama Barang</td>
+                                                <td>Tanggal Produksi</td>
+                                                <td>Tanggal Kadaluarsa</td>
+                                                <td>Harga Normal</td>
+                                                <td>Discount</td>
+                                                <td>Harga Discount</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Harga Normal</label>
+                            <div class="col-md-10 col-sm-9 form-inline">
+                                <input type="text" id="t2_kode_barang" class="form-control " readonly> &nbsp;&nbsp;
+                                <button onClick="openModalBarang();" class="input-group-text bg-success ">
+                                    <i class="fa fa-search "></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nama Barang</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_nama_barang" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Harga Normal</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_harga" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Barcode</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_barcode" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Tgl. Produksi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="date" id="t2_tgl_produksi" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12"
+                        title="No Account di yang akan digunakan untuk transaksi Bank,PPOB dan lainya">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Tgl. Kadaluarsa</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="date" id="t2_tgl_expired" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Barcode Qty</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="number" id="t2_barcode_qty" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-12">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Packing Qty</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="number" id="t2_packing_qty" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header2" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader2" class="text-white">
+                                                <td>Barcode</td>
+                                                <td>Barcode Generate</td>
+                                                <td>Sequence</td>
+                                                <td>Packing Qty</td>
+                                                <!--<td>Action</td>-->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult2">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal " id="modalBarang">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <span style="font-weight:bold ;">Cari Barang </span> <button type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 form-inline">
+                        <span>Nama Barang </span>&nbsp;&nbsp;&nbsp;
+                        <input type="text" id="modal_namaAnggota" class="form-control txt_hris">&nbsp;&nbsp;
+                        <button onClick="searchBarang();" class="input-group-text bg-success ">
+                            <i class="fa fa-search "></i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlockModal">
+                                    <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="modalHeader">
+                                                <td>Kode Barang </td>
+                                                <td>Nama Barang</td>
+                                                <td>Harga BArang</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="modalResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

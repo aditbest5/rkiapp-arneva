@@ -1,0 +1,751 @@
+<script>
+    var isiTable;
+    var d = new Date();
+    var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+
+    function setDefault() {
+        var d = new Date();
+        var curr_date = d.getDate();
+        var strDate = "" + curr_date;
+        if (strDate.length == 1) {
+            strDate = "0" + strDate;
+        }
+        var curr_month = d.getMonth() + 1;
+        var strMonth = "" + curr_month;
+        if (strMonth.length == 1) {
+            strMonth = "0" + strMonth;
+        }
+        var curr_year = d.getFullYear();
+        $("#t1_tgl_transaksi").val(curr_year + "-" + strMonth + "-" + strDate);
+        $('#t2_tgl_awal').val(curr_year + "-" + strMonth + "-" + strDate);
+        $('#t2_tgl_akhir').val(curr_year + "-" + strMonth + "-" + strDate);
+    }
+
+    function selKoperasi() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selKoperasi",
+            kop_id: $("#login_kop_id").val()
+        }, function (data, status) {
+            const myArr = JSON.parse(data);
+            var b = "";
+            var x = document.getElementById("modal_nama_koperasi");
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    var option = document.createElement("option");
+                    option.text = myArr[i]["nama_koperasi"];
+                    option.value = myArr[i]["idx"];
+                    x.add(option, x[i]);
+                }
+            }
+        }).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, 'error', 'Warning');
+        });
+    }
+
+
+    function setBarang(kode, nama) {
+        var idx = $("#modalBarangIdx").val();
+        $("input[name='kode_barang']").eq(idx).val(kode);
+        $("input[name='nama_barang']").eq(idx).val(nama);
+        hideModalBarang();
+    }
+    function setSuplier(kode, nama) {
+        $("#t1_kode_suplier").val(kode);
+        $("#t1_nama_suplier").val(nama);
+        hideModalSuplier();
+    }
+
+    function toMoney() {
+        if ($("#t2_amount").val() == "") {
+
+        } else {
+            var a = parseInt($("#t2_amount").val()).toLocaleString();
+            $("#t2_string_amount").text("Rp " + a);
+        }
+
+    }
+
+    function _action(tipe, noTrans, appSts, verify) {
+        var param = [tipe, noTrans, appSts, verify];
+        if (tipe == "DELETE") {
+            salertOptionFunction(" Delete Data ?", "question", ' Anda Yakin ?', "_app", param);
+            if (noTrans == '0') {
+
+            } else {
+                var idx = noTrans - 1;
+                $("#btnAdd" + idx).prop("disabled", false);
+                $("#btnDelete" + idx).prop("disabled", false);
+                $("#harga_barang_" + idx).prop('readonly', false);
+                $("#jumlah_barang_" + idx).prop('readonly', false);
+            }
+        } else if (tipe == "ADD") {
+            salertOptionFunction(" Tambah Data  ?", "question", 'Anda Yakin ?', "_app", param);
+            //alert("#btnAdd" + noTrans);
+            $("#btnAdd" + noTrans).prop("disabled", true);
+            $("#btnDelete" + noTrans).prop("disabled", true);
+            $("#harga_barang_" + noTrans).prop('readonly', true);
+            $("#jumlah_barang_" + noTrans).prop('readonly', true);
+        }
+    }
+
+
+    function _app(param) {
+        if (param[0] == "DELETE") {
+            //alert(param[1]);
+            $("#row" + param[1]).remove();
+            //salert("Data Sudah Di Approve ! \n Tidak Dapat Di Update", 'warning', 'Warning');
+        } else {
+            //alert($("input[name='kode_barang']").length);
+            var idx = parseInt($("input[name='kode_barang']").length);
+            var b = "";
+            b = b + "<tr id='row" + idx + "' > ";
+            b = b + "    <td> ";
+            b = b + "        <div class='input-group' style='margin-bottom: 0px !important;'> ";
+            b = b + "             <input type='text' id='kode_barang_0' name='kode_barang' ";
+            b = b + "                style='border:none;' class='form-control ' readonly> ";
+            b = b + "            &nbsp; ";
+            b = b + "            <div class='input-group-append'> ";
+            b = b + "                <button onClick=\"openModalBarang('" + idx + "');\" ";
+            b = b + "                    class='input-group-text bg-success '> ";
+            b = b + "                    <i class='fa fa-search '></i></button> ";
+            b = b + "            </div> ";
+            b = b + "        </div> ";
+            b = b + "    </td> ";
+            b = b + "    <td><input type='text' id='nama_barang_0' name='nama_barang' class='form-control ' ";
+            b = b + "            style='border:none;' readonly></td> ";
+            b = b + "    <td><input type='number' id='harga_barang_" + idx + "' name='harga_barang' value='0' ";
+            b = b + "            class='form-control '></td> ";
+            b = b + "     <td> ";
+            b = b + "        <input type='number' id='jumlah_barang_" + idx + "' name='jumlah_barang' value='0' ";
+            b = b + "            class='form-control '> ";
+            b = b + "    </td> ";
+            b = b + "    <td> ";
+            b = b + "        <button id='btnAdd" + idx + "' onclick=\"_action('ADD', '" + idx + "', '', '')\" class='btn btn-success' ";
+            b = b + "            title='ADD'> <i class='fa-solid fa-plus'></i></button> ";
+            b = b + "        <button id='btnDelete" + idx + "' onclick=\"_action('DELETE', '" + idx + "', '', '')\" class='btn btn-danger ' ";
+            b = b + "            title='DELETE'><i class='fa fa-trash'></i></button> ";
+            b = b + "    </td> ";
+            b = b + "</tr> ";
+            $("#tableResult").append(b);
+        }
+    }
+
+    function searchBarang(idx) {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selBarang",
+            toko_id: $("#login_toko_id").val(),
+            kop_id: $("#login_kop_id").val()
+        }, function (data, status) {
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setBarang('" + myArr[i]["idx"] + "','" + myArr[i]["nama_barang"] + "');\" >";
+                    b = b + " <td>" + myArr[i]["idx"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["barcode_kemasan"] + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+            }
+            var table = $('#fix-header-modal').DataTable();
+            table.destroy();
+            $('#modalResult').html(b);
+            $('#fix-header-modal').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+    function searchSuplier() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selPembeli",
+            toko_id: $("#login_toko_id").val(),
+            kop_id: $("#login_kop_id").val(),
+            kode_pembeli: ""
+        }, function (data, status) {
+            var c = 1;
+            var b = "";
+            const myArr = JSON.parse(data);
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setSuplier('" + myArr[i]["kode_pembeli"] + "','" + myArr[i]["nama_pembeli"] + "');\" >";
+                    b = b + " <td>" + myArr[i]["kode_pembeli"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_pembeli"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["alamat"] + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+            }
+            var table = $('#fix-header-modal-suplier').DataTable();
+            table.destroy();
+            $('#modalResultSuplier').html(b);
+            $('#fix-header-modal-suplier').DataTable({
+                fixedHeader: true
+            });
+        }).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
+    }
+
+
+    function openModalSuplier() {
+        $("#modalSuplier").modal("show");
+        searchSuplier()
+    }
+
+    function hideModalSuplier() {
+        $("#modalSuplier").modal("hide");
+    }
+
+    function openModalPoDetail(pono, tanggl, suplier) {
+        $("#modalPoDetailNoPo").val(pono);
+        $("#modalPoDetailTanggal").val(tanggl);
+        $("#modalPoDetailSuplier").val(suplier);
+        showPodetail(pono, tanggl, suplier)
+    }
+
+    function hideModalPoDetail() {
+        $("#modalPoDetail").modal("hide");
+    }
+
+    function openModalBarang(idx) {
+        $("#modalBarangIdx").val(idx);
+        $("#modalBarang").modal("show");
+        searchBarang()
+    }
+    function hideModalBarang() {
+        $("#modalBarang").modal("hide");
+    }
+
+
+    function showPodetail(dono, tanggl, suplier) {
+        $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+            cmd: "selDoDetail",
+            kop_id: $('#login_kop_id').val(),
+            do_no: dono
+        }, function (data, status) {
+            const myArr = JSON.parse(data);
+            var b = "";
+            var c = 1;
+            if (myArr.length == 0) {
+                salert("Tidak Ada Data", 'warning', 'Warning');
+            } else {
+                //console.log(data);
+                for (var i = 0; i < myArr.length; i += 1) {
+                    b = b + "<tr onmouseover=\"changeColor(this,'#modalResultPoDetail');\" onmouseout=\"backColor(this);\" >";
+                    b = b + " <td>" + c + "</td> ";
+                    b = b + " <td>" + myArr[i]["kode_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["jumlah_barang"] + "</td> ";
+                    b = b + " <td>" + myArr[i]["harga_barang"] + "</td> ";
+                    b = b + "</tr>";
+                    c = c + 1;
+                }
+                var table = $('#fix-header-modal-barang').DataTable();
+                table.destroy();
+                $("#modalResultPoDetail").html(b);
+                isiTable = b;
+                $('#fix-header-modal-barang').DataTable({
+                    fixedHeader: true
+                });
+                $("#modalPoDetail").modal("show");
+
+            }
+        }).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, 'error', 'Error');
+        });
+    }
+
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            $('#t1_kode_transaksi').val("");
+            $('#t1_kode_suplier').val("");
+            $('#t1_nama_suplier').val("");
+            getNumber();
+            var b = "";
+            b = b + "<tr id='row0'> ";
+            b = b + "    <td> ";
+            b = b + "        <div class='input-group' style='margin-bottom: 0px !important;'> ";
+            b = b + "            <input type='text' name='kode_barang' style='border:none;' ";
+            b = b + "                class='form-control ' readonly> ";
+            b = b + "            &nbsp; ";
+            b = b + "            <div class='input-group-append'> ";
+            b = b + "                <button onClick=\"openModalBarang('0');\" ";
+            b = b + "                    class='input-group-text bg-success '> ";
+            b = b + "                    <i class='fa fa-search '></i></button> ";
+            b = b + "            </div> ";
+            b = b + "        </div> ";
+            b = b + "    </td> ";
+            b = b + "    <td><input type='text' name='nama_barang' class='form-control ' style='border:none;' ";
+            b = b + "            readonly></td> ";
+            b = b + "    <td><input type='number' id='harga_barang_0' name='harga_barang' value='0' class='form-control '> ";
+            b = b + "    </td> ";
+            b = b + "    <td> ";
+            b = b + "        <input type='number' id='jumlah_barang_0' name='jumlah_barang' value='0' class='form-control '> ";
+            b = b + "    </td> ";
+            b = b + "    <td> ";
+            b = b + "        <button id='btnAdd0' onclick=\"_action('ADD', '0', '', '')\" ";
+            b = b + "            class='btn btn-success' title='ADD'> <i ";
+            b = b + "                class='fa-solid fa-plus'></i></button> ";
+            b = b + "        <button id='btnDelete0' onclick=\"_action('DELETE', '0', '', '')\" ";
+            b = b + "            class='btn btn-danger ' title='DELETE'><i class='fa fa-trash'></i></button> ";
+            b = b + "    </td> ";
+            b = b + "</tr> ";
+            $("#tableResult").html(b);
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function getNumber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+                cmd: "selNomorDo"
+            }, function (data, status) {
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    $('#t1_kode_transaksi').val(myArr[0]["noDo"]);
+                }
+            }).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, 'error', 'Error');
+            });
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+                cmd: "selDoMaster",
+                kop_id: $('#login_kop_id').val(),
+                tgl_awal: $('#t2_tgl_awal').val(),
+                tgl_akhir: $('#t2_tgl_akhir').val(),
+            }, function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                //console.log(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b = b + "<tr onmouseover=\"changeColor(this,'#tableResult1');\" onmouseout=\"backColor(this);\" >";
+                        b = b + " <td>" + c + "</td> ";
+                        b = b + " <td>" + myArr[i]["no_do"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["tgl_do"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_pembeli"] + "</td> ";
+                        b = b + " <td><button onclick=\"openModalPoDetail('" + myArr[i]["no_do"] + "','" + myArr[i]["tgl_do"] + "','" + myArr[i]["nama_pembeli"] + "')\"   title='DETAIL' class='btn btn-info '><i class='fa fa-list'></i></button></td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
+                }
+                swalFinishLoading();
+                var table = $('#fix-header1').DataTable();
+                table.destroy();
+                $("#tableResult1").html(b);
+                isiTable = b;
+                $('#fix-header1').DataTable({
+                    fixedHeader: true
+                });
+
+            }).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            var kode_transaksi = $('#t1_kode_transaksi').val();
+            var tgl_transaksi = $('#t1_tgl_transaksi').val();
+            var suplier = $('#t1_kode_suplier').val();
+            if (kode_transaksi == "") {
+                salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/erp/InsUpDelErp", {
+                    cmd: "InsDo",
+                    userIns: $('#login_userId').val(),
+                    kop_id: $('#login_kop_id').val(),
+                    kode_transaksi: kode_transaksi,
+                    tgl_transaksi: tgl_transaksi,
+                    suplier: suplier,
+                    kode_barang: $("input[name='kode_barang']").serializeArray(),
+                    harga_barang: $("input[name='harga_barang']").serializeArray(),
+                    jumlah_barang: $("input[name='jumlah_barang']").serializeArray(),
+                }, function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    console.log(myArr.length);
+                    if (myArr["sts"] == "OK") {
+                        //swalFinishLoading();
+                        clearForm();
+                        salert("Save Complete !", 'success', 'Success');
+                    } else {
+                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    // Handle error here
+                    swalFinishLoading();
+                });
+            }
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+
+        }
+    }
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            clearForm();
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px">
+
+            <li class="nav-item" style="width: calc(100% / 2.5) !important;">
+                <a class="nav-link active" data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; DO </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item" style="width: calc(100% / 2.5) !important;">
+                <a class="nav-link " data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; Data DO </a>
+                <div class="slide"></div>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="entry" role="tabpanel">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">No DO</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="t1_kode_transaksi" class="form-control " readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Tanggal DO</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="t1_tgl_transaksi" class="form-control ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left ">Pembeli</label>
+                            <div class="col-sm-9">
+                                <div class="input-group" style="margin-bottom: 0px !important;">
+                                    <input type="hidden" id="t1_kode_suplier" readonly class="form-control ">
+                                    <input type="text" id="t1_nama_suplier" class="form-control " readonly>
+                                    &nbsp;
+                                    <div class="input-group-append">
+                                        <button onClick="openModalSuplier();" class="input-group-text bg-success ">
+                                            <i class="fa fa-search "></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="dt-responsive table-responsive bg-white" id="cardBlock">
+                        <table id="fix-header " class="table table-striped table-bordered nowrap">
+                            <thead class="bg-rki">
+                                <tr id="tableHeader" class="text-white">
+                                    <td>Kode Barang </td>
+                                    <td>Nama Barang </td>
+                                    <td>Harga</td>
+                                    <td>Jumlah</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tableResult">
+                                <tr id='row0'>
+                                    <td>
+                                        <div class='input-group' style='margin-bottom: 0px !important;'>
+                                            <input type='text' name='kode_barang' style='border:none;'
+                                                class='form-control ' readonly>
+                                            &nbsp;
+                                            <div class='input-group-append'>
+                                                <button onClick="openModalBarang('0');"
+                                                    class='input-group-text bg-success '>
+                                                    <i class='fa fa-search '></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><input type='text' id='nama_barang_0' name='nama_barang' class='form-control '
+                                            style='border:none;' readonly></td>
+                                    <td><input type='number' id='harga_barang_0' name='harga_barang' value='0'
+                                            class='form-control '>
+                                    </td>
+                                    <td>
+                                        <input type='number' id='jumlah_barang_0' name='jumlah_barang' value='0'
+                                            class='form-control '>
+                                    </td>
+                                    <td>
+                                        <button id='btnAdd0' onclick="_action('ADD', '0' , '' , '' )"
+                                            class='btn btn-success' title='ADD'> <i
+                                                class='fa-solid fa-plus'></i></button>
+                                        <button id='btnDelete0' onclick="_action('DELETE', '0' , '' , '' )"
+                                            class='btn btn-danger ' title='DELETE'><i class='fa fa-trash'></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div name="tab-idx" class="tab-pane " id="query" role="tabpanel">
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Awal</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="t2_tgl_awal" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Akhir</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="t2_tgl_akhir" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <div class="card">
+                            <div class="dt-responsive table-responsive" id="cardBlock">
+                                <table id="fix-header1" class="table table-striped table-bordered nowrap mt-2">
+                                    <thead class="bg-rki">
+                                        <tr id="tableHeader1" class="text-white">
+                                            <td>No</td>
+                                            <td>DO</td>
+                                            <td>Tanggal </td>
+                                            <td>Nama Pembeli</td>
+                                            <td>Action</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tableResult1">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal " id="modalBarang">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <span style="font-weight:bold ;">Cari Barang </span> <button type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 form-inline">
+                        <button onClick="searchBarang();" class="input-group-text bg-success ">
+                            <i class="fa fa-refresh "></i></button><input type="hidden" id="modalBarangIdx">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="dt-responsive table-responsive" id="cardBlockModal">
+                            <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                <thead class="bg-rki">
+                                    <tr id="modalHeader">
+                                        <td>Kode Barang </td>
+                                        <td>Nama Barang</td>
+                                        <td>Barcode Kemasan</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalResult">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal " id="modalSuplier">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <span style="font-weight:bold ;">Cari Pembeli </span> <button type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 form-inline">
+                        <button onClick="searchSuplier();" class="input-group-text bg-success ">
+                            <i class="fa fa-refresh "></i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="dt-responsive table-responsive" id="cardBlockModal">
+                            <table id="fix-header-modal-suplier" class="table table-striped table-bordered nowrap">
+                                <thead class="bg-rki">
+                                    <tr id="modalHeaderSuplier">
+                                        <td>Kode Pembeli </td>
+                                        <td>Nama Pembeli</td>
+                                        <td>Alamat Pembeli</td>
+                                    </tr>
+                                </thead>
+                                <tbody id="modalResultSuplier">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal " id="modalPoDetail">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success ">
+                <span style="font-weight:bold ;"> Do Detail </span> <button type="button" class="close"
+                    data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="">No Do</label>
+                            <input class="form-control" type="text" id="modalPoDetailNoPo" readonly></input>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="">Tanggal</label>
+                            <input class="form-control" type="text" id="modalPoDetailTanggal" readonly></input>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="">Pembeli</label>
+                            <input class="form-control" type="text" id="modalPoDetailSuplier" readonly></input>
+                        </div>
+                    </div>
+
+                    <div class="dt-responsive table-responsive col-12" id="cardBlockModal">
+                        <table id="fix-header-modal-barang" class="table table-striped table-bordered nowrap">
+                            <thead class="bg-rki">
+                                <tr id="modalPoDetail">
+                                    <td>No </td>
+                                    <td>Kode Barang </td>
+                                    <td>Nama Barang</td>
+                                    <td>Jumlah Barang</td>
+                                    <td>Harga Barang</td>
+                                </tr>
+                            </thead>
+                            <tbody id="modalResultPoDetail">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button onclick="" title='DETAIL' class='btn btn-success '><i class='fa fa-print'></i>
+                            Print</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

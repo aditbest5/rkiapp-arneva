@@ -1,0 +1,209 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        //salert("Tidak Ada Data",'warning','Warning');
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            if ($('#t1_tgl_awal').val() == "") {
+                salert("Harap Isi Periode ! ", 'warning', 'Warning');
+            } else {
+                var tgl_awal = $('#t1_tgl_awal').val();
+                var tgl_akhir = $('#t1_tgl_awal').val();
+                swalStartLoading();
+                var total_real_amount = 0;
+                $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
+                    cmd: "selJurnalPos",
+                    tgl_awal: tgl_awal,
+                    tgl_akhir: tgl_akhir,
+                    kop_id: $("#login_kop_id").val(),
+                    coa: "",
+                    jenisTran: ""
+                }, function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    var appYn = "warning";
+                    var verify = "warning";
+
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                        $('#total_real_amount').text(0);
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + c + "</td> ";
+                            b = b + " <td>" + myArr[i]["tglTran"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["coaName"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_transaksi"] + "</td> ";
+                            if (myArr[i]["coaTipe"] == "MASUK") {
+                                total_real_amount = total_real_amount + parseInt(myArr[i]["amount"]);
+                                b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
+                                b = b + " <td>" + "" + "</td> ";
+                            } else {
+                                total_real_amount = total_real_amount - parseInt(myArr[i]["amount"]);
+                                b = b + " <td>" + "" + "</td> ";
+                                b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
+                            }
+                            b = b + " <td>" + parseInt(total_real_amount).toLocaleString() + "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+                    }
+                    swalFinishLoading();
+                    $('#total_real_amount').text(total_real_amount.toLocaleString());
+                    var table = $('#fix-header').DataTable();
+                    table.destroy();
+                    $("#tableResult").html(b);
+                    isiTable = b;
+                    //$('#fix-header').DataTable({
+                    //    fixedHeader: true
+                    //});
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+            }
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            //salert("Not Setting Tab 2!", 'warning', 'Warning');
+            //clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
+            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
+                <a class="nav-link active" data-toggle="tab" href="#query1" role="tab" id="tab_query1">
+                    <i class="icofont icofont-search"></i>&nbsp; Jurnal Inventory / POS</a>
+                <div class="slide"></div>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query1" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-3 col-form-label  txt_hris">Periode</label>
+                            <div class="col-sm-9">
+                                <input type="month" style="width:50%;" id="t1_tgl_awal" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    Note : Pastikan setiap bulan membuat transaksi untuk saldo awal jurnal di menu "KAS
+                                    MASUK" dan sudah "APPROVE"
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>No</td>
+                                                <td>Tanggal Transaksi</td>
+                                                <td>Item</td>
+                                                <td>Nama Item</td>
+                                                <td class="bg-success">Debet</td>
+                                                <td class="bg-warning">Kredit</td>
+                                                <td>Saldo</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <span class="text-right font-weight-bold">Saldo: </span> <span
+                                    class="text-right font-weight-bold" id="total_real_amount">0</span>
+                            </div>
+                        </div>
+                        <!-- Basic Header fix table end -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

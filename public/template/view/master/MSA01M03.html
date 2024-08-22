@@ -1,0 +1,1205 @@
+<script>
+    var isiTable;
+
+    function setDefault() {
+        selCoa();
+        selKoperasi();
+        fnInquery();
+    }
+
+
+    function selCoa() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selCodeDetail",
+            kop_id: $("#login_kop_id").val(),
+            masterCode: "1000008"
+
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                const myArr = JSON.parse(data);
+                //console.log(myArr);
+                var b = "";
+                var x = document.getElementById("t2_coa_2nd");
+                var y = document.getElementById("t3_coa_2nd");
+                var z = document.getElementById("t4_coa_2nd");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+
+                        var option1 = document.createElement("option");
+                        option1.text = myArr[i]["detailName"];
+                        option1.value = myArr[i]["detailCode"];
+                        y.add(option1, y[i]);
+
+                        var option2 = document.createElement("option");
+                        option2.text = myArr[i]["detailName"];
+                        option2.value = myArr[i]["detailCode"];
+                        z.add(option2, z[i]);
+                    }
+                }
+            }).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, 'warning', 'Warning');
+                // Handle error here
+            });
+    }
+
+    function selKoperasi() {
+        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+            cmd: "selKoperasi",
+            kop_id: $("#login_kop_id").val()
+
+        },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                const myArr = JSON.parse(data);
+                //console.log(myArr);
+                var b = "";
+                var x = document.getElementById("t2_nama_koperasi");
+                var y = document.getElementById("t3_nama_koperasi");
+                var z = document.getElementById("t4_nama_koperasi");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", 'warning', 'Warning');
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["nama_koperasi"];
+                        option.value = myArr[i]["idx"];
+                        x.add(option, x[i]);
+
+                        var option1 = document.createElement("option");
+                        option1.text = myArr[i]["nama_koperasi"];
+                        option1.value = myArr[i]["idx"];
+                        y.add(option1, y[i]);
+
+                        var option2 = document.createElement("option");
+                        option2.text = myArr[i]["nama_koperasi"];
+                        option2.value = myArr[i]["idx"];
+                        z.add(option2, z[i]);
+                    }
+                }
+            }).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, 'warning', 'Warning');
+                // Handle error here
+            });
+    }
+
+
+
+
+
+    function selCoaL2() {
+        var userIns = $('#login_userId').val();
+        var kop_id = "";
+        if (userIns == "ADMIN") {
+            kop_id = $('#t2_nama_koperasi').val();
+        } else {
+            kop_id = $("#login_kop_id").val();
+        }
+
+        if ($("#t2_code_coa").val() == "") {
+            salert("Tolong Pilih Group COA Dahulu", 'warning', 'Warning');
+        } else {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selCoaL2",
+                kop_id: kop_id
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult3','" + myArr[i]["idxd_l2"] + "')\"  onmouseover=\"changeColor(this,'#tableResult3');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + myArr[i]["idxd_l2"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_group_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_detail_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["desc_detail_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["coaL2Idx"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["detailUseYn"] + "</td> ";
+                            b = b + " <td>" + "<button onclick=\"_changeTabCoa3('" + myArr[i]["idxd_l2"] + "','" + myArr[i]["nama_detail_coa"] + "','" + myArr[i]["coaL2Idx"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='Tabah COA Level 3'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                            b = b + "          </button></td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+
+                    }
+                    swalFinishLoading();
+                    document.getElementById("tableResult3").innerHTML = b;
+
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+        }
+    }
+
+    function selCoaL3() {
+        var userIns = $('#login_userId').val();
+        var kop_id = "";
+        if (userIns == "ADMIN") {
+            kop_id = $('#t2_nama_koperasi').val();
+        } else {
+            kop_id = $("#login_kop_id").val();
+        }
+
+        if ($("#t4_kode_coa_2nd").val() == "") {
+            salert("Tolong Pilih Group COA Dahulu", 'warning', 'Warning');
+        } else {
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selCoaL3",
+                kop_id: kop_id
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult4','" + myArr[i]["idxd_l2"] + "')\"  onmouseover=\"changeColor(this,'#tableResult4');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + myArr[i]["idxd_l3"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_group_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_detail_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_detail_l3_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["desc_detail_l3_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["coa3Idx"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["aktifL3"] + "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+
+                    }
+                    swalFinishLoading();
+                    $('#tableResult4').html(b);
+
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+        }
+    }
+
+    function clearForm() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            $('#t2_code_coa').val("");
+            $('#t2_code_coa').removeAttr('readonly');
+            $('#t2_nama_group_coa').val("");
+            $('#t2_nama_group_coa').removeAttr('readonly');
+            $('#t2_coa_2nd').val("");
+            $('#t2_coa_2nd').removeAttr('readonly');
+            $('#t2_nama_koperasi').val("");
+            $('#t2_nama_koperasi').removeAttr('readonly');
+            $('#t2_coaIdx').val("");
+            $('#t2_coaIdx').removeAttr('readonly');
+            $('#t2_aktif').val("");
+            $('#t2_aktif').removeAttr('readonly');
+            getNumber();
+        } else if (a[2].className.search("active") > 0) {
+            getNumber();
+            selCoaL2();
+            // $('#t3_coa_2nd').prop("disabled", false);
+            // $('#t3_nama_koperasi').prop("disabled", false);
+            // $('#t3_coa_2nd').removeAttr('readonly');
+            // $('#t3_nama_koperasi').removeAttr('readonly');
+        } else if (a[3].className.search("active") > 0) {
+            getNumber();
+            selCoaL3();
+        }
+    }
+
+    function getNumber() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selUserNomorCoa",
+                kop_id: $("#login_kop_id").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t2_code_coa').val(myArr[0]["noCoag"]);
+                        $('#t2_code_coa').attr('readonly', 'readonly');
+                        $('#t2_coaIdx').val(myArr[0]["coagNumber"]);
+                        $('#t2_coaIdx').attr('readonly', 'readonly');
+                        if (kop_id == "") {
+
+                        } else {
+                            $('#t2_nama_koperasi').val(kop_id);
+                            $('#t2_nama_koperasi').attr('readonly', 'readonly');
+                        }
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+        } else if (a[2].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selUserNomorCoa2nd",
+                kop_id: $("#login_kop_id").val(),
+                coag: $("#t3_code_coa").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t3_nama_coa_2nd').val("");
+                        $('#t3_nama_coa_2nd').removeAttr('readonly');
+                        $('#t3_remark_coa_2nd').val("");
+                        $('#t3_remark_coa_2nd').removeAttr('readonly');
+
+                        $('#t3_kode_coa_2nd').val(myArr[0]["noCoad"]);
+                        $('#t3_kode_coa_2nd').attr('readonly', 'readonly');
+                        $('#t3_idx_coa_2nd').val(myArr[0]["coadNumber"]);
+                        $('#t3_idx_coa_2nd').attr('readonly', 'readonly');
+
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+        } else if (a[3].className.search("active") > 0) {
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selUserNomorCoa3rd",
+                kop_id: $("#login_kop_id").val(),
+                coads: $("#t4_kode_coa_2nd").val()
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        $('#t4_nama_coa_3rd').val("");
+                        $('#t4_nama_coa_3rd').removeAttr('readonly');
+                        $('#t4_remark_coa_3rd').val("");
+                        $('#t4_remark_coa_3rd').removeAttr('readonly');
+
+                        $('#t4_kode_coa_3rd').val(myArr[0]["noCoads"]);
+                        $('#t4_kode_coa_3rd').attr('readonly', 'readonly');
+                        $('#t4_idx_coa_3rd').val(myArr[0]["coadsNumber"]);
+                        $('#t4_idx_coa_3rd').attr('readonly', 'readonly');
+
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    salert("Error: " + e, 'warning', 'Warning');
+                });
+        }
+    }
+
+    function _changeTab(idx, Coa_L2, nama_group_coa, coaIdx, useYn, nama_koperasi) {
+        //$('#t2_userId').attr('readonly', 'readonly');
+        $('#t2_code_coa').val(idx);
+        $('#t2_code_coa').attr('readonly', 'readonly');
+        $('#t2_nama_group_coa').val(nama_group_coa);
+        $('#t2_nama_group_coa').attr('readonly', 'readonly');
+        $('#t2_coa_2nd').val(Coa_L2);
+        $('#t2_coa_2nd').attr('readonly', 'readonly');
+        $('#t2_nama_koperasi').val(nama_koperasi);
+        $('#t2_nama_koperasi').attr('readonly', 'readonly');
+        $('#t2_coaIdx').val(coaIdx);
+        $('#t2_coaIdx').attr('readonly', 'readonly');
+        $('#t2_aktif').val(useYn);
+        $('#t2_aktif').attr('readonly', 'readonly');
+
+        $('#t3_code_coa').val(idx);
+        $('#t3_nama_group_coa').val(nama_group_coa);
+        $('#t3_coa_2nd').val(Coa_L2);
+        $('#t3_coa_2nd').prop("disabled", true);
+        $('#t3_nama_koperasi').val(nama_koperasi);
+        $('#t3_nama_koperasi').prop("disabled", true);
+        $('#t3_coaIdx').val(coaIdx);
+        $('#t3_aktif').val(useYn);
+        $('#t3_aktif').prop("disabled", true);
+
+        $('#t4_code_coa').val(idx);
+        $('#t4_nama_group_coa').val(nama_group_coa);
+        $('#t4_coa_2nd').val(Coa_L2);
+        $('#t4_coa_2nd').prop("disabled", true);
+        $('#t4_nama_koperasi').val(nama_koperasi);
+        $('#t4_nama_koperasi').prop("disabled", true);
+        $('#t4_coaIdx').val(coaIdx);
+        $('#t4_aktif').val(useYn);
+        $('#t4_aktif').prop("disabled", true);
+
+        // tab_query
+        $('#tab_entry').click();
+
+    }
+
+    function _changeTabCoa3(kode_coa_2nd, nama_coa_2nd, idx_coa_2nd) {
+        //$('#t2_userId').attr('readonly', 'readonly');
+        $('#t4_kode_coa_2nd').val(kode_coa_2nd);
+        $('#t4_nama_coa_2nd').val(nama_coa_2nd);
+        $('#t4_idx_coa_2nd').val(idx_coa_2nd);
+
+        // tab_query
+        $('#tab_entry_l3').click();
+
+    }
+
+    function _deleteRow(userId) {
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Delete This Data ?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                    cmd: "delUser",
+                    userId: userId
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salert("Save Complete !", 'success', 'Success');
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                        swalFinishLoading();
+                        fnInquery();
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+
+            }
+        })
+
+    }
+
+    function fnInquery() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            var userIns = $('#login_userId').val();
+            var kop_id = "";
+            if (userIns == "ADMIN") {
+                kop_id = "";
+            } else {
+                kop_id = $("#login_kop_id").val();
+            }
+            swalStartLoading();
+            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+                cmd: "selAkun",
+                kop_id: kop_id
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", 'warning', 'Warning');
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["userId"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b = b + " <td>" + myArr[i]["idx"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["Coa_L1"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["Coa_L2"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_group_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["desc_group_coa"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["coaIdx"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
+                            b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["idx"] + "','" + myArr[i]["coa2"] + "','" + myArr[i]["nama_group_coa"] + "','" + myArr[i]["coaIdx"] + "','" + myArr[i]["useYn"] + "','" + myArr[i]["kop_id"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='TAMBAH COA Level 2'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                            b = b + "          </button></td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
+
+                    }
+                    swalFinishLoading();
+                    var table = $('#fix-header').DataTable();
+                    table.destroy();
+                    document.getElementById("tableResult").innerHTML = b;
+                    isiTable = b;
+                    $('#fix-header').DataTable({
+                        fixedHeader: true
+                    });
+
+                }).fail(function (e) {
+                    console.log(e);
+                    swalFinishLoading();
+                });
+
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnSave() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+
+        } else if (a[1].className.search("active") > 0) {
+
+            var userIns = $('#login_userId').val();
+            var kop_id = "";
+            if (userIns == "ADMIN") {
+                kop_id = $('#t2_nama_koperasi').val();
+            } else {
+                kop_id = $('#login_kop_id').val();
+            }
+            var code_coa = $('#t2_code_coa').val();
+            var nama_group_coa = $('#t2_nama_group_coa').val();
+            var coa_2nd = $('#t2_coa_2nd').val();
+            var nama_koperasi = $('#t2_nama_koperasi').val();
+            var coaIdx = $('#t2_coaIdx').val();
+            var aktif = $('#t2_aktif').val();
+
+            if (code_coa == "") {
+                salert("Error ! " + "Please Clik Button New First ! ", 'error', 'Error');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "insGroupCoa",
+                    userIns: userIns,
+                    kop_id: kop_id,
+                    code_coa: code_coa,
+                    nama_group_coa: nama_group_coa,
+                    coa_2nd: coa_2nd,
+                    nama_koperasi: nama_koperasi,
+                    coaIdx: coaIdx,
+                    aktif: aktif
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salert("Save Complete !", 'success', 'Success');
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+                        swalFinishLoading();
+                        clearForm();
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            }
+
+        } else if (a[2].className.search("active") > 0) {
+
+            var userIns = $('#login_userId').val();
+            var kop_id = "";
+            if (userIns == "ADMIN") {
+                kop_id = $('#t2_nama_koperasi').val();
+            } else {
+                kop_id = $('#login_kop_id').val();
+            }
+            var code_coa = $('#t3_code_coa').val();
+            var nama_group_coa = $('#t3_nama_group_coa').val();
+            var nama_coa_2nd = $('#t3_nama_coa_2nd').val();
+            var kode_coa_2nd = $('#t3_kode_coa_2nd').val();
+            var idx_coa_2nd = $('#t3_idx_coa_2nd').val();
+            var remark_coa_2nd = $('#t3_remark_coa_2nd').val();
+
+            if (kode_coa_2nd == "") {
+                salert("Error ! " + "Please Clik Button New First ! ", 'error', 'Error');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "insGroupCoaL2",
+                    userIns: userIns,
+                    kop_id: kop_id,
+                    code_coa: code_coa,
+                    nama_group_coa: nama_group_coa,
+                    nama_coa_2nd: nama_coa_2nd,
+                    kode_coa_2nd: kode_coa_2nd,
+                    idx_coa_2nd: idx_coa_2nd,
+                    remark_coa_2nd:remark_coa_2nd
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salert("Save Complete !", 'success', 'Success');
+                            swalFinishLoading();
+                            clearForm();
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+
+
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+            }
+        }else if (a[3].className.search("active") > 0) {
+            var userIns = $('#login_userId').val();
+            var kop_id = "";
+            if (userIns == "ADMIN") {
+                kop_id = $('#t2_nama_koperasi').val();
+            } else {
+                kop_id = $('#login_kop_id').val();
+            }
+            var code_coa = $('#t4_code_coa').val();
+            var nama_group_coa = $('#t4_nama_group_coa').val();
+            var kode_coa_2nd = $('#t4_kode_coa_2nd').val();
+
+            var nama_coa_3rd = $('#t4_nama_coa_3rd').val();
+            var kode_coa_3rd = $('#t4_kode_coa_3rd').val();
+            var idx_coa_3rd = $('#t4_idx_coa_3rd').val();
+            var remark_coa_3rd = $('#t4_remark_coa_3rd').val();
+
+            if (kode_coa_3rd == "") {
+                salert("Error ! " + "Please Clik Button New First ! ", 'error', 'Error');
+            } else {
+                swalStartLoading();
+                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
+                    cmd: "insGroupCoaL3",
+                    userIns: userIns,
+                    kop_id: kop_id,
+                    code_coa: code_coa,
+                    nama_group_coa: nama_group_coa,
+                    kode_coa_2nd:kode_coa_2nd,
+
+                    nama_coa_3rd: nama_coa_3rd,
+                    kode_coa_3rd: kode_coa_3rd,
+                    idx_coa_3rd: idx_coa_3rd,
+                    remark_coa_3rd:remark_coa_3rd
+                },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salert("Save Complete !", 'success', 'Success');
+                            swalFinishLoading();
+                            clearForm();
+                        } else {
+                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        }
+
+
+                    }).fail(function (e) {
+                        console.log(e);
+                        // Handle error here
+                        swalFinishLoading();
+                    });
+                }
+        }
+    }
+
+
+
+
+    function fnNew() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            clearForm();
+        } else if (a[2].className.search("active") > 0) {
+            clearForm();
+        } else if (a[3].className.search("active") > 0) {
+            clearForm();
+        }
+    }
+
+    function fnDelete() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function fnPrint() {
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Not Setting Tab 1!", 'warning', 'Warning');
+        } else if (a[1].className.search("active") > 0) {
+            salert("Not Setting Tab 2!", 'warning', 'Warning');
+        }
+    }
+
+    function exportExcel() {
+
+        //alert("tab");
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Download Excel", 'info', 'Info');
+            downloadExcell("#tableHeader", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+
+        }
+    }
+
+    function openAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Maximum View", 'info', 'Info');
+            openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+
+    function gridAll() {
+
+        var a = document.getElementsByName("tab-idx");
+        if (a[0].className.search("active") > 0) {
+            salert("Minimum View", 'info', 'Info');
+            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+        } else if (a[1].className.search("active") > 0) {
+            alert("Not Setting Tab 1!");
+        }
+    }
+</script>
+<!-- Row start -->
+<div class="row" id="start">
+    <div class="col-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;" >
+            <li class="nav-item" style="width: calc(100% / 4.1) !important;" >
+                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
+                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+                <div class="slide"></div>
+            </li>
+
+            <li class="nav-item" style="width: calc(100% / 4.1) !important;">
+                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Grop COA </a>
+                <div class="slide"></div>
+            </li>
+
+            <li class="nav-item" onclick="selCoaL2();" style="width: calc(100% / 4.1) !important;" >
+                <a class="nav-link " data-toggle="tab" href="#entry_detail_l2" role="tab" id="tab_entry_l2">
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah COA (LV 2) </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item" onclick="selCoaL3();" style="width: calc(100% / 4.1) !important;" >
+                <a class="nav-link " data-toggle="tab" href="#entry_detail_l3" role="tab" id="tab_entry_l3">
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah COA (LV 3)</a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content card-block">
+            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <!-- Parameter Section 1 -->
+                        <div class="form-group row frm_grp">
+
+                            <div class="col-sm-8">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right txt_hris"></label>
+                            <div class="col-sm-8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group row frm_grp">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Basic Header fix table start -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                                <div class="card-header-right">
+                                    <ul class="list-unstyled card-option">
+                                        <li><i class="feather icon-minimize full-card" onclick="gridAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-maximize full-card" onclick="openAll();"></i>
+                                        </li>
+                                        <li><i class="feather icon-download full-card" onclick="exportExcel();"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader" class="text-white">
+                                                <td>Kode Acount</td>
+                                                <td>Coa 1</td>
+                                                <td>Coa 2</td>
+                                                <td>Nama Acount</td>
+                                                <td>Describe Acount</td>
+                                                <td>Nama Koperasi</td>
+                                                <td>index</td>
+                                                <td>Status</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Kode Group</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" style="width:50%;" id="t2_code_coa" class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Group</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_nama_group_coa" class="form-control txt_hris text-uppercase">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">COA </label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t2_coa_2nd" class="form-control combobox_hris" style="width:auto">
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Koperasi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t2_nama_koperasi" class="form-control combobox_hris" style="width:auto">
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">COA Index</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t2_coaIdx" style="width:50%;" alt="maximal 10 char"
+                                    class="form-control txt_hris" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Status active</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t2_aktif" class="form-control combobox_hris"
+                                    style="width:auto">
+                                    <option value="">Chosee..</option>
+                                    <option value="Y">YES</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div name="tab-idx" class="tab-pane" id="entry_detail_l2" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Coa Group Id</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" style="width:50%;" id="t3_code_coa" class="form-control txt_hris"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Coa Group</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t3_nama_group_coa" class="form-control txt_hris text-uppercase"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Index Coa</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t3_coa_2nd" class="form-control combobox_hris" style="width:auto" readonly>
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Koperasi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t3_nama_koperasi" class="form-control combobox_hris" style="width:auto"
+                                    readonly>
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Index</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t3_coaIdx" style="width:50%;" alt="maximal 10 char" readonly
+                                    class="form-control txt_hris" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Aktif</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t3_aktif" class="form-control combobox_hris" readonly
+                                    style="width:auto">
+                                    <option value="">Chosee..</option>
+                                    <option value="Y">YES</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Coa 2nd</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t3_nama_coa_2nd" class="form-control txt_hris text-uppercase"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Remark Coa 2nd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t3_remark_coa_2nd"  readonly
+                                    class="form-control txt_hris">
+                                <input type="hidden" id="t3_idx_coa_2nd" style="width:50%;" readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Kode Coa 2nd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t3_kode_coa_2nd" style="width:50%;" readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header3" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader3">
+                                                <td>COA Detail</td>
+                                                <td>COA Group </td>
+                                                <td>COA Level 2 </td>
+                                                <td>Remark Level 2 </td>
+                                                <td>Nama Koperasi</td>
+                                                <td>index</td>
+                                                <td>Status</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult3">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div name="tab-idx" class="tab-pane" id="entry_detail_l3" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-6 ">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Kode Account</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text"  id="t4_code_coa" class="form-control txt_hris"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Acount</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_nama_group_coa" class="form-control txt_hris" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">COA 2nd</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t4_coa_2nd" class="form-control combobox_hris" style="width:auto" readonly>
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Koperasi</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select id="t4_nama_koperasi" class="form-control combobox_hris" style="width:auto"
+                                    readonly>
+                                    <option value="">Chosee..</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">COA Index</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_coaIdx"  alt="maximal 10 char" readonly
+                                    class="form-control txt_hris" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Status active</label>
+                            <div class="col-md-10 col-sm-9">
+                                <select name="aktif" id="t4_aktif" class="form-control combobox_hris" readonly
+                                    style="width:auto">
+                                    <option value="">Chosee..</option>
+                                    <option value="Y">YES</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Coa 2nd</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_nama_coa_2nd" class="form-control txt_hris text-uppercase"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Kode Coa 2nd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_kode_coa_2nd"  readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Index Coa 2nd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_idx_coa_2nd"  readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Nama Coa 3rd</label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_nama_coa_3rd" class="form-control txt_hris text-uppercase"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Remark Coa 3rd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_remark_coa_3rd"  readonly
+                                    class="form-control txt_hris">
+                                <input type="hidden" id="t4_idx_coa_3rd"  readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-md-2 col-sm-3 col-form-label text-right txt_hris">Kode Coa 3rd </label>
+                            <div class="col-md-10 col-sm-9">
+                                <input type="text" id="t4_kode_coa_3rd"  readonly
+                                    class="form-control txt_hris">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <div class="dt-responsive table-responsive" id="cardBlock">
+                                    <table id="fix-header4" class="table table-striped table-bordered nowrap">
+                                        <thead class="bg-rki">
+                                            <tr id="tableHeader4">
+                                                <td>COA Detail</td>
+                                                <td>COA Group Name</td>
+                                                <td>COA Level 2</td>
+                                                <td>COA Level 3</td>
+                                                <td>Remark Level 3</td>
+                                                <td>Nama Koperasi</td>
+                                                <td>Level 3 Index</td>
+                                                <td>Aktif</td>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableResult4">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

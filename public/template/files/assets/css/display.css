@@ -1,0 +1,72 @@
+@font-face {
+    font-family: 'Avenir LT Std 95 Black';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Avenir LT Std 95 Black'), url('AvenirLTStd-Black.woff') format('woff');
+}
+
+.header {
+    text-align: center;
+    background-color: #a6a6ff;
+    font-size: 2.6vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-left: #000000 1px solid;
+    font-weight: bold;
+}
+
+.sub_header {
+    text-align: center;
+    background-color: #38003d;
+    font-size: 2.5vw;
+    font-family: 'Avenir LT Std 95 Black';
+    color: white;
+    border-bottom: #a6a6ff 1px solid;
+}
+
+.detail {
+    text-align: center;
+    background-color: #000000;
+    color: white;
+    font-size: 2.7vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-left: #a6a6ff 1px solid;
+}
+
+.detail_err {
+    text-align: center;
+    background-color: #f50909;
+    color: white;
+    font-size: 2.7vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-left: #a6a6ff 1px solid;
+}
+.detail_ok {
+    text-align: center;
+    background-color:green;
+    color: white;
+    font-size: 2.7vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-left: #a6a6ff 1px solid;
+}
+.detail_more {
+    text-align: center;
+    background-color:blue;
+    color: white;
+    font-size: 2.7vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-left: #a6a6ff 1px solid;
+}
+
+.mar {
+    text-align: center;
+    background-color: #000000;
+    color: white;
+    font-size: 2.5vw;
+    font-family: 'Avenir LT Std 95 Black';
+    border-top: #a6a6ff 1px solid;
+    border-bottom: #a6a6ff 1px solid;
+}
+
+.border-header {
+    border-bottom: #dbdbff 1px solid;
+}
