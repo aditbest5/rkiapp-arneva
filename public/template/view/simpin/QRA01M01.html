@@ -92,7 +92,7 @@
                     fd.append('folder', "bukti");
 
                     $.ajax({
-                        url: "https://rkiapp.rkicoop.co.id/api/umum/",
+                        url: window.location.protocol + "//" + window.location.host +"api/umum/",
                         type: 'post',
                         data: fd,
                         contentType: false,

@@ -54,8 +54,8 @@
             var userId = document.getElementById("userId").value;
             var userPwd = document.getElementById("userPwd").value;
             //document.location.href = "/view/jsp/general/login.jsp";
-            // https://rkiapp.rkicoop.co.id/api/umum/
-            $.post("https://rkiapp.rkicoop.co.id/api/umum/", {
+            // api/umum/
+            $.post(window.location.protocol + "//" + window.location.host +window.location.protocol + "//" + window.location.host +"api/umum/", {
                     cmd: "selLogin",
                     userId: userId,
                     userPwd: userPwd
