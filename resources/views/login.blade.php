@@ -55,7 +55,7 @@
             var userPwd = document.getElementById("userPwd").value;
             //document.location.href = "/view/jsp/general/login.jsp";
             // api/umum/
-            $.post(window.location.protocol + "//" + window.location.host +window.location.protocol + "//" + window.location.host +"api/umum/", {
+            $.post(window.location.protocol + "//" + window.location.host +"api/umum/", {
                     cmd: "selLogin",
                     userId: userId,
                     userPwd: userPwd
