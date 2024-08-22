@@ -492,7 +492,7 @@
 
                                 $.ajax({
                                     /* url: 'http://103.232.66.72:82/test/upload.php', */
-                                    url: window.location.protocol + "//" + window.location.host +"api/umum/",
+                                    url: window.location.protocol + "//" + window.location.host +"/api/umum/",
                                     type: 'post',
                                     data: fd,
                                     contentType: false,
@@ -541,7 +541,7 @@
         fd.append('cmd', "uploadImageBarang");
 
         $.ajax({
-            url: window.location.protocol + "//" + window.location.host +"api/umum/",
+            url: window.location.protocol + "//" + window.location.host +"/api/umum/",
             type: 'post',
             data: fd,
             contentType: false,

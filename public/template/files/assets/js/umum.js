@@ -287,7 +287,7 @@ function finishLoading() {
 function Logout() {
     // $("#frmLogout").submit();
 
-    $.post(window.location.protocol + "//" + window.location.host +"api/umum/", {
+    $.post(window.location.protocol + "//" + window.location.host +"/api/umum/", {
         cmd: "logOut"
 
     },
