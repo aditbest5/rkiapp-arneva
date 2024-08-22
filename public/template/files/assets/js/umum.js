@@ -287,7 +287,7 @@ function finishLoading() {
 function Logout() {
     // $("#frmLogout").submit();
 
-    $.post("api/umum/", {
+    $.post("https://rkiapp.rkicoop.co.id/api/umum/", {
         cmd: "logOut"
 
     },
