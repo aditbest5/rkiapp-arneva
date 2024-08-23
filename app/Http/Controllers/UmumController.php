@@ -28,6 +28,11 @@ class UmumController extends Controller
 
     public function selLogin(Request $request, $cmd)
     {
+        header('Access-Control-Allow-Origin: *');
+
+        header('Access-Control-Allow-Methods: GET, POST');
+
+        header("Access-Control-Allow-Headers: X-Requested-With");
         $user = $request->get("userId");
         $userPwd = $request->get("userPwd");
         $sql = "
@@ -80,6 +85,11 @@ class UmumController extends Controller
 
     public function save(Request $request, $cmd)
     {
+        header('Access-Control-Allow-Origin: *');
+
+        header('Access-Control-Allow-Methods: GET, POST');
+
+        header("Access-Control-Allow-Headers: X-Requested-With");
         $id = $request->get("idx");
         $yy = $request->get("yy");
         //
@@ -87,6 +97,11 @@ class UmumController extends Controller
     }
     public function logOut(Request $request, $cmd)
     {
+        header('Access-Control-Allow-Origin: *');
+
+        header('Access-Control-Allow-Methods: GET, POST');
+
+        header("Access-Control-Allow-Headers: X-Requested-With");
         session_unset();
         session_destroy();
         $resutlMsg = array("sts" => "Y", "desc" => "", "msg" => "");
@@ -95,6 +110,11 @@ class UmumController extends Controller
 
     public function uploadImage(Request $request, $cmd)
     {
+        header('Access-Control-Allow-Origin: *');
+
+        header('Access-Control-Allow-Methods: GET, POST');
+
+        header("Access-Control-Allow-Headers: X-Requested-With");
 
         $fileName = $_POST["fileName"];
         $folder = $_POST["folder"];
