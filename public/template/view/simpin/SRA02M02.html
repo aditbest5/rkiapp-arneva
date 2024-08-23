@@ -4,13 +4,21 @@
     function setDefault() {
         //salert("Tidak Ada Data",'warning','Warning');
         selKoperasi();
-
     }
     var d = new Date();
-    var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
-
-
-
+    var pktr =
+        d.getFullYear() +
+        "" +
+        d.getMonth() +
+        "" +
+        d.getDate() +
+        "" +
+        d.getHours() +
+        "" +
+        d.getMinutes() +
+        "" +
+        d.getSeconds() +
+        d.getMilliseconds();
 
     function setAnggota(no_agt, nama) {
         var a = document.getElementsByName("tab-idx");
@@ -26,35 +34,44 @@
 
     function toMoney() {
         if ($("#t2_lama_pinjaman").val() == "") {
-            salert("Tolong Pilih Lama Pinjaman Dahulu !", 'error', 'Warning');
+            salert("Tolong Pilih Lama Pinjaman Dahulu !", "error", "Warning");
             $("#t2_jumlah_pinjaman").val("");
         } else {
             if ($("#t2_jumlah_pinjaman").val() == "") {
-
             } else {
                 console.log($("#t2_jumlah_pinjaman").val());
                 console.log($("#t2_lama_pinjaman option:selected").text());
-                var c = parseInt(parseInt($("#t2_jumlah_pinjaman").val()) / parseInt($("#t2_lama_pinjaman option:selected").text()));
+                var c = parseInt(
+                    parseInt($("#t2_jumlah_pinjaman").val()) /
+                        parseInt($("#t2_lama_pinjaman option:selected").text())
+                );
                 $("#t2_jumlah_angsuran").val(c);
-                $("#t2_string_jumlah_angsuran").text("Rp " + parseInt(c).toLocaleString());
-                $("#t2_string_jumlah_pinjaman").text("Rp " + parseInt($("#t2_jumlah_pinjaman").val()).toLocaleString());
+                $("#t2_string_jumlah_angsuran").text(
+                    "Rp " + parseInt(c).toLocaleString()
+                );
+                $("#t2_string_jumlah_pinjaman").text(
+                    "Rp " +
+                        parseInt(
+                            $("#t2_jumlah_pinjaman").val()
+                        ).toLocaleString()
+                );
             }
         }
-
-
     }
 
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: $("#login_kop_id").val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 const myArr = JSON.parse(data);
                 var b = "";
                 var x = document.getElementById("modal_nama_koperasi");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option = document.createElement("option");
@@ -63,10 +80,11 @@
                         x.add(option, x[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'error', 'Warning');
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "error", "Warning");
+        });
     }
 
     function searchAnggota() {
@@ -75,44 +93,53 @@
             $('#modalResult').html("Silahkan Pilih Koperasi Lebih Dahulu ! ");
         } else {
             */
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selAnggota",
-            kop_id: $("#modal_nama_koperasi").val(),
-            nama_anggota: $("#modal_namaAnggota").val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selAnggota",
+                kop_id: $("#modal_nama_koperasi").val(),
+                nama_anggota: $("#modal_namaAnggota").val(),
+            },
             function (data, status) {
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
-                        b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setAnggota('" + myArr[i]["no_anggota"] + "','" + myArr[i]["nama"] + "');\" >";
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#modalResult\');" onmouseout="backColor(this);"  ondblclick="setAnggota(\'' +
+                            myArr[i]["no_anggota"] +
+                            "','" +
+                            myArr[i]["nama"] +
+                            "');\" >";
                         b = b + " <td>" + myArr[i]["no_anggota"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["no_anggota_internal"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["no_anggota_internal"] +
+                            "</td> ";
                         b = b + " <td>" + myArr[i]["nama"] + "</td> ";
                         b = b + " <td>" + myArr[i]["nik"] + "</td> ";
                         b = b + "</tr>";
                         c = c + 1;
                     }
-
                 }
-                var table = $('#fix-header-modal').DataTable();
+                var table = $("#fix-header-modal").DataTable();
                 table.destroy();
-                $('#modalResult').html(b);
-                $('#fix-header-modal').DataTable({
-                    fixedHeader: true
+                $("#modalResult").html(b);
+                $("#fix-header-modal").DataTable({
+                    fixedHeader: true,
                 });
-
-            }).fail(function (e) {
-                console.log(e);
-                swalFinishLoading();
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
         //}
     }
-
-
 
     function openModalAnggota() {
         $("#modalAnggota").modal("show");
@@ -126,23 +153,18 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#t2_image_bukti')
-                    .attr('src', e.target.result);
+                $("#t2_image_bukti").attr("src", e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-
-
-
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            $('#t2_kode_transaksi').val(pktr);
+            $("#t2_kode_transaksi").val(pktr);
             /*
             $.post("tr", {
                 cmd: "selNomorPengajuan"
@@ -163,186 +185,317 @@
         }
     }
 
-
     function verifyData() {
         swalStartLoading();
         var fd = new FormData();
-        var files = $('#fileToUpload')[0].files;
-        var nomor_pinjaman = $('#t2_nomor_pinjaman').val()
-        var nomor_pengajuan = $('#t2_nomor_pengajuan').val()
-        $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
-            cmd: "updAngsuran",
-            userIns: $('#login_userId').val(),
-            nomor_pinjaman: nomor_pinjaman,
-            nomor_pengajuan: nomor_pengajuan
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr["sts"] == "OK") {
-                //salertFunction("Save Complete !", 'success', 'Success', "saveComplete", "");
-                if (files.length == 0) {
-                    salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "saveComplete", "");
-                } else {
-                    // Check file selected or not
-                    fd.append('fileToUpload', files[0]);
-                    fd.append('fileName', nomor_pinjaman + "-" + nomor_pengajuan);
-                    fd.append('cmd', "uploadImage");
-                    fd.append('folder', "bukti");
+        var files = $("#fileToUpload")[0].files;
+        var nomor_pinjaman = $("#t2_nomor_pinjaman").val();
+        var nomor_pengajuan = $("#t2_nomor_pengajuan").val();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+            {
+                cmd: "updAngsuran",
+                userIns: $("#login_userId").val(),
+                nomor_pinjaman: nomor_pinjaman,
+                nomor_pengajuan: nomor_pengajuan,
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr["sts"] == "OK") {
+                    //salertFunction("Save Complete !", 'success', 'Success', "saveComplete", "");
+                    if (files.length == 0) {
+                        salertFunction(
+                            "Success ! " + myArr["desc"] + "\n" + myArr["msg"],
+                            "success",
+                            "Success",
+                            "saveComplete",
+                            ""
+                        );
+                    } else {
+                        // Check file selected or not
+                        fd.append("fileToUpload", files[0]);
+                        fd.append(
+                            "fileName",
+                            nomor_pinjaman + "-" + nomor_pengajuan
+                        );
+                        fd.append("cmd", "uploadImage");
+                        fd.append("folder", "bukti");
 
-                    $.ajax({
-                        /* url: 'http://103.232.66.72:82/test/upload.php', */
-                        url: "api/umum/",
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        cors: true,
-                        success: function (response) {
-                            if (response != 0) {
-                                const myArr = JSON.parse(response);
-                                if (myArr["sts"] == "OK") {
-                                    salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "saveComplete", "");
+                        $.ajax({
+                            /* url: 'http://103.232.66.72:82/test/upload.php', */
+                            url: "api/umum/",
+                            type: "post",
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            cors: true,
+                            success: function (response) {
+                                if (response != 0) {
+                                    const myArr = JSON.parse(response);
+                                    if (myArr["sts"] == "OK") {
+                                        salertFunction(
+                                            "Success ! " +
+                                                myArr["desc"] +
+                                                "\n" +
+                                                myArr["msg"],
+                                            "success",
+                                            "Success",
+                                            "saveComplete",
+                                            ""
+                                        );
+                                    } else {
+                                        salert(
+                                            "Error ! " +
+                                                myArr["desc"] +
+                                                "\n" +
+                                                myArr["msg"],
+                                            "error",
+                                            "Error"
+                                        );
+                                    }
                                 } else {
-                                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                                    salert(
+                                        "file not uploaded",
+                                        "error",
+                                        "Error"
+                                    );
                                 }
-                            } else {
-                                salert('file not uploaded', 'error', 'Error');
-                            }
-                        },
-                    });
+                            },
+                        });
+                    }
+                } else {
+                    salert(
+                        "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                        "error",
+                        "Error"
+                    );
                 }
-
-            } else {
-                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             // Handle error here
         });
     }
 
     function saveComplete() {
-        $('#tab_query').click();
+        $("#tab_query").click();
         fnInquery();
         clearForm();
     }
 
-
-    function _changeTab(nomor_pinjaman, nomor_pengajuan, nama, jatuh_tempo, jumlah_angsuran, jumlah_pinjaman, angsuran_ke, denda, sts) {
-        $('#tab_entry').click();
-        $('#t2_sts').val(sts);
-        $('#t2_nomor_pinjaman').val(nomor_pinjaman);
-        $('#t2_nomor_pengajuan').val(nomor_pengajuan);
-        $('#t2_nama').val(nama);
-        $('#t2_jatuh_tempo').val(jatuh_tempo);
-        $('#t2_jumlah_angsuran').val(jumlah_angsuran);
-        $('#t2_jumlah_pinjaman').val(jumlah_pinjaman);
-        $('#t2_angsuran_ke').val(angsuran_ke);
-        $('#t2_denda').val(denda);
-        $('#t2_image_bukti').attr("src", "https://storage.googleapis.com/atous-product-images/bukti/" + nomor_pinjaman + "-" + nomor_pengajuan + ".jpg?ignoreCache=1");
+    function _changeTab(
+        nomor_pinjaman,
+        nomor_pengajuan,
+        nama,
+        jatuh_tempo,
+        jumlah_angsuran,
+        jumlah_pinjaman,
+        angsuran_ke,
+        denda,
+        sts
+    ) {
+        $("#tab_entry").click();
+        $("#t2_sts").val(sts);
+        $("#t2_nomor_pinjaman").val(nomor_pinjaman);
+        $("#t2_nomor_pengajuan").val(nomor_pengajuan);
+        $("#t2_nama").val(nama);
+        $("#t2_jatuh_tempo").val(jatuh_tempo);
+        $("#t2_jumlah_angsuran").val(jumlah_angsuran);
+        $("#t2_jumlah_pinjaman").val(jumlah_pinjaman);
+        $("#t2_angsuran_ke").val(angsuran_ke);
+        $("#t2_denda").val(denda);
+        $("#t2_image_bukti").attr(
+            "src",
+            "https://storage.googleapis.com/atous-product-images/bukti/" +
+                nomor_pinjaman +
+                "-" +
+                nomor_pengajuan +
+                ".jpg?ignoreCache=1"
+        );
     }
 
     function clearForm() {
-        $('#t2_sts').val("");
-        $('#t2_nomor_pinjaman').val("");
-        $('#t2_nomor_pengajuan').val("");
-        $('#t2_nama').val("");
-        $('#t2_jatuh_tempo').val("");
-        $('#t2_jumlah_angsuran').val("");
-        $('#t2_jumlah_pinjaman').val("");
-        $('#t2_angsuran_ke').val("");
-        $('#t2_denda').val("");
-        $('#t2_image_bukti').attr("src", "../template/files/assets/images/admin.jpg");
+        $("#t2_sts").val("");
+        $("#t2_nomor_pinjaman").val("");
+        $("#t2_nomor_pengajuan").val("");
+        $("#t2_nama").val("");
+        $("#t2_jatuh_tempo").val("");
+        $("#t2_jumlah_angsuran").val("");
+        $("#t2_jumlah_pinjaman").val("");
+        $("#t2_angsuran_ke").val("");
+        $("#t2_denda").val("");
+        $("#t2_image_bukti").attr(
+            "src",
+            "../template/files/assets/images/admin.jpg"
+        );
     }
 
     function fnInquery() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
-            if ($('#t1_tgl_awal').val().length == 0 || $('#t1_tgl_akhir').val().length == 0) {
-                salert("Tolong Isi Tanggal Lebih Dahulu ", 'warning', 'Warning');
+            if (
+                $("#t1_tgl_awal").val().length == 0 ||
+                $("#t1_tgl_akhir").val().length == 0
+            ) {
+                salert(
+                    "Tolong Isi Tanggal Lebih Dahulu ",
+                    "warning",
+                    "Warning"
+                );
                 return;
             }
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                cmd: "selAngsuran",
-                tgl_awal: $('#t1_tgl_awal').val(),
-                tgl_akhir: $('#t1_tgl_akhir').val(),
-                kop_id: $('#login_kop_id').val(),
-                noAnggota: $('#t1_noAnggota').val()
-            }, function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                var c = 1;
-                var b = "";
-                var sts = "info";
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                {
+                    cmd: "selAngsuran",
+                    tgl_awal: $("#t1_tgl_awal").val(),
+                    tgl_akhir: $("#t1_tgl_akhir").val(),
+                    kop_id: $("#login_kop_id").val(),
+                    noAnggota: $("#t1_noAnggota").val(),
+                },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    var sts = "info";
 
-                const myArr = JSON.parse(data);
-                if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
-                } else {
-                    for (var i = 0; i < myArr.length; i += 1) {
-                        if (myArr[i]["sts"] == "UTANG") {
-                            sts = "warning";
-                        } else {
-                            sts = "success";
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", "warning", "Warning");
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            if (myArr[i]["sts"] == "UTANG") {
+                                sts = "warning";
+                            } else {
+                                sts = "success";
+                            }
+
+                            b =
+                                b +
+                                "<tr  onDblClick=\"Tab2(this,'#tableResult','" +
+                                myArr[i]["masterCode"] +
+                                '\')"  onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                            b = b + " <td>" + c + "</td> ";
+                            b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                            b = b + " <td>" + myArr[i]["idx"] + "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["str_jatuh_tempo"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(
+                                    myArr[i]["jumlah_angsuran"]
+                                ).toLocaleString() +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(
+                                    myArr[i]["jumlah_pinjaman"]
+                                ).toLocaleString() +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["angsuran_ke"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(myArr[i]["denda"]).toLocaleString() +
+                                "</td> ";
+
+                            b =
+                                b +
+                                " <td> <span class='text-" +
+                                sts +
+                                " font-weight-bold' title='" +
+                                myArr[i]["sts"] +
+                                "'  > " +
+                                myArr[i]["sts"] +
+                                "</span></td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                " <button onclick=\"_changeTab('" +
+                                myArr[i]["nomor_pinjaman"] +
+                                "','" +
+                                myArr[i]["idx"] +
+                                "','" +
+                                myArr[i]["nama"] +
+                                "','" +
+                                myArr[i]["str_jatuh_tempo"] +
+                                "','" +
+                                parseInt(
+                                    myArr[i]["jumlah_angsuran"]
+                                ).toLocaleString() +
+                                "','" +
+                                parseInt(
+                                    myArr[i]["jumlah_pinjaman"]
+                                ).toLocaleString() +
+                                "','" +
+                                myArr[i]["angsuran_ke"] +
+                                "','" +
+                                parseInt(myArr[i]["denda"]).toLocaleString() +
+                                "','" +
+                                myArr[i]["sts"] +
+                                "')\"   title='BAYAR' class='btn btn-success btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-dollar'></i></button>" +
+                                "</td> ";
+                            b = b + "</tr>";
+                            c = c + 1;
                         }
-
-                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                        b = b + " <td>" + c + "</td> ";
-                        b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["idx"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["str_jatuh_tempo"] + "</td> ";
-                        b = b + " <td>" + parseInt(myArr[i]["jumlah_angsuran"]).toLocaleString() + "</td> ";
-                        b = b + " <td>" + parseInt(myArr[i]["jumlah_pinjaman"]).toLocaleString() + "</td> ";
-                        b = b + " <td>" + myArr[i]["angsuran_ke"] + "</td> ";
-                        b = b + " <td>" + parseInt(myArr[i]["denda"]).toLocaleString() + "</td> ";
-
-                        b = b + " <td> <span class='text-" + sts + " font-weight-bold' title='" + myArr[i]["sts"] + "'  > " + myArr[i]["sts"] + "</span></td> ";
-                        b = b + " <td>" + " <button onclick=\"_changeTab('" + myArr[i]["nomor_pinjaman"] + "','" + myArr[i]["idx"] + "','" + myArr[i]["nama"] + "','" + myArr[i]["str_jatuh_tempo"] + "','" + parseInt(myArr[i]["jumlah_angsuran"]).toLocaleString() + "','" + parseInt(myArr[i]["jumlah_pinjaman"]).toLocaleString() + "','" + myArr[i]["angsuran_ke"] + "','" + parseInt(myArr[i]["denda"]).toLocaleString() + "','" + myArr[i]["sts"] + "')\"   title='BAYAR' class='btn btn-success btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-dollar'></i></button>" + "</td> ";
-                        b = b + "</tr>";
-                        c = c + 1;
                     }
-
+                    swalFinishLoading();
+                    var table = $("#fix-header").DataTable();
+                    table.destroy();
+                    document.getElementById("tableResult").innerHTML = b;
+                    isiTable = b;
+                    $("#fix-header").DataTable({
+                        fixedHeader: true,
+                    });
                 }
-                swalFinishLoading();
-                var table = $('#fix-header').DataTable();
-                table.destroy();
-                document.getElementById("tableResult").innerHTML = b;
-                isiTable = b;
-                $('#fix-header').DataTable({
-                    fixedHeader: true
-                });
-
-            }).fail(function (e) {
+            ).fail(function (e) {
                 console.log(e);
                 swalFinishLoading();
             });
-
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            if ($('#t2_sts').val() == "LUNAS") {
-                salert("Angsuran Sudah Lunas !  \n Harap Pilih Angsuran Yang Lain ", 'warning', 'Warning');
+            if ($("#t2_sts").val() == "LUNAS") {
+                salert(
+                    "Angsuran Sudah Lunas !  \n Harap Pilih Angsuran Yang Lain ",
+                    "warning",
+                    "Warning"
+                );
             } else {
-                salertOptionFunction(" Data Akan Di Konfirmasi ?", "question", 'Apakah Anda Yakin ?', "verifyData", "")
+                salertOptionFunction(
+                    " Data Akan Di Konfirmasi ?",
+                    "question",
+                    "Apakah Anda Yakin ?",
+                    "verifyData",
+                    ""
+                );
             }
-
         }
     }
-
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -352,39 +505,36 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function exportExcel() {
-
         //alert("tab");
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Download Excel", 'info', 'Info');
+            salert("Download Excel", "info", "Info");
             downloadExcell("#tableHeader", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
-
         }
     }
 
     function openAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Maximum View", 'info', 'Info');
+            salert("Maximum View", "info", "Info");
             openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
@@ -392,11 +542,10 @@
     }
 
     function gridAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Minimum View", 'info', 'Info');
-            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+            salert("Minimum View", "info", "Info");
+            minimizeAllGrid("#fix-header", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
         }
@@ -406,52 +555,107 @@
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px">
-
-            <li class="nav-item  " style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important; border-bottom: 0px"
+        >
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
 
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Approve Data </a>
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Approve Data
+                </a>
                 <div class="slide"></div>
             </li>
-
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Tanggal Awal</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Tanggal Awal</label
+                            >
                             <div class="col-sm-8">
-                                <input type="date" id="t1_tgl_awal" class="form-control txt_hris">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_awal"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Tanggal Akhir</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Tanggal Akhir</label
+                            >
                             <div class="col-sm-8">
-                                <input type="date" id="t1_tgl_akhir" class="form-control txt_hris">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_akhir"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Nama Anggota</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Nama Anggota</label
+                            >
                             <div class="col-sm-8">
-                                <div class="input-group" style="margin-bottom: 0px !important;">
-                                    <input type="text" id="t1_namaAnggota" class="form-control txt_hris" readonly>
-                                    <input type="hidden" id="t1_noAnggota" readonly class="form-control txt_hris">
+                                <div
+                                    class="input-group"
+                                    style="margin-bottom: 0px !important"
+                                >
+                                    <input
+                                        type="text"
+                                        id="t1_namaAnggota"
+                                        class="form-control txt_hris"
+                                        readonly
+                                    />
+                                    <input
+                                        type="hidden"
+                                        id="t1_noAnggota"
+                                        readonly
+                                        class="form-control txt_hris"
+                                    />
                                     &nbsp;
                                     <div class="input-group-append">
-                                        <button onClick="openModalAnggota();" class="input-group-text bg-success ">
-                                            <i class="fa fa-search "></i></button>
+                                        <button
+                                            onClick="openModalAnggota();"
+                                            class="input-group-text bg-success"
+                                        >
+                                            <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -459,19 +663,27 @@
                     </div>
                 </div>
 
-
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No</td>
-                                                <td>Nama </td>
-                                                <td>No Transaksi </td>
+                                                <td>Nama</td>
+                                                <td>No Transaksi</td>
                                                 <td>Jatuh Tempo</td>
                                                 <td>Jumlah Angsuran</td>
                                                 <td>Jumlah Pinjaman</td>
@@ -481,9 +693,7 @@
                                                 <td>Action</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -493,149 +703,212 @@
                 </div>
             </div>
 
-
             <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Kode Transaksi</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Kode Transaksi</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_nomor_pinjaman" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_nomor_pinjaman"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">No Pengajuan</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >No Pengajuan</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_nomor_pengajuan" class="form-control txt_hris" readonly>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Nama Anggota</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="t2_nama" readonly class="form-control txt_hris">
+                                <input
+                                    type="text"
+                                    id="t2_nomor_pengajuan"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Jatuh Tempo</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Nama Anggota</label
+                            >
                             <div class="col-sm-8">
-
-                                <input type="text" id="t2_jatuh_tempo" class="form-control txt_hris" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Jumlah Angsuran</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="t2_jumlah_angsuran" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_nama"
+                                    readonly
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Jumlah Pinjaman</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Jatuh Tempo</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_jumlah_pinjaman" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_jatuh_tempo"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
-
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Jumlah Angsuran</label
+                            >
+                            <div class="col-sm-8">
+                                <input
+                                    type="text"
+                                    id="t2_jumlah_angsuran"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Angsuran Ke</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Jumlah Pinjaman</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_angsuran_ke" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_jumlah_pinjaman"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Angsuran Ke</label
+                            >
+                            <div class="col-sm-8">
+                                <input
+                                    type="text"
+                                    id="t2_angsuran_ke"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Denda</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Denda</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_denda" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_denda"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
-
-
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">Status</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >Status</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_sts" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_sts"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-
                 <div class="row p-3">
-                    <div class="col-3 col-sm-3">
-
-                    </div>
-                    <div class="col-12 col-sm-6 "><!--<button onclick="uploadImage22()">testUpload</button>-->
-                        <form id="uploadImage" runat="server" method="post" enctype="multipart/form-data">
+                    <div class="col-3 col-sm-3"></div>
+                    <div class="col-12 col-sm-6">
+                        <!--<button onclick="uploadImage22()">testUpload</button>-->
+                        <form
+                            id="uploadImage"
+                            runat="server"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
                             Upload Bukti Transaksi
-                            <br>
-                            <input type="file" accept=".jpg" class="form-control" id="fileToUpload" name="fileToUpload"
-                                onchange="readURL(this);">
+                            <br />
+                            <input
+                                type="file"
+                                accept=".jpg"
+                                class="form-control"
+                                id="fileToUpload"
+                                name="fileToUpload"
+                                onchange="readURL(this);"
+                            />
 
-                            <br>
+                            <br />
                             <center>
-                                <img src="../template/files/assets/images/admin.jpg" id="t2_image_bukti" class="rounded"
-                                    alt="Upload Your Image Maksimal 500 Kb" title=" Upload Your Image Maksimal 500 Kb"
-                                    width="304" height="300">
+                                <img
+                                    src="../template/files/assets/images/admin.jpg"
+                                    id="t2_image_bukti"
+                                    class="rounded"
+                                    alt="Upload Your Image Maksimal 500 Kb"
+                                    title=" Upload Your Image Maksimal 500 Kb"
+                                    width="304"
+                                    height="300"
+                                />
                             </center>
                         </form>
                     </div>
-                    <div class="col-3 col-sm-3">
-
-                    </div>
-
+                    <div class="col-3 col-sm-3"></div>
                 </div>
-
-
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>
 
 <!-- The Modal -->
-<div class="modal " id="modalAnggota">
+<div class="modal" id="modalAnggota">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-success ">
-                <span style="font-weight:bold ;">Cari Anggota </span> <button type="button" class="close"
-                    data-dismiss="modal">&times;</button>
+            <div class="modal-header bg-success">
+                <span style="font-weight: bold">Cari Anggota </span>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
@@ -655,10 +928,18 @@
 
                     <div class="col-12 col-sm-6 form-inline">
                         <span>Nama Anggota </span>&nbsp;&nbsp;&nbsp;
-                        <input type="text" id="modal_namaAnggota" style="width: 50%;"
-                            class="form-control txt_hris">&nbsp;&nbsp;
-                        <button onClick="searchAnggota();" class="input-group-text bg-success ">
-                            <i class="fa fa-search "></i></button>
+                        <input
+                            type="text"
+                            id="modal_namaAnggota"
+                            style="width: 50%"
+                            class="form-control txt_hris"
+                        />&nbsp;&nbsp;
+                        <button
+                            onClick="searchAnggota();"
+                            class="input-group-text bg-success"
+                        >
+                            <i class="fa fa-search"></i>
+                        </button>
                         <!--
                         <div class="form-group row frm_grp">
                             <label class="col-sm-4 col-form-label text-right txt_hris">Nama Anggota</label>
@@ -679,26 +960,29 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlockModal">
-                                    <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlockModal"
+                                >
+                                    <table
+                                        id="fix-header-modal"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
                                             <tr id="modalHeader">
-                                                <td>No Anggota </td>
+                                                <td>No Anggota</td>
                                                 <td>Id</td>
                                                 <td>Nama Anggota</td>
                                                 <td>No KTP</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="modalResult">
-
-                                        </tbody>
+                                        <tbody id="modalResult"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

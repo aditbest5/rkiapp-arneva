@@ -10,13 +10,14 @@
         //selToko();
     }
 
-
     function userAll() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selUser",
-            tipeUser: "",
-            kop_id: $('#login_kop_id').val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selUser",
+                tipeUser: "",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
@@ -24,7 +25,7 @@
                 var b = "";
                 var x = document.getElementById("userId");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option = document.createElement("option");
@@ -33,25 +34,28 @@
                         x.add(option, x[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "warning", "Warning");
+            // Handle error here
+        });
     }
 
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: ""
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: "",
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
                 var b = "";
                 var y = document.getElementById("t2_kop_id");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option2 = document.createElement("option");
@@ -60,26 +64,29 @@
                         y.add(option2, y[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "warning", "Warning");
+            // Handle error here
+        });
     }
 
     function selToko() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selToko",
-            kop_id: "",
-            toko_id: ""
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selToko",
+                kop_id: "",
+                toko_id: "",
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
                 var b = "";
                 var y = document.getElementById("t2_toko_id");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option2 = document.createElement("option");
@@ -88,32 +95,27 @@
                         y.add(option2, y[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                //salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            //salert("Error: " + e, 'warning', 'Warning');
+            // Handle error here
+        });
     }
-
-
-
-
 
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
-            $('#t2_userId').val("");
-            $('#t2_cfmPass').val("");
-            $('#t2_userId').removeAttr('readonly');
-            $('#t2_userNm').val("");
-            $('#t2_userPwd').val("");
-            $('#t2_namaUser').val("");
-            $('#t2_aktif').val("");
-            $('#t2_tipeUser').val("");
+            $("#t2_userId").val("");
+            $("#t2_cfmPass").val("");
+            $("#t2_userId").removeAttr("readonly");
+            $("#t2_userNm").val("");
+            $("#t2_userPwd").val("");
+            $("#t2_namaUser").val("");
+            $("#t2_aktif").val("");
+            $("#t2_tipeUser").val("");
             getNumber();
         }
     }
@@ -121,164 +123,290 @@
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-                cmd: "selUserNomor"
-            },
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                {
+                    cmd: "selUserNomor",
+                },
                 function (data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
                     const myArr = JSON.parse(data);
                     if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
+                        salert("Tidak Ada Data", "warning", "Warning");
                     } else {
-                        $('#t2_userId').val(myArr[0]["noUser"]);
-                        $('#t2_userId').attr('readonly', 'readonly');
+                        $("#t2_userId").val(myArr[0]["noUser"]);
+                        $("#t2_userId").attr("readonly", "readonly");
                     }
-                }).fail(function (e) {
-                    console.log(e);
-                    salert("Error: " + e, 'warning', 'Warning');
-                });
+                }
+            ).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, "warning", "Warning");
+            });
         }
     }
 
-    function _changeTab(userId, userNm, userPwd, aktif, level, kop_id, namaUser, toko_id) {
-        $('#t2_userId').val(userId);
-        $('#t2_userId').attr('readonly', 'readonly');
-        $('#t2_userNm').val(userNm);
-        $('#t2_userPwd').val(userPwd);
-        $('#t2_aktif').val(aktif);
-        $('#t2_namaUser').val(namaUser);
-        $('#t2_tipeUser').val(level);
-        $('#t2_kop_id').val(kop_id);
-        $('#t2_toko_id').val(toko_id);
+    function _changeTab(
+        userId,
+        userNm,
+        userPwd,
+        aktif,
+        level,
+        kop_id,
+        namaUser,
+        toko_id
+    ) {
+        $("#t2_userId").val(userId);
+        $("#t2_userId").attr("readonly", "readonly");
+        $("#t2_userNm").val(userNm);
+        $("#t2_userPwd").val(userPwd);
+        $("#t2_aktif").val(aktif);
+        $("#t2_namaUser").val(namaUser);
+        $("#t2_tipeUser").val(level);
+        $("#t2_kop_id").val(kop_id);
+        $("#t2_toko_id").val(toko_id);
         // tab_query
-        $('#tab_entry').click();
-        $('#tab_entry').text('Edit Data');
+        $("#tab_entry").click();
+        $("#tab_entry").text("Edit Data");
     }
-
 
     function _action(tipe, idx) {
         var param = [idx];
         if (tipe == "DELETE") {
-            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+            salertOptionFunction(
+                " Data Akan Di Delete ?",
+                "question",
+                " Anda Yakin ?",
+                "_del",
+                param
+            );
         }
     }
 
     function _del(param) {
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-            cmd: "delUser",
-            userId: param[0]
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            {
+                cmd: "delUser",
+                userId: param[0],
+            },
             function (data, status) {
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr["sts"] == "OK") {
-                    salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
+                    salertFunction(
+                        "Delete Complete !",
+                        "success",
+                        "Success",
+                        "fnInquery",
+                        ""
+                    );
                 } else {
-                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    salert(
+                        "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                        "error",
+                        "Error"
+                    );
                 }
-            }).fail(function (e) {
-                console.log(e);
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            // Handle error here
+        });
     }
 
-
-
     function inq() {
-        var userId = $('#userId').val();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selHakUser",
-            userId: userId
-        },
+        var userId = $("#userId").val();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selHakUser",
+                userId: userId,
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     showData = myArr.length;
-                    b = b + "<input type='hidden' id='showDataUserid' value='" + myArr[0]["userId"] + "'";
+                    b =
+                        b +
+                        "<input type='hidden' id='showDataUserid' value='" +
+                        myArr[0]["userId"] +
+                        "'";
                     for (var i = 0; i < myArr.length; i += 1) {
-                        b = b + "<tr     onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b =
+                            b +
+                            '<tr     onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
                         //b = b + "<td> " + myArr[i]["userNm"] + "</td> ";
 
-                        b = b + " <td>" + myArr[i]["menuCode"] + " <input type='hidden' id='menuCode" + i + "' value='" + myArr[i]["menuCode"] + "'></td> ";
-
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["menuCode"] +
+                            " <input type='hidden' id='menuCode" +
+                            i +
+                            "' value='" +
+                            myArr[i]["menuCode"] +
+                            "'></td> ";
 
                         if (myArr[i]["menuClass"] == "MODUL") {
-                            b = b + "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " + myArr[i]["menuName"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " +
+                                myArr[i]["menuName"] +
+                                "</td> ";
                         } else if (myArr[i]["menuClass"] == "MENU") {
-                            b = b + "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " + myArr[i]["menuName"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " +
+                                myArr[i]["menuName"] +
+                                "</td> ";
                         } else {
-                            b = b + " <td title='menu STEP1' >" + myArr[i]["menuName"] + "</td> ";
+                            b =
+                                b +
+                                " <td title='menu STEP1' >" +
+                                myArr[i]["menuName"] +
+                                "</td> ";
                         }
                         if (myArr[i]["menuClass"] == "MODUL") {
-                            b = b + "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " + myArr[i]["menuTipe"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " +
+                                myArr[i]["menuTipe"] +
+                                "</td> ";
                         } else if (myArr[i]["menuClass"] == "MENU") {
-                            b = b + "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " + myArr[i]["menuTipe"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " +
+                                myArr[i]["menuTipe"] +
+                                "</td> ";
                         } else {
-                            b = b + " <td title='menu STEP1' >" + myArr[i]["menuTipe"] + "</td> ";
+                            b =
+                                b +
+                                " <td title='menu STEP1' >" +
+                                myArr[i]["menuTipe"] +
+                                "</td> ";
                         }
                         if (myArr[i]["menuClass"] == "MODUL") {
-                            b = b + "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " + myArr[i]["menuClass"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-success font-weight-bold' title='Setiap User Haru Mempunyai Minimal Satu Modul Yang Harus Diakses' > " +
+                                myArr[i]["menuClass"] +
+                                "</td> ";
                         } else if (myArr[i]["menuClass"] == "MENU") {
-                            b = b + "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " + myArr[i]["menuClass"] + "</td> ";
+                            b =
+                                b +
+                                "<td class='text-warning font-weight-bold' title='Jika ada STEP1 yang boleh diakses maka menu harus dibuat Yes' > " +
+                                myArr[i]["menuClass"] +
+                                "</td> ";
                         } else {
-                            b = b + " <td title='menu STEP1' >" + myArr[i]["menuClass"] + "</td> ";
+                            b =
+                                b +
+                                " <td title='menu STEP1' >" +
+                                myArr[i]["menuClass"] +
+                                "</td> ";
                         }
 
                         b = b + " <td> ";
                         if (myArr[i]["showYn"] == "Y") {
-                            b = b + "    <select  id='showYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select  id='showYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='showYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='showYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
                         b = b + " <td> ";
                         if (myArr[i]["saveYn"] == "Y") {
-                            b = b + "    <select id='saveYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='saveYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='saveYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='saveYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
                         b = b + " <td> ";
                         if (myArr[i]["editYn"] == "Y") {
-                            b = b + "    <select id='editYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='editYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='editYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='editYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
                         b = b + " <td> ";
                         if (myArr[i]["inqYn"] == "Y") {
-                            b = b + "    <select id='inqYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='inqYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='inqYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='inqYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
                         b = b + " <td> ";
                         if (myArr[i]["deleteYn"] == "Y") {
-                            b = b + "    <select id='deleteYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='deleteYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='deleteYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='deleteYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
                         b = b + " <td> ";
                         if (myArr[i]["printYn"] == "Y") {
-                            b = b + "    <select id='printYn" + i + "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='printYn" +
+                                i +
+                                "'><option value='N' >No</option><option value='Y' selected  >Yes</option> </select>  ";
                         } else {
-                            b = b + "    <select id='printYn" + i + "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
+                            b =
+                                b +
+                                "    <select id='printYn" +
+                                i +
+                                "'><option value='N' selected  >No</option><option value='Y'   >Yes</option> </select>  ";
                         }
                         b = b + " </td> ";
 
@@ -288,18 +416,17 @@
                 }
                 swalFinishLoading();
                 var screenHeight = $(document).height();
-                screenHeight = screenHeight * 70 / 100;
+                screenHeight = (screenHeight * 70) / 100;
                 $("#cardBlock").height(screenHeight);
                 $("#cardBlock").css("overflow", "auto");
                 $("#tableResult").html(b);
 
                 isiTable = b;
-
-
-            }).fail(function (e) {
-                console.log(e);
-                swalFinishLoading();
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
     }
 
     function fnInquery() {
@@ -307,13 +434,12 @@
         if (a[0].className.search("active") > 0) {
             inq();
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
-
 
         if (a[0].className.search("active") > 0) {
             var arrData = [];
@@ -325,17 +451,19 @@
                     editYn: $("#editYn" + i).val(),
                     inqYn: $("#inqYn" + i).val(),
                     deleteYn: $("#deleteYn" + i).val(),
-                    printYn: $("#printYn" + i).val()
+                    printYn: $("#printYn" + i).val(),
                 };
                 arrData.push(objMenu);
             }
             console.log(arrData);
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-                cmd: "updHakuser",
-                userId: $('#userId').val(),
-                arrData: arrData
-            },
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                {
+                    cmd: "updHakuser",
+                    userId: $("#userId").val(),
+                    arrData: arrData,
+                },
                 function (data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
                     var c = 1;
@@ -344,27 +472,33 @@
                     console.log(myArr.length);
                     if (myArr["sts"] == "OK") {
                         //salert(myArr["desc"], 'success', 'Success');
-                        salertFunction(myArr["desc"], 'success', 'Success', "inq", "");
+                        salertFunction(
+                            myArr["desc"],
+                            "success",
+                            "Success",
+                            "inq",
+                            ""
+                        );
                     } else {
-                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        salert(
+                            "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                            "error",
+                            "Error"
+                        );
                     }
-                }).fail(function (e) {
-                    console.log(e);
-                });
-
+                }
+            ).fail(function (e) {
+                console.log(e);
+            });
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         }
-
     }
-
-
-
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -374,18 +508,18 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
@@ -393,18 +527,17 @@
         //alert("tab");
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Download Excel", 'info', 'Info');
+            salert("Download Excel", "info", "Info");
             downloadExcell("#tableHeader", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
-
         }
     }
 
     function openAll() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Maximum View", 'info', 'Info');
+            salert("Maximum View", "info", "Info");
             openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
@@ -414,8 +547,8 @@
     function gridAll() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Minimum View", 'info', 'Info');
-            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+            salert("Minimum View", "info", "Info");
+            minimizeAllGrid("#fix-header", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
         }
@@ -425,44 +558,75 @@
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;" onclick="inq()">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li
+                class="nav-item"
+                style="width: calc(100% / 3.1) !important"
+                onclick="inq()"
+            >
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
-
-
-
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">User Login</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >User Login</label
+                            >
                             <div class="col-sm-8">
-                                <select name="userId" id="userId" class="form-control combobox_hris">
+                                <select
+                                    name="userId"
+                                    id="userId"
+                                    class="form-control combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <!--<td>User Name</td>-->
                                                 <td>Menu Code</td>
                                                 <td>Menu Name</td>
@@ -476,9 +640,7 @@
                                                 <td>Print</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -488,32 +650,52 @@
                 </div>
             </div>
 
-
             <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Id</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Id</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_userId" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_userId"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Nama</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Nama</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_namaUser" class="form-control txt_hris">
+                                <input
+                                    type="text"
+                                    id="t2_namaUser"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Group</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Group</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select id="t2_tipeUser" class="form-control combobox_hris">
+                                <select
+                                    id="t2_tipeUser"
+                                    class="form-control combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -522,39 +704,69 @@
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Name</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Name</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_userNm" class="form-control txt_hris">
+                                <input
+                                    type="text"
+                                    id="t2_userNm"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_userPwd" alt="maximal 10 char"
-                                    class="form-control txt_hris" maxlength="10">
+                                <input
+                                    type="password"
+                                    id="t2_userPwd"
+                                    alt="maximal 10 char"
+                                    class="form-control txt_hris"
+                                    maxlength="10"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Confirm Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Confirm Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_cfmPass" alt="maximal 10 char"
-                                    class="form-control txt_hris" maxlength="10">
+                                <input
+                                    type="password"
+                                    id="t2_cfmPass"
+                                    alt="maximal 10 char"
+                                    class="form-control txt_hris"
+                                    maxlength="10"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Koperasi</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Koperasi</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="hidden" value="Y" id="t2_aktif">
-                                <select name="aktif" id="t2_kop_id" class="form-control form-select combobox_hris">
+                                <input type="hidden" value="Y" id="t2_aktif" />
+                                <select
+                                    name="aktif"
+                                    id="t2_kop_id"
+                                    class="form-control form-select combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -562,30 +774,24 @@
                     </div>
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Toko</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Toko</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="hidden" value="Y" id="t2_aktif">
-                                <select name="aktif" id="t2_toko_id" class="form-control form-select combobox_hris">
+                                <input type="hidden" value="Y" id="t2_aktif" />
+                                <select
+                                    name="aktif"
+                                    id="t2_toko_id"
+                                    class="form-control form-select combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>

@@ -32,7 +32,7 @@
 
     function getTokenKaspro(tipe, command) {
         $.ajax({
-            url: 'api/kaspro',
+            url: 'https://backendrki.rkicoop.co.id/api/kaspro',
             type: 'POST',
             "cors": true,
             "crossDomain": true,
@@ -158,7 +158,7 @@
         var nowe = d.getFullYear() + "-" + mnth + "-" + d.getDate() + " T " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds();
         var requestId = "ARV-PPOB-" + d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
         $.ajax({
-            url: 'api/pos/InsUpDelPos',
+            url: 'https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos',
             type: 'POST',
             data: {
                 "cmd": "insPpobSimpleMaster",
@@ -192,7 +192,7 @@
                     if (tipe_transaksi == "PULSA" || tipe_transaksi == "PAKETDATA") {
                         hideModalPPOB();
                         $.ajax({
-                            url: 'api/kaspro',
+                            url: 'https://backendrki.rkicoop.co.id/api/kaspro',
                             type: 'POST',
                             data: {
                                 "cmd": "billerPayment",
@@ -260,7 +260,7 @@
         var signature = 'Signature keyId="' + hmacKey + '",algorithm="hmac-sha256",headers="(request-target) date",signature="' + hashInBase64UrlEncoded + '"';
 
         $.ajax({
-            url: 'api/kaspro',
+            url: 'https://backendrki.rkicoop.co.id/api/kaspro',
             type: 'POST',
             data: {
                 "cmd": "customerAccountInquery",
@@ -323,7 +323,7 @@
         var tipe = $("#modalPPOBTipe").val();
         $("#biilerInq").html("<div class='col-12' ><center><i style='font-size:50px;' class='fa fa-refresh rotate-refresh text-info'></i><br> Please Wait...</center></div>")
         $.ajax({
-            url: 'api/kaspro',
+            url: 'https://backendrki.rkicoop.co.id/api/kaspro',
             type: 'POST',
             data: {
                 "cmd": "billerInquery",
@@ -415,7 +415,7 @@
         $("#modalOtherTitle").text(tipeNm);
 
         $.ajax({
-            url: 'api/kaspro',
+            url: 'https://backendrki.rkicoop.co.id/api/kaspro',
             type: 'POST',
             data: {
                 "cmd": "billerInquery",
@@ -697,7 +697,7 @@
             struk = struk + "</body>  ";
         } else if ($("#modalMultiFelloTipeLayanan").val() == "07") {
             //alert(idx);
-            struk = " <body onload='window.print()'> "; //PDAM ada 3 Struk
+            struk = " <body onload='window.print()'> "; //PDAM ada 3 Struk 
             struk = struk + " <div class='ticket' > ";
 
             struk = struk + " <table border='1' width='100%'> ";
@@ -720,7 +720,7 @@
             struk = struk + " <tr><td>7</td><td>&nbsp;</td></tr> ";
             struk = struk + " <tr><td>8</td><td style='text-align:center;' >PDAM menyatakan struk ini sebagai bukti pembayaran yang sah, mohon disimpan</td></tr> ";
             struk = struk + " <tr><td>9</td><td>&nbsp;</td></tr> ";
-            struk = struk + " <tr><td>10</td><td>BIAYA ADMIN : Rp. " + parseInt(idx.substring(120, 128)).toLocaleString() + "   </td></tr> "; // pilihan setting sendiri
+            struk = struk + " <tr><td>10</td><td>BIAYA ADMIN : Rp. " + parseInt(idx.substring(120, 128)).toLocaleString() + "   </td></tr> "; // pilihan setting sendiri 
             struk = struk + " <tr><td>11</td><td>TOTAL BAYAR : Rp. " + parseInt(parseInt(idx.substring(108, 120)) + parseInt(idx.substring(120, 128))).toLocaleString() + "</td></tr> ";
             struk = struk + " <tr><td>12</td><td>&nbsp;</td></tr> ";
             struk = struk + " </table> ";
@@ -763,7 +763,7 @@
 
         } else if ($("#modalMultiFelloTipeLayanan").val() == "17") {
             alert("17");
-            struk = " <body onload='window.print()'> "; //
+            struk = " <body onload='window.print()'> "; // 
             struk = struk + " <div class='ticket' > Contoh PDAM SPEK 1";
 
             struk = struk + "<table border='1' width='100%'> ";
@@ -808,7 +808,7 @@
             struk = struk + " </div> ";
             struk = struk + "</body>  ";
         } else if ($("#modalMultiFelloTipeLayanan").val() == "27") {
-            struk = " <body onload='window.print()'> "; //
+            struk = " <body onload='window.print()'> "; // 
             struk = struk + " <div class='ticket' > Contoh PDAM PDAM SPEK 2";
 
             var loop1 = 0;
@@ -919,7 +919,7 @@
             //PLN POSTPAID
             struk = " <body onload='window.print()'> ";
             struk = struk + "            <div> ";
-            struk = struk + "     STRUK PEMBAYARAN TAGIHAN LISTRIK <br>";//
+            struk = struk + "     STRUK PEMBAYARAN TAGIHAN LISTRIK <br>";//    
             struk = struk + "     ID Pelanggan : " + data.substring(0, 12) + " <br>";//12 Id pelanggan, padding 0 rata kiri. 542100528616
             struk = struk + "     Jumlah Tagihan : " + data.substring(12, 13) + " <br>";//1 Jumlah tagihan yang bisa dibayarkan dalam satu 4 siklus (dibatasi hingga 4 tunggakan oleh PLN)
             struk = struk + "     Jumlah Payment : " + data.substring(13, 14) + " <br>";//1 Jumlah payment yang dilakukan (harus sama 4 dengan jumlah tagihan)
@@ -995,7 +995,7 @@
 
             struk = struk + "     Switcher ID : " + data.substring(0, 7) + " <br>";// 7
             struk = struk + "     Meter Id : " + data.substring(7, 18) + " <br>";// 11 Left Justified. Padded with blankNilainya sama dengan request
-            struk = struk + "     Idpel : " + data.substring(18, 30) + " <br>";// 12 Left Justified Id pelanggan
+            struk = struk + "     Idpel : " + data.substring(18, 30) + " <br>";// 12 Left Justified Id pelanggan 
             struk = struk + "     Flag : " + data.substring(30, 31) + " <br>";// 1 Nilainya sama dengan request
             struk = struk + "     Trx id : " + data.substring(31, 63) + " <br>";// 32 Nilainya sama dengan request
             struk = struk + "     Jatelindo Reference Number : " + data.substring(63, 95) + " <br>";// 32 Nilai dari response ini yang  dijadikan acuan untuk refernce  number
@@ -1004,19 +1004,19 @@
             struk = struk + "     Tarif : " + data.substring(128, 132) + " <br>";// 4 Nilainya sama dengan request
             struk = struk + "     Kategori Pengunaan  Daya : " + data.substring(132, 141) + " <br>";// 9 Nilainya sama dengan request
             struk = struk + "     Pilihan Pembelian : " + data.substring(141, 142) + " <br>";// 1 Nilainya sama dengan request
-            struk = struk + "     Nilai Minor Biaya Admin : " + data.substring(142, 143) + " <br>";// 1
+            struk = struk + "     Nilai Minor Biaya Admin : " + data.substring(142, 143) + " <br>";// 1 
             struk = struk + "     Biaya Admin : " + data.substring(143, 153) + " <br>";// 10 Left Justified. Padded  with zero
-            struk = struk + "     Nilai Minor Biaya  Materai : " + data.substring(153, 154) + " <br>";// 1
+            struk = struk + "     Nilai Minor Biaya  Materai : " + data.substring(153, 154) + " <br>";// 1 
             struk = struk + "     Biaya Materai : " + data.substring(154, 164) + " <br>";// 10 Left Justified. Padded  with zero
-            struk = struk + "     Nilai Minor Rupiah PPN : " + data.substring(164, 165) + " <br>";// 1
+            struk = struk + "     Nilai Minor Rupiah PPN : " + data.substring(164, 165) + " <br>";// 1 
             struk = struk + "     Rupiah PPN : " + data.substring(165, 175) + " <br>";// 10 Left Justified. Padded  with zero
-            struk = struk + "     Nilai Minor Rupiah PPJU : " + data.substring(175, 176) + " <br>";// 1
+            struk = struk + "     Nilai Minor Rupiah PPJU : " + data.substring(175, 176) + " <br>";// 1 
             struk = struk + "     Rupiah PPJU : " + data.substring(176, 186) + " <br>";// 10 Left Justified. Padded  with zero
             struk = struk + "     Nilai Minor Biaya Angsuran : " + data.substring(186, 187) + " <br>";// 1
             struk = struk + "     Rupiah Angsuran : " + data.substring(187, 197) + " <br>";// 10 Left Justified. Padded  with zero
-            struk = struk + "     Nial Minor Pembelian  Listrik : " + data.substring(197, 198) + " <br>";// 1
+            struk = struk + "     Nial Minor Pembelian  Listrik : " + data.substring(197, 198) + " <br>";// 1 
             struk = struk + "     Pembelian Listrik : " + data.substring(198, 210) + " <br>";// 12 Left Justified. Padded  with zero
-            struk = struk + "     Nilai Minor Pembelian KWH Unit : " + data.substring(210, 211) + " <br>";// 1
+            struk = struk + "     Nilai Minor Pembelian KWH Unit : " + data.substring(210, 211) + " <br>";// 1 
             struk = struk + "     Pembelian Jumlah KWH : " + data.substring(211, 221) + " <br>";// 10 Left Justified. Padded  with zero
             struk = struk + "     Token Number : " + data.substring(221, 241) + " <br>";// 20
             struk = struk + "     Tanggal Lunas : " + data.substring(241, 255) + " <br>";// 14 YYYYMMDDHHMISS
@@ -1053,8 +1053,8 @@
             struk = " <body onload='window.print()'> ";
             struk = struk + " <div class='ticket' >  ";
 
-            struk = struk + "     STRUK NON TAGIHAN LISTRIK <br>";//
-            struk = struk + "     Nomer Registrasi : " + data.substring(0, 13) + " <br>";// 13 Left Justified. Padded with space
+            struk = struk + "     STRUK NON TAGIHAN LISTRIK <br>";//  
+            struk = struk + "     Nomer Registrasi : " + data.substring(0, 13) + " <br>";// 13 Left Justified. Padded with space 
             struk = struk + "     Jenis transaksi : " + data.substring(13, 38) + " <br>";// 25 Left Justified. Padded with space
             struk = struk + "     Tanggal registrasi : " + data.substring(38, 46) + " <br>";//8 YYYYMMDD
             struk = struk + "     Batas akhir registrasi : " + data.substring(46, 54) + " <br>";// 8 DDMMYYYY
@@ -1066,8 +1066,8 @@
             struk = struk + "     Rp tagihan : " + data.substring(160, 177) + " <br>";//17 Right Justified.  Padded with zero 2 digit paling akhir  merupakan 2 angka  dibelakang koma
             struk = struk + "     Rp Admin : " + data.substring(177, 187) + " <br>";//10 Right Justified.  Padded with zero 2 digit paling akhir  merupakan 2 angka  dibelakang koma
             struk = struk + "     Tanggal lunas : " + data.substring(187, 195) + " <br>";//8 YYYYMMDD
-            struk = struk + "     Jam lunas : " + data.substring(195, 201) + " <br>";// 6 hhmmss
-            /*
+            struk = struk + "     Jam lunas : " + data.substring(195, 201) + " <br>";// 6 hhmmss   
+            /*     
             struk = struk + "             <table border='1' width='100%'>  ";
             struk = struk + "                 <tr><td colspan='2' style='text-align:center'>34643763478537346353453534</td></tr>  ";
             struk = struk + "                 <tr><td colspan='2' style='text-align:center' >STRUK NON TAGIHAN LISTRIK </td></tr>  ";
@@ -1167,7 +1167,7 @@
     function walletSukses() {
         hideModalBayarFello();
         //alert("Sukses Banget");
-        $.post('api/fello', {
+        $.post('https://backendrki.rkicoop.co.id/api/fello', {
             cmd: "selWalletFello",
             kop_id: $("#login_kop_id").val(),
             traceNumber: ketWallet
@@ -1202,7 +1202,7 @@
     function closeBinding(custId) {
         hideModalBayarFello();
         alert("Sukses " + custId);
-        $.post('api/fello', {
+        $.post('https://backendrki.rkicoop.co.id/api/fello', {
             cmd: "selWalletFelloBinding",
             kop_id: $("#login_kop_id").val(),
             custId: custId
@@ -1223,7 +1223,7 @@
 
 
     function cekBinding() {
-        $.post('api/fello', {
+        $.post('https://backendrki.rkicoop.co.id/api/fello', {
             cmd: "selWalletFelloCekBinding",
             kop_id: $("#login_kop_id").val(),
             userId: $('#login_userId').val()
@@ -1400,7 +1400,7 @@
         } else if (d == "4") {
             swalStartLoading();
             $.ajax({
-                url: 'api/fello',
+                url: 'https://backendrki.rkicoop.co.id/api/fello',
                 type: 'POST',
                 data: {
                     "cmd": "felloMultiBillerPostPaid",
@@ -1595,7 +1595,7 @@
     }
 
     function pilihDenum() {
-        //buat default
+        //buat default 
         var a = $("#modalPpobFelloKodeLayanan").val();
         if (a == "3") {
             $("#modalPpobFelloNomor").val("14234567895");
@@ -1789,7 +1789,7 @@
 
             }
             $.ajax({
-                url: 'api/fello',
+                url: 'https://backendrki.rkicoop.co.id/api/fello',
                 type: 'POST',
                 data: {
                     "cmd": cmd,
@@ -2080,7 +2080,7 @@
 
                 //console.log(felloDataInq);
                 $.ajax({
-                    url: 'api/fello',
+                    url: 'https://backendrki.rkicoop.co.id/api/fello',
                     type: 'POST',
                     data: {
                         "cmd": cmd,
@@ -2124,7 +2124,7 @@
                         //bit39_ResponseCode:,
                         bit41_TerminalID: "",
                         bit42_AcceptorIdentification: "",
-                        bit48_AdditionalDataPrivate: felloDataInq.bit48,//tanda "//" harus dihilangkan agar tidak pending dan error
+                        bit48_AdditionalDataPrivate: felloDataInq.bit48,//tanda "//" harus dihilangkan agar tidak pending dan error 
                         bit49_TransactionCurrencyCode: bit49_TransactionCurrencyCode,
                         bit63_DataLoket: bit63_DataLoket
 
@@ -2498,7 +2498,7 @@
         }
 
         if (modalMultiFelloKodeLayanan != "" && modalMultiFelloTipeLayanan != "") {
-            $.post('api/fello', {
+            $.post('https://backendrki.rkicoop.co.id/api/fello', {
                 cmd: "selMasterFello",
                 tipe: modalMultiFelloTipeLayanan,
                 kode_layanan: modalMultiFelloKodeLayanan
@@ -2564,7 +2564,7 @@
 
 
                 $.ajax({
-                    url: 'api/fello',
+                    url: 'https://backendrki.rkicoop.co.id/api/fello',
                     type: 'POST',
                     data: {
                         "cmd": cmd,
@@ -2663,7 +2663,7 @@
 
 
                 $.ajax({
-                    url: 'api/fello',
+                    url: 'https://backendrki.rkicoop.co.id/api/fello',
                     type: 'POST',
                     data: {
                         "cmd": "felloMultiBillerPostPaid",
@@ -2789,7 +2789,7 @@
         var dateRequest = new Date().toUTCString();
         swalStartLoading();
         $.ajax({
-            url: 'api/fello',
+            url: 'https://backendrki.rkicoop.co.id/api/fello',
             type: 'POST',
             data: {
                 "cmd": "felloSignatureAuth",
@@ -2816,7 +2816,7 @@
             if ($("#modalMultiFelloTypeBayar").val() == "000003") {
                 var dateRequest = new Date().toUTCString();
                 $.ajax({
-                    url: 'api/fello',
+                    url: 'https://backendrki.rkicoop.co.id/api/fello',
                     type: 'POST',
                     data: {
                         "cmd": "felloSignatureAuth",
@@ -2845,7 +2845,7 @@
             if ($("#modalPpobFelloTypeBayar").val() == "000003") {
                 var dateRequest = new Date().toUTCString();
                 $.ajax({
-                    url: 'api/fello',
+                    url: 'https://backendrki.rkicoop.co.id/api/fello',
                     type: 'POST',
                     data: {
                         "cmd": "felloSignatureAuth",
@@ -2885,7 +2885,7 @@
         var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
         var xExternalId = pktr + Math.round((new Date()).getTime() / 1000);
         $.ajax({
-            url: 'api/fello',
+            url: 'https://backendrki.rkicoop.co.id/api/fello',
             type: 'POST',
             data: {
                 kop_id: $("#login_kop_id").val(),
@@ -2930,7 +2930,7 @@
             amount = $("#modalMultiFelloJumlahUang").val();
         }
         $.ajax({
-            url: 'api/fello',
+            url: 'https://backendrki.rkicoop.co.id/api/fello',
             type: 'POST',
             data: {
                 kop_id: $("#login_kop_id").val(),
@@ -2981,7 +2981,7 @@
             sts = "0";
         }
         $.ajax({
-            url: 'api/fello',
+            url: 'https://backendrki.rkicoop.co.id/api/fello',
             type: 'POST',
             data: {
                 kop_id: $("#login_kop_id").val(),

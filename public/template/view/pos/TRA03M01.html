@@ -7,130 +7,220 @@
 
     var jumlah_pos = 0;
     var d = new Date();
-    var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
-
+    var pktr =
+        d.getFullYear() +
+        "" +
+        d.getMonth() +
+        "" +
+        d.getDate() +
+        "" +
+        d.getHours() +
+        "" +
+        d.getMinutes() +
+        "" +
+        d.getSeconds() +
+        d.getMilliseconds();
 
     function cekBarang() {
         if (event.keyCode === 13) {
-            var barcode = $('#t1_barcode').val()
+            var barcode = $("#t1_barcode").val();
             if (barcode == "") {
             } else {
-                $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
-                    cmd: "insPos",
-                    userIns: $('#login_userId').val(),
-                    kop_id: $("#login_kop_id").val(),
-                    pk: pktr,
-                    barcode: barcode
-                }, function (data, status) {
-                    var c = 1;
-                    var b = "";
-                    var s = "";
-                    var bb = $('#tableResult2').html();
-                    //var ss=$('#tableResult3').html();
-                    var totalPos = 0;
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                    {
+                        cmd: "insPos",
+                        userIns: $("#login_userId").val(),
+                        kop_id: $("#login_kop_id").val(),
+                        pk: pktr,
+                        barcode: barcode,
+                    },
+                    function (data, status) {
+                        var c = 1;
+                        var b = "";
+                        var s = "";
+                        var bb = $("#tableResult2").html();
+                        //var ss=$('#tableResult3').html();
+                        var totalPos = 0;
 
-                    const myArr = JSON.parse(data);
-                    if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
-                    } else {
-                        for (var i = 0; i < myArr.length; i += 1) {
-                            b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
-                            b = b + " <td>" + myArr[i]["generate_barcode"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["qty"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["harga"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["discount_value"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["discount"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["amount"] + "</td> ";
-                            b = b + " <td>" + "<button onclick=\"_action('DELETE','" + myArr[i]["pos_id"] + "','" + myArr[i]["generate_barcode"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
-                            b = b + "</tr>";
-                            c = c + 1;
+                        const myArr = JSON.parse(data);
+                        if (myArr.length == 0) {
+                            salert("Tidak Ada Data", "warning", "Warning");
+                        } else {
+                            for (var i = 0; i < myArr.length; i += 1) {
+                                b =
+                                    b +
+                                    '<tr    onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
+                                b =
+                                    b +
+                                    " <td>" +
+                                    myArr[i]["generate_barcode"] +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    myArr[i]["nama_barang"] +
+                                    "</td> ";
+                                b = b + " <td>" + myArr[i]["qty"] + "</td> ";
+                                b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    myArr[i]["discount_value"] +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    myArr[i]["discount"] +
+                                    "</td> ";
+                                b = b + " <td>" + myArr[i]["amount"] + "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    "<button onclick=\"_action('DELETE','" +
+                                    myArr[i]["pos_id"] +
+                                    "','" +
+                                    myArr[i]["generate_barcode"] +
+                                    "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                                b = b + "</tr>";
+                                c = c + 1;
 
-                            jumlah_pos = jumlah_pos + 1;
-                            totalPos = totalPos + parseInt(myArr[i]["amount"]);
+                                jumlah_pos = jumlah_pos + 1;
+                                totalPos =
+                                    totalPos + parseInt(myArr[i]["amount"]);
+                            }
                         }
+                        $("#totalPos").text(
+                            "Rp " + parseInt(totalPos).toLocaleString()
+                        );
+                        $("#tableResult2").html(b);
+                        //$('#tableResult3').html(s);
+                        $("#t1_barcode").val("");
                     }
-                    $('#totalPos').text("Rp " + parseInt(totalPos).toLocaleString());
-                    $('#tableResult2').html(b);
-                    //$('#tableResult3').html(s);
-                    $('#t1_barcode').val("");
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                 });
             }
-
         }
     }
 
     function _action(tipe, pos_id, generate_barcode) {
         var param = [pos_id, generate_barcode];
         if (tipe == "DELETE") {
-            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+            salertOptionFunction(
+                " Data Akan Di Delete ?",
+                "question",
+                " Anda Yakin ?",
+                "_del",
+                param
+            );
         }
     }
 
     function _del(param) {
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
-            cmd: "delPos",
-            kop_id: $("#login_kop_id").val(),
-            pos_id: param[0],
-            generate_barcode: param[1]
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr["sts"] == "OK") {
-                salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
-            } else {
-                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+            {
+                cmd: "delPos",
+                kop_id: $("#login_kop_id").val(),
+                pos_id: param[0],
+                generate_barcode: param[1],
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr["sts"] == "OK") {
+                    salertFunction(
+                        "Delete Complete !",
+                        "success",
+                        "Success",
+                        "fnInquery",
+                        ""
+                    );
+                } else {
+                    salert(
+                        "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                        "error",
+                        "Error"
+                    );
+                }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
         });
     }
 
     function _delAll() {
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
-            cmd: "delPosAll",
-            kop_id: $("#login_kop_id").val(),
-            pos_id: pktr
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr["sts"] == "OK") {
-                pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
-                salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
-            } else {
-                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+            {
+                cmd: "delPosAll",
+                kop_id: $("#login_kop_id").val(),
+                pos_id: pktr,
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr["sts"] == "OK") {
+                    pktr =
+                        d.getFullYear() +
+                        "" +
+                        d.getMonth() +
+                        "" +
+                        d.getDate() +
+                        "" +
+                        d.getHours() +
+                        "" +
+                        d.getMinutes() +
+                        "" +
+                        d.getSeconds() +
+                        d.getMilliseconds();
+                    salertFunction(
+                        "Delete Complete !",
+                        "success",
+                        "Success",
+                        "fnInquery",
+                        ""
+                    );
+                } else {
+                    salert(
+                        "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                        "error",
+                        "Error"
+                    );
+                }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
         });
     }
 
-
     function getDetail(masterCode) {
         //alert("tab 2");
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selCodeDetail",
-            kop_id: $("#login_kop_id").val(),
-            masterCode: masterCode
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selCodeDetail",
+                kop_id: $("#login_kop_id").val(),
+                masterCode: masterCode,
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
-
                     for (var i = 0; i < myArr.length; i += 1) {
-                        b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
                         b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
                         b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
                         b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
@@ -141,89 +231,133 @@
                         b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
                         b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
                         if (myArr[i]["deleteYn"] == "Y") {
-                            b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                "<button onclick=\"_deleteRow('" +
+                                myArr[i]["deleteYn"] +
+                                "','" +
+                                myArr[i]["masterCode"] +
+                                "','" +
+                                myArr[i]["detailCode"] +
+                                "','" +
+                                myArr[i]["detailKop"] +
+                                "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
                         } else {
-                            b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                "<button onclick=\"_deleteRow('" +
+                                myArr[i]["deleteYn"] +
+                                "','" +
+                                myArr[i]["masterCode"] +
+                                "','" +
+                                myArr[i]["detailCode"] +
+                                "','" +
+                                myArr[i]["detailKop"] +
+                                "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
                         }
                         b = b + "</tr>";
                         c = c + 1;
                     }
                 }
                 swalFinishLoading();
-                var table = $('#fix-header2').DataTable();
+                var table = $("#fix-header2").DataTable();
                 table.destroy();
 
-                $('#tableResult2').html(b);
+                $("#tableResult2").html(b);
                 isiTable = b;
-                $('#fix-header2').DataTable({
-                    fixedHeader: true
+                $("#fix-header2").DataTable({
+                    fixedHeader: true,
                 });
-
-            }).fail(function (e) {
-                console.log(e);
-                swalFinishLoading();
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
     }
-
-
 
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
             _delAll();
 
-            $('#totalPos').text("Rp " + "0");
-            $('#tableResult2').html("");
+            $("#totalPos").text("Rp " + "0");
+            $("#tableResult2").html("");
             //$('#tableResult3').html(s);
-            $('#t1_barcode').val("");
-
+            $("#t1_barcode").val("");
         } else if (a[1].className.search("active") > 0) {
             //getNUmber();
         }
     }
 
     function showReport() {
-        var myWindow = window.open("/view/erp/php/recipt.php?p[]=" + pktr + "&p[]=" + $("#login_kop_id").val(), "", "width=400,height=600");
+        var myWindow = window.open(
+            "/view/erp/php/recipt.php?p[]=" +
+                pktr +
+                "&p[]=" +
+                $("#login_kop_id").val(),
+            "",
+            "width=400,height=600"
+        );
     }
 
-
     function fnInquery() {
-        $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
-            cmd: "selPosBarcode",
-            userIns: $('#login_userId').val(),
-            kop_id: $("#login_kop_id").val(),
-            pk: pktr,
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            var s = "";
-            var bb = $('#tableResult2').html();
-            var totalPos = 0;
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+            {
+                cmd: "selPosBarcode",
+                userIns: $("#login_userId").val(),
+                kop_id: $("#login_kop_id").val(),
+                pk: pktr,
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                var s = "";
+                var bb = $("#tableResult2").html();
+                var totalPos = 0;
 
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
-                    b = b + " <td>" + myArr[i]["generate_barcode"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["qty"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["harga"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["discount_value"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["discount"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["amount"] + "</td> ";
-                    b = b + " <td>" + "<button onclick=\"_action('DELETE','" + myArr[i]["pos_id"] + "','" + myArr[i]["generate_barcode"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
-                    b = b + "</tr>";
-                    c = c + 1;
-                    jumlah_pos = jumlah_pos + 1;
-                    totalPos = totalPos + parseInt(myArr[i]["amount"]);
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["generate_barcode"] +
+                            "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_barang"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["qty"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["harga"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["discount_value"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["discount"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["amount"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            "<button onclick=\"_action('DELETE','" +
+                            myArr[i]["pos_id"] +
+                            "','" +
+                            myArr[i]["generate_barcode"] +
+                            "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                        jumlah_pos = jumlah_pos + 1;
+                        totalPos = totalPos + parseInt(myArr[i]["amount"]);
+                    }
                 }
+                $("#totalPos").text(
+                    "Rp " + parseInt(totalPos).toLocaleString()
+                );
+                $("#tableResult2").html(b);
+                $("#t1_barcode").val("");
             }
-            $('#totalPos').text("Rp " + parseInt(totalPos).toLocaleString());
-            $('#tableResult2').html(b);
-            $('#t1_barcode').val("");
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
         });
     }
@@ -231,16 +365,16 @@
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         }
     }
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -250,56 +384,93 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
-
 </script>
 <!-- Row start -->
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-            <li class="nav-item" style="width: calc(100% / 2.1) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Scan Transaction </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li class="nav-item" style="width: calc(100% / 2.1) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Scan Transaction
+                </a>
                 <div class="slide"></div>
             </li>
         </ul>
         <!-- Tab panes -->
-        <div class="tab-content ">
-            <div name="tab-idx" class="tab-pane active" id="entry" role="tabpanel">
+        <div class="tab-content">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="entry"
+                role="tabpanel"
+            >
                 <div class="row mt-2">
                     <div class="col-6 col-sm-6 col-md-8 col-lg-8">
                         <div class="form-group row frm_grp">
                             <div class="col-sm-12">
-                                <input type="text" id="t1_barcode" class="form-control txt_hris"
-                                    style="height:40px !important;font-size: 35px;width:100%" onkeydown="cekBarang();">
+                                <input
+                                    type="text"
+                                    id="t1_barcode"
+                                    class="form-control txt_hris"
+                                    style="
+                                        height: 40px !important;
+                                        font-size: 35px;
+                                        width: 100%;
+                                    "
+                                    onkeydown="cekBarang();"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-sm-6 col-md-4 col-lg-4">
-                        <label class="text-right" id="totalPos" style="font-size: 20px;font-weight: bold;">Rp 0
+                        <label
+                            class="text-right"
+                            id="totalPos"
+                            style="font-size: 20px; font-weight: bold"
+                            >Rp 0
                         </label>
                     </div>
-                    <br>
+                    <br />
                     <div class="col-12 col-sm-7 col-md-8 col-lg-8">
                         <div class="card">
-                            <div class="dt-responsive table-responsive" id="cardBlock2">
-                                <table id="fix-header2" class="table table-striped table-bordered nowrap">
+                            <div
+                                class="dt-responsive table-responsive"
+                                id="cardBlock2"
+                            >
+                                <table
+                                    id="fix-header2"
+                                    class="table table-striped table-bordered nowrap"
+                                >
                                     <thead class="bg-rki">
-                                        <tr id="tableHeader2" class="text-white">
+                                        <tr
+                                            id="tableHeader2"
+                                            class="text-white"
+                                        >
                                             <td>Barcode</td>
                                             <td>Nama Barang</td>
                                             <td>Qty</td>
@@ -308,45 +479,61 @@
                                             <td>Discount Amount</td>
                                             <td>Amount</td>
                                             <td>Action</td>
-
                                         </tr>
                                     </thead>
-                                    <tbody id="tableResult2">
-
-                                    </tbody>
+                                    <tbody id="tableResult2"></tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-5 col-md-4 col-lg-4">
                         <div class="row">
-                            <div class="col-6"><button type="button" class="btn btn-success rounded p-3"
-                                    onclick="showReport()" style="width:100%;font-size: 3vm;">
-                                    <i class="fa-solid fa-money-bill" style="font: size 20px;"></i>Bayar
-                                </button></div>
-                            <div class="col-6"><button type="button" class="btn btn-danger rounded p-3 "
-                                    onclick="clearForm()" style="width:100%;font-size: 3vm;">
-                                    <i class="fa-solid fa-broom" style="font: size 20px;"></i>Clear
-                                </button></div>
+                            <div class="col-6">
+                                <button
+                                    type="button"
+                                    class="btn btn-success rounded p-3"
+                                    onclick="showReport()"
+                                    style="width: 100%; font-size: 3vm"
+                                >
+                                    <i
+                                        class="fa-solid fa-money-bill"
+                                        style="font: size 20px"
+                                    ></i
+                                    >Bayar
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger rounded p-3"
+                                    onclick="clearForm()"
+                                    style="width: 100%; font-size: 3vm"
+                                >
+                                    <i
+                                        class="fa-solid fa-broom"
+                                        style="font: size 20px"
+                                    ></i
+                                    >Clear
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div name="tab-idx" class="tab-pane " id="query" role="tabpanel">
+            <div name="tab-idx" class="tab-pane" id="query" role="tabpanel">
                 <div class="row">
                     <div class="col-sm-3">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <div class="col-sm-8">
-
-                            </div>
+                            <div class="col-sm-8"></div>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris"></label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                            ></label>
                             <div class="col-sm-8">
                                 <!-- <input type="date" id="tgl2" anem="expire" class="form-control txt_hris"
                                         style="width:auto"> -->
@@ -354,35 +541,37 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group row frm_grp">
-
-                        </div>
+                        <div class="form-group row frm_grp"></div>
                     </div>
-                    <div class="col-sm-3">
-
-                    </div>
+                    <div class="col-sm-3"></div>
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
-                                                <td>Idx </td>
-                                                <td>Group Name </td>
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
+                                                <td>Idx</td>
+                                                <td>Group Name</td>
                                                 <td>Describe Group</td>
                                                 <td>Describe Detail</td>
                                                 <td>Action</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -390,7 +579,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

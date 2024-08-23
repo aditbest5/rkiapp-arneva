@@ -1,7 +1,19 @@
 <script>
     var isiTable;
     var d = new Date();
-    var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+    var pktr =
+        d.getFullYear() +
+        "" +
+        d.getMonth() +
+        "" +
+        d.getDate() +
+        "" +
+        d.getHours() +
+        "" +
+        d.getMinutes() +
+        "" +
+        d.getSeconds() +
+        d.getMilliseconds();
 
     function setDefault() {
         //salert("Tidak Ada Data",'warning','Warning');
@@ -10,85 +22,93 @@
         selJenisSimpanan();
     }
 
-
     function selCoaL2() {
-        $('#t2_coa_2nd').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selCoaL2",
-            kop_id: $("#login_kop_id").val(),
-            coa: "MASUK"
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_coa_2nd");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_coa_2nd").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selCoaL2",
+                kop_id: $("#login_kop_id").val(),
+                coa: "MASUK",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_coa_2nd");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
 
     function selJenisSimpanan() {
-        $('#t2_jenis_simpanan').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selJenisSimpanan",
-            kop_id: $("#login_kop_id").val(),
-            coa: "MASUK"
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_jenis_simpanan");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_jenis_simpanan").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selJenisSimpanan",
+                kop_id: $("#login_kop_id").val(),
+                coa: "MASUK",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_jenis_simpanan");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
-
-
 
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: $("#login_kop_id").val()
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("modal_nama_koperasi");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["nama_koperasi"];
-                    option.value = myArr[i]["idx"];
-                    x.add(option, x[i]);
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: $("#login_kop_id").val(),
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("modal_nama_koperasi");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["nama_koperasi"];
+                        option.value = myArr[i]["idx"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
-
 
     function setAnggota(no_agt, nama) {
         $("#t2_noAnggota").val(no_agt);
@@ -98,60 +118,64 @@
 
     function toMoney() {
         if ($("#t2_amount").val() == "") {
-
         } else {
             var a = parseInt($("#t2_amount").val()).toLocaleString();
             $("#t2_string_amount").text("Rp " + a);
         }
-
     }
-
-
-
-
 
     function searchAnggota() {
         /*
         if ($("#modal_nama_koperasi").val() == "") {
             $('#modalResult').html("Silahkan Pilih Koperasi Lebih Dahulu ! ");
         } else { */
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selAnggota",
-            kop_id: $("#login_kop_id").val(),
-            nama_anggota: $("#modal_namaAnggota").val()
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setAnggota('" + myArr[i]["no_anggota"] + "','" + myArr[i]["nama"] + "');\" >";
-                    b = b + " <td>" + myArr[i]["no_anggota"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["no_anggota_internal"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nik"] + "</td> ";
-                    b = b + "</tr>";
-                    c = c + 1;
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selAnggota",
+                kop_id: $("#login_kop_id").val(),
+                nama_anggota: $("#modal_namaAnggota").val(),
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#modalResult\');" onmouseout="backColor(this);"  ondblclick="setAnggota(\'' +
+                            myArr[i]["no_anggota"] +
+                            "','" +
+                            myArr[i]["nama"] +
+                            "');\" >";
+                        b = b + " <td>" + myArr[i]["no_anggota"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["no_anggota_internal"] +
+                            "</td> ";
+                        b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nik"] + "</td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
                 }
-
+                var table = $("#fix-header-modal").DataTable();
+                table.destroy();
+                $("#modalResult").html(b);
+                $("#fix-header-modal").DataTable({
+                    fixedHeader: true,
+                });
             }
-            var table = $('#fix-header-modal').DataTable();
-            table.destroy();
-            $('#modalResult').html(b);
-            $('#fix-header-modal').DataTable({
-                fixedHeader: true
-            });
-
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             swalFinishLoading();
         });
         //}
     }
-
-
 
     function openModalAnggota() {
         $("#modalAnggota").modal("show");
@@ -161,80 +185,84 @@
         $("#modalAnggota").modal("hide");
     }
 
-
-
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
             var mnth = d.getMonth() + 1;
             var dt = d.getDate().toString();
-            if (mnth.length > 1) { mnth = mnth } else {
-                mnth = "0" + mnth
+            if (mnth.length > 1) {
+                mnth = mnth;
+            } else {
+                mnth = "0" + mnth;
             }
-            if (dt.length > 1) { dt = dt } else {
-                dt = "0" + dt
+            if (dt.length > 1) {
+                dt = dt;
+            } else {
+                dt = "0" + dt;
             }
             var www = d.getFullYear() + "-" + mnth + "-" + dt;
-            $('#t2_kode_transaksi').val("");
-            $('#t2_tgl_transaksi').val(www);
-            $('#t2_tgl_transaksi').removeAttr('readonly');
+            $("#t2_kode_transaksi").val("");
+            $("#t2_tgl_transaksi").val(www);
+            $("#t2_tgl_transaksi").removeAttr("readonly");
             //$('#t2_coa_2nd').val("");
-            $('#t2_coa_2nd').prop('disabled', false);
-            $('#t2_jenis_simpanan').prop('disabled', false);
-            $('#t2_amount').val("");
-            $('#t2_amount').removeAttr('readonly');
-            $('#t2_noAnggota').val("");
-            $('#t2_namaAnggota').val("");
-            $('#t2_string_amount').text("Rp. 0");
-            $('#t2_noAnggota').removeAttr('readonly');
-            $('#t2_coa_3rd').val("");
-            $('#t2_coa_3rd').prop('disabled', false);
+            $("#t2_coa_2nd").prop("disabled", false);
+            $("#t2_jenis_simpanan").prop("disabled", false);
+            $("#t2_amount").val("");
+            $("#t2_amount").removeAttr("readonly");
+            $("#t2_noAnggota").val("");
+            $("#t2_namaAnggota").val("");
+            $("#t2_string_amount").text("Rp. 0");
+            $("#t2_noAnggota").removeAttr("readonly");
+            $("#t2_coa_3rd").val("");
+            $("#t2_coa_3rd").prop("disabled", false);
             getNumber();
-
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                cmd: "selNomorSimpan"
-            }, function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                const myArr = JSON.parse(data);
-                if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
-                } else {
-                    $('#t2_kode_transaksi').val(myArr[0]["noTran"]);
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                {
+                    cmd: "selNomorSimpan",
+                },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", "warning", "Warning");
+                    } else {
+                        $("#t2_kode_transaksi").val(myArr[0]["noTran"]);
+                    }
                 }
-            }).fail(function (e) {
+            ).fail(function (e) {
                 console.log(e);
-                salert("Error: " + e, 'error', 'Error');
+                salert("Error: " + e, "error", "Error");
             });
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
-
-
 
     function fnInquery() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //alert("tab 2");
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                cmd: "selTrSimpan",
-                tgl_awal: $('#t1_tgl_awal').val(),
-                tgl_akhir: $('#t1_tgl_akhir').val(),
-                kop_id: $('#login_kop_id').val(),
-                coa: "MASUK"
-            },
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                {
+                    cmd: "selTrSimpan",
+                    tgl_awal: $("#t1_tgl_awal").val(),
+                    tgl_akhir: $("#t1_tgl_akhir").val(),
+                    kop_id: $("#login_kop_id").val(),
+                    coa: "MASUK",
+                },
                 function (data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
                     var c = 1;
@@ -244,7 +272,7 @@
 
                     const myArr = JSON.parse(data);
                     if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
+                        salert("Tidak Ada Data", "warning", "Warning");
                     } else {
                         for (var i = 0; i < myArr.length; i += 1) {
                             if (myArr[i]["appYn"] == "APPROVE") {
@@ -258,16 +286,40 @@
                                 verify = "warning";
                             }
 
-                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                            b =
+                                b +
+                                "<tr  onDblClick=\"Tab2(this,'#tableResult','" +
+                                myArr[i]["masterCode"] +
+                                '\')"  onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
                             b = b + " <td>" + c + "</td> ";
                             b = b + " <td>" + myArr[i]["noSimpan"] + "</td> ";
                             b = b + " <td>" + myArr[i]["tglSimpan"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["nama_detail_coa"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["jenisSimpan"] + "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["nama_detail_coa"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["jenisSimpan"] +
+                                "</td> ";
                             b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                            b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(myArr[i]["amount"]).toLocaleString() +
+                                "</td> ";
 
-                            b = b + " <td> <span class='text-" + appYn + " rounded font-weight-bold' title='" + myArr[i]["appYn"] + "'  > " + myArr[i]["appYn"] + "</span></td> ";
+                            b =
+                                b +
+                                " <td> <span class='text-" +
+                                appYn +
+                                " rounded font-weight-bold' title='" +
+                                myArr[i]["appYn"] +
+                                "'  > " +
+                                myArr[i]["appYn"] +
+                                "</span></td> ";
                             //b = b + " <td> <button class='btn btn-" + verify + " rounded font-weight-bold' title='" + myArr[i]["verify"] + "'  > " + myArr[i]["verify"] + "</button></td> ";
                             /*
                             b = b + " <td>" + "";
@@ -283,21 +335,20 @@
                             b = b + "</tr>";
                             c = c + 1;
                         }
-
                     }
                     swalFinishLoading();
-                    var table = $('#fix-header').DataTable();
+                    var table = $("#fix-header").DataTable();
                     table.destroy();
                     document.getElementById("tableResult").innerHTML = b;
                     isiTable = b;
-                    $('#fix-header').DataTable({
-                        fixedHeader: true
+                    $("#fix-header").DataTable({
+                        fixedHeader: true,
                     });
-
-                }).fail(function (e) {
-                    console.log(e);
-                    swalFinishLoading();
-                });
+                }
+            ).fail(function (e) {
+                console.log(e);
+                swalFinishLoading();
+            });
         }
     }
 
@@ -307,127 +358,183 @@
             const d = new Date();
             var ms = d.getMilliseconds();
 
-            var userIns = $('#login_userId').val();
-            var kode_transaksi = $('#t2_kode_transaksi').val();
-            var tgl_transaksi = $('#t2_tgl_transaksi').val();
-            var t2_jenis_simpanan = $('#t2_jenis_simpanan').val();
-            var coa_2nd = $('#t2_coa_2nd').val();
-            var amount = $('#t2_amount').val();
-            var noAnggota = $('#t2_noAnggota').val();
+            var userIns = $("#login_userId").val();
+            var kode_transaksi = $("#t2_kode_transaksi").val();
+            var tgl_transaksi = $("#t2_tgl_transaksi").val();
+            var t2_jenis_simpanan = $("#t2_jenis_simpanan").val();
+            var coa_2nd = $("#t2_coa_2nd").val();
+            var amount = $("#t2_amount").val();
+            var noAnggota = $("#t2_noAnggota").val();
             //var coa_3rd = $('#t2_coa_3rd').val();
             var no_pengajuan = ms;
             if (kode_transaksi == "") {
-                salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
+                salert(
+                    "Harap Tekan Tombol New Terlebih Dahulu !",
+                    "error",
+                    "Error"
+                );
             } else {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
-                    cmd: "InsTrSimpan",
-                    userIns: userIns,
-                    pktr: pktr,
-                    kode_transaksi: kode_transaksi,
-                    tgl_transaksi: tgl_transaksi,
-                    t2_jenis_simpanan: t2_jenis_simpanan,
-                    coa_2nd: coa_2nd,
-                    amount: amount,
-                    noAnggota: noAnggota,
-                    coa_3rd: "",
-                    no_pengajuan: no_pengajuan
-
-                }, function (data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var c = 1;
-                    var b = "";
-                    const myArr = JSON.parse(data);
-                    console.log(myArr.length);
-                    if (myArr["sts"] == "OK") {
-                        //swalFinishLoading();
-                        clearForm();
-                        salert("Save Complete !", 'success', 'Success');
-                        pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
-                    } else {
-                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                    {
+                        cmd: "InsTrSimpan",
+                        userIns: userIns,
+                        pktr: pktr,
+                        kode_transaksi: kode_transaksi,
+                        tgl_transaksi: tgl_transaksi,
+                        t2_jenis_simpanan: t2_jenis_simpanan,
+                        coa_2nd: coa_2nd,
+                        amount: amount,
+                        noAnggota: noAnggota,
+                        coa_3rd: "",
+                        no_pengajuan: no_pengajuan,
+                    },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            //swalFinishLoading();
+                            clearForm();
+                            salert("Save Complete !", "success", "Success");
+                            pktr =
+                                d.getFullYear() +
+                                "" +
+                                d.getMonth() +
+                                "" +
+                                d.getDate() +
+                                "" +
+                                d.getHours() +
+                                "" +
+                                d.getMinutes() +
+                                "" +
+                                d.getSeconds() +
+                                d.getMilliseconds();
+                        } else {
+                            salert(
+                                "Error ! " +
+                                    myArr["desc"] +
+                                    "\n" +
+                                    myArr["msg"],
+                                "error",
+                                "Error"
+                            );
+                        }
                     }
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                     // Handle error here
                     swalFinishLoading();
                 });
             }
-
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
-
-
-
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
             clearForm();
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
-
-
 </script>
 <!-- Row start -->
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-
-            <li class="nav-item" style="width: calc(100% / 2.5) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li class="nav-item" style="width: calc(100% / 2.5) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data
+                </a>
                 <div class="slide"></div>
             </li>
 
-            <li class="nav-item" style="width: calc(100% / 2.5) !important;">
-                <a class="nav-link " data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+            <li class="nav-item" style="width: calc(100% / 2.5) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="entry" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="entry"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Kode Transaksi</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Kode Transaksi</label
+                            >
                             <div class="col-sm-9">
-                                <input type="text" id="t2_kode_transaksi" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_kode_transaksi"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Akun </label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Akun
+                            </label>
                             <div class="col-sm-9">
-                                <select id="t2_coa_2nd" class="form-control combobox_hris" style="width:auto" disabled>
+                                <select
+                                    id="t2_coa_2nd"
+                                    class="form-control combobox_hris"
+                                    style="width: auto"
+                                    disabled
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -438,39 +545,72 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Transaksi</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Tanggal Transaksi</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" id="t2_tgl_transaksi" readonly class="form-control txt_hris">
+                                <input
+                                    type="date"
+                                    id="t2_tgl_transaksi"
+                                    readonly
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Jenis Simpanan</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Jenis Simpanan</label
+                            >
                             <div class="col-sm-9">
-                                <select id="t2_jenis_simpanan" class="form-control combobox_hris" style="width:auto"
-                                    disabled>
+                                <select
+                                    id="t2_jenis_simpanan"
+                                    class="form-control combobox_hris"
+                                    style="width: auto"
+                                    disabled
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Nama Anggota</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Nama Anggota</label
+                            >
                             <div class="col-sm-9">
-
-                                <div class="input-group" style="margin-bottom: 0px !important;">
-                                    <input type="hidden" id="t2_noAnggota" readonly class="form-control txt_hris">
-                                    <input type="text" id="t2_namaAnggota" class="form-control txt_hris" readonly>
+                                <div
+                                    class="input-group"
+                                    style="margin-bottom: 0px !important"
+                                >
+                                    <input
+                                        type="hidden"
+                                        id="t2_noAnggota"
+                                        readonly
+                                        class="form-control txt_hris"
+                                    />
+                                    <input
+                                        type="text"
+                                        id="t2_namaAnggota"
+                                        class="form-control txt_hris"
+                                        readonly
+                                    />
                                     &nbsp;
                                     <div class="input-group-append">
-                                        <button onClick="openModalAnggota();" class="input-group-text bg-success ">
-                                            <i class="fa fa-search "></i></button>
+                                        <button
+                                            onClick="openModalAnggota();"
+                                            class="input-group-text bg-success"
+                                        >
+                                            <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -478,51 +618,81 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Jumlah Simpan</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Jumlah Simpan</label
+                            >
                             <div class="col-sm-9">
-                                <input type="number" id="t2_amount" onkeyup="toMoney()" readonly
-                                    class="form-control txt_hris">
-                                <span id="t2_string_amount" style="font-size:25px;font-weight:bold;">Rp 0</span>
-
+                                <input
+                                    type="number"
+                                    id="t2_amount"
+                                    onkeyup="toMoney()"
+                                    readonly
+                                    class="form-control txt_hris"
+                                />
+                                <span
+                                    id="t2_string_amount"
+                                    style="font-size: 25px; font-weight: bold"
+                                    >Rp 0</span
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div name="tab-idx" class="tab-pane " id="query" role="tabpanel">
+            <div name="tab-idx" class="tab-pane" id="query" role="tabpanel">
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Awal</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Tanggal Awal</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" id="t1_tgl_awal" class="form-control txt_hris">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_awal"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left txt_hris">Tanggal Akhir</label>
+                            <label
+                                class="col-sm-3 col-form-label text-left txt_hris"
+                                >Tanggal Akhir</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" id="t1_tgl_akhir" class="form-control txt_hris">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_akhir"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
 
-
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
-                            <div class="dt-responsive table-responsive" id="cardBlock">
-                                <table id="fix-header" class="table table-striped table-bordered nowrap">
+                            <div
+                                class="dt-responsive table-responsive"
+                                id="cardBlock"
+                            >
+                                <table
+                                    id="fix-header"
+                                    class="table table-striped table-bordered nowrap"
+                                >
                                     <thead class="bg-rki">
                                         <tr id="tableHeader" class="text-white">
                                             <td>No</td>
-                                            <td>Kode Transaksi </td>
-                                            <td>Tanggal </td>
+                                            <td>Kode Transaksi</td>
+                                            <td>Tanggal</td>
                                             <td>Akun</td>
                                             <td>Jenis Simpanan</td>
                                             <td>Nama Anggota</td>
@@ -532,9 +702,7 @@
                                             <!--<td>Action</td>-->
                                         </tr>
                                     </thead>
-                                    <tbody id="tableResult">
-
-                                    </tbody>
+                                    <tbody id="tableResult"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -542,18 +710,19 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
 <!-- The Modal -->
-<div class="modal " id="modalAnggota">
+<div class="modal" id="modalAnggota">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-success ">
-                <span style="font-weight:bold ;">Cari Anggota </span> <button type="button" class="close"
-                    data-dismiss="modal">&times;</button>
+            <div class="modal-header bg-success">
+                <span style="font-weight: bold">Cari Anggota </span>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
@@ -573,10 +742,18 @@
 
                     <div class="col-12 col-sm-12 form-inline">
                         <span>Nama Anggota </span>&nbsp;&nbsp;&nbsp;
-                        <input type="text" id="modal_namaAnggota" style="width: 50%;"
-                            class="form-control txt_hris">&nbsp;&nbsp;
-                        <button onClick="searchAnggota();" class="input-group-text bg-success ">
-                            <i class="fa fa-search "></i></button>
+                        <input
+                            type="text"
+                            id="modal_namaAnggota"
+                            style="width: 50%"
+                            class="form-control txt_hris"
+                        />&nbsp;&nbsp;
+                        <button
+                            onClick="searchAnggota();"
+                            class="input-group-text bg-success"
+                        >
+                            <i class="fa fa-search"></i>
+                        </button>
                         <!--
                         <div class="form-group row frm_grp">
                             <label class="col-sm-3 col-form-label text-left txt_hris">Nama Anggota</label>
@@ -597,26 +774,29 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlockModal">
-                                    <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlockModal"
+                                >
+                                    <table
+                                        id="fix-header-modal"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
                                             <tr id="modalHeader">
-                                                <td>No Anggota </td>
+                                                <td>No Anggota</td>
                                                 <td>Id</td>
                                                 <td>Nama Anggota</td>
                                                 <td>No KTP</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="modalResult">
-
-                                        </tbody>
+                                        <tbody id="modalResult"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

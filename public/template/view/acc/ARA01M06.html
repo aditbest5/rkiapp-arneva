@@ -10,60 +10,68 @@
     }
 
     function selCoaL2() {
-        $('#t2_coa_2nd').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selCoaL2",
-            kop_id: $("#login_kop_id").val(),
-            coa: ""
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_coa_2nd");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_coa_2nd").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selCoaL2",
+                kop_id: $("#login_kop_id").val(),
+                coa: "",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_coa_2nd");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
 
     function selJeniTransaksi() {
-        $('#t2_jenis_transaksi').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selJenisTranKas",
-            kop_id: $("#login_kop_id").val(),
-            coa: "MASUK"
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_jenis_transaksi");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_jenis_transaksi").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selJenisTranKas",
+                kop_id: $("#login_kop_id").val(),
+                coa: "MASUK",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_jenis_transaksi");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
 
     function calculateShu() {
-        if ($('#t1_tgl_awal').val() == "") {
-            salert("Harap Isi Periode ! ", 'warning', 'Warning');
+        if ($("#t1_tgl_awal").val() == "") {
+            salert("Harap Isi Periode ! ", "warning", "Warning");
         } else {
             var myVar = $(".harus_input");
             var b = 0;
@@ -71,14 +79,18 @@
                 b = b + 1;
                 console.log($(this).val());
                 if ($(this).val() == "" || $(this).val() == 0) {
-                    salert("Harap Lengkapi Data Dahulu ! ", 'warning', 'Warning');
+                    salert(
+                        "Harap Lengkapi Data Dahulu ! ",
+                        "warning",
+                        "Warning"
+                    );
                     b = 0;
                     return;
                 }
             });
             if (b > 0) {
-                $('#tab_query2').click();
-                $('#t2_tgl_awal').val($('#t1_tgl_awal').val());
+                $("#tab_query2").click();
+                $("#t2_tgl_awal").val($("#t1_tgl_awal").val());
                 fnInquery();
             }
         }
@@ -87,147 +99,223 @@
     function calcShu(idx) {
         var jma = $($("[name=jma]")[idx]).val();
         var jua = $($("[name=jua]")[idx]).val();
-        if (jma == "") { jma = 0 }
-        if (jua == "") { jua = 0 }
+        if (jma == "") {
+            jma = 0;
+        }
+        if (jua == "") {
+            jua = 0;
+        }
         var shu = parseInt(jma) + parseInt(jua);
-        $($("[name=shu]")[idx]).text(parseInt(shu).toLocaleString())
+        $($("[name=shu]")[idx]).text(parseInt(shu).toLocaleString());
         //console.log(shu);
     }
-
 
     function fnInquery() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            if ($('#t1_tgl_awal').val() == "") {
-                salert("Harap Isi Periode ! ", 'warning', 'Warning');
+            if ($("#t1_tgl_awal").val() == "") {
+                salert("Harap Isi Periode ! ", "warning", "Warning");
             } else {
-                var tgl_awal = $('#t1_tgl_awal').val();
-                var tgl_akhir = $('#t1_tgl_awal').val();
+                var tgl_awal = $("#t1_tgl_awal").val();
+                var tgl_akhir = $("#t1_tgl_awal").val();
                 swalStartLoading();
                 var total_real_amount = 0;
-                $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                    cmd: "selShuManual",
-                    tgl_awal: tgl_awal,
-                    tgl_akhir: tgl_akhir,
-                    kop_id: $("#login_kop_id").val(),
-                    coa: "",
-                    jenisTran: ""
-                }, function (data, status) {
-                    var c = 1;
-                    var b = "";
-                    var appYn = "warning";
-                    var verify = "warning";
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                    {
+                        cmd: "selShuManual",
+                        tgl_awal: tgl_awal,
+                        tgl_akhir: tgl_akhir,
+                        kop_id: $("#login_kop_id").val(),
+                        coa: "",
+                        jenisTran: "",
+                    },
+                    function (data, status) {
+                        var c = 1;
+                        var b = "";
+                        var appYn = "warning";
+                        var verify = "warning";
 
-                    const myArr = JSON.parse(data);
-                    if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
-                        $('#total_real_amount').text(0);
-                    } else {
-                        for (var i = 0; i < myArr.length; i += 1) {
-                            b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                            b = b + " <td>" + c + "</td> ";
-                            b = b + " <td><span class='item' >" + myArr[i]["tipe"] + "</span></td> ";
-                            b = b + " <td> ";
-                            b = b + " <div class='input-group'> ";
-                            b = b + "   <input type='number' class='form-control presentase' placeholder='Persentase'  > ";
-                            b = b + "   <div class='input-group-append'> ";
-                            b = b + "     <span class='input-group-text' id='basic - addon2'>%</span> ";
-                            b = b + "   </div> ";
-                            b = b + " </div> ";
-                            b = b + " </td> ";
-                            b = b + " <td> ";
-                            b = b + " <div class='input-group'> ";
-                            b = b + "   <div class='input-group-append'> ";
-                            b = b + "     <span class='input-group-text' id='basic - addon2'>Rp</span> ";
-                            b = b + "   </div> ";
-                            b = b + "   <input type='number' class='form-control harus_input' placeholder='Amount'   > ";
-                            b = b + " </div> ";
-                            b = b + " </td> ";
-                            b = b + "</tr>";
-                            c = c + 1;
-                            if (myArr[i]["shu"] == "JASA_MODAL") {
-                                jasa_modal = myArr[i]["amount"];
-                            }
-                            if (myArr[i]["shu"] == "JASA_USAHA") {
-                                jasa_usaha = myArr[i]["amount"];
-                            }
-                            if (myArr[i]["tipe"] == "TOTAL PENDAPATAN") {
-                                b = b + " <tr   onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                                b = b + " <td colspan='4' >&nbsp;</td> ";
+                        const myArr = JSON.parse(data);
+                        if (myArr.length == 0) {
+                            salert("Tidak Ada Data", "warning", "Warning");
+                            $("#total_real_amount").text(0);
+                        } else {
+                            for (var i = 0; i < myArr.length; i += 1) {
+                                b =
+                                    b +
+                                    '<tr    onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                                b = b + " <td>" + c + "</td> ";
+                                b =
+                                    b +
+                                    " <td><span class='item' >" +
+                                    myArr[i]["tipe"] +
+                                    "</span></td> ";
+                                b = b + " <td> ";
+                                b = b + " <div class='input-group'> ";
+                                b =
+                                    b +
+                                    "   <input type='number' class='form-control presentase' placeholder='Persentase'  > ";
+                                b = b + "   <div class='input-group-append'> ";
+                                b =
+                                    b +
+                                    "     <span class='input-group-text' id='basic - addon2'>%</span> ";
+                                b = b + "   </div> ";
+                                b = b + " </div> ";
+                                b = b + " </td> ";
+                                b = b + " <td> ";
+                                b = b + " <div class='input-group'> ";
+                                b = b + "   <div class='input-group-append'> ";
+                                b =
+                                    b +
+                                    "     <span class='input-group-text' id='basic - addon2'>Rp</span> ";
+                                b = b + "   </div> ";
+                                b =
+                                    b +
+                                    "   <input type='number' class='form-control harus_input' placeholder='Amount'   > ";
+                                b = b + " </div> ";
+                                b = b + " </td> ";
                                 b = b + "</tr>";
-                                b = b + " <tr   onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                                b = b + " <td colspan='4' class='text-center font-weight-bold' >Pembagian Dana</td> ";
-                                b = b + "</tr>";
-                            }
-                            if (myArr[i]["tipe"] == "DANA PEMBAGIAN SHU") {
-                                b = b + " <tr   onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                                b = b + " <td colspan='4' >&nbsp;</td> ";
-                                b = b + "</tr>";
-                                b = b + " <tr   onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                                b = b + " <td colspan='4' class='text-center font-weight-bold' >Clasifikasi SHU</td> ";
-                                b = b + "</tr>";
+                                c = c + 1;
+                                if (myArr[i]["shu"] == "JASA_MODAL") {
+                                    jasa_modal = myArr[i]["amount"];
+                                }
+                                if (myArr[i]["shu"] == "JASA_USAHA") {
+                                    jasa_usaha = myArr[i]["amount"];
+                                }
+                                if (myArr[i]["tipe"] == "TOTAL PENDAPATAN") {
+                                    b =
+                                        b +
+                                        ' <tr   onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                                    b = b + " <td colspan='4' >&nbsp;</td> ";
+                                    b = b + "</tr>";
+                                    b =
+                                        b +
+                                        ' <tr   onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                                    b =
+                                        b +
+                                        " <td colspan='4' class='text-center font-weight-bold' >Pembagian Dana</td> ";
+                                    b = b + "</tr>";
+                                }
+                                if (myArr[i]["tipe"] == "DANA PEMBAGIAN SHU") {
+                                    b =
+                                        b +
+                                        ' <tr   onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                                    b = b + " <td colspan='4' >&nbsp;</td> ";
+                                    b = b + "</tr>";
+                                    b =
+                                        b +
+                                        ' <tr   onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                                    b =
+                                        b +
+                                        " <td colspan='4' class='text-center font-weight-bold' >Clasifikasi SHU</td> ";
+                                    b = b + "</tr>";
+                                }
                             }
                         }
+                        swalFinishLoading();
+                        $("#tableResult").html(b);
+                        isiTable = b;
                     }
-                    swalFinishLoading();
-                    $("#tableResult").html(b);
-                    isiTable = b;
-
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                     swalFinishLoading();
                 });
             }
         } else if (a[1].className.search("active") > 0) {
-            if ($('#t2_tgl_awal').val() == "") {
-                salert("Harap Isi Periode ! ", 'warning', 'Warning');
+            if ($("#t2_tgl_awal").val() == "") {
+                salert("Harap Isi Periode ! ", "warning", "Warning");
             } else {
-                var tgl_awal = String($('#t2_tgl_awal').val()) + "-01";
-                var tgl_akhir = String($('#t2_tgl_awal').val()) + "-31";
+                var tgl_awal = String($("#t2_tgl_awal").val()) + "-01";
+                var tgl_akhir = String($("#t2_tgl_awal").val()) + "-31";
                 swalStartLoading();
                 var total_real_amount = 0;
-                $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                    cmd: "selShuAnggotaManual",
-                    tgl_awal: tgl_awal,
-                    tgl_akhir: tgl_akhir,
-                    kop_id: $("#login_kop_id").val(),
-                    jasa_modal: jasa_modal,
-                    jasa_usaha: jasa_usaha
-                }, function (data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var c = 1;
-                    var b = "";
-                    var appYn = "warning";
-                    var verify = "warning";
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                    {
+                        cmd: "selShuAnggotaManual",
+                        tgl_awal: tgl_awal,
+                        tgl_akhir: tgl_akhir,
+                        kop_id: $("#login_kop_id").val(),
+                        jasa_modal: jasa_modal,
+                        jasa_usaha: jasa_usaha,
+                    },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        var appYn = "warning";
+                        var verify = "warning";
 
-                    const myArr = JSON.parse(data);
-                    if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
-                        $('#total_real_amount').text(0);
-                    } else {
-                        for (var i = 0; i < myArr.length; i += 1) {
-                            b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult2','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
-                            b = b + " <td>" + c + "</td> ";
-                            b = b + " <td>" + myArr[i]["no_anggota_internal"] + "</td> ";
-                            b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                            b = b + " <td>" + parseInt(myArr[i]["danaSimpan"]).toLocaleString() + "</td> ";
-                            b = b + " <td>" + parseInt(myArr[i]["danaKeluar"]).toLocaleString() + "</td> ";
-                            b = b + " <td>" + parseInt(myArr[i]["balAnggota"]).toLocaleString() + "</td> ";
-                            b = b + " <td>" + parseInt(myArr[i]["balKoperasi"]).toLocaleString() + "</td> ";
-                            b = b + " <td><input type='number' class='form-control jma' name='jma' placeholder='Amount' onkeyup=calcShu(" + i + ") ></td> ";
-                            b = b + " <td><input type='number' class='form-control jua' name='jua' placeholder='Amount' onkeyup=calcShu(" + i + ") ></td> ";
-                            b = b + " <td><span name='shu'>0</span></td> ";
-                            b = b + "</tr>";
-                            c = c + 1;
+                        const myArr = JSON.parse(data);
+                        if (myArr.length == 0) {
+                            salert("Tidak Ada Data", "warning", "Warning");
+                            $("#total_real_amount").text(0);
+                        } else {
+                            for (var i = 0; i < myArr.length; i += 1) {
+                                b =
+                                    b +
+                                    "<tr  onDblClick=\"Tab2(this,'#tableResult2','" +
+                                    myArr[i]["masterCode"] +
+                                    '\')"  onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
+                                b = b + " <td>" + c + "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    myArr[i]["no_anggota_internal"] +
+                                    "</td> ";
+                                b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    parseInt(
+                                        myArr[i]["danaSimpan"]
+                                    ).toLocaleString() +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    parseInt(
+                                        myArr[i]["danaKeluar"]
+                                    ).toLocaleString() +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    parseInt(
+                                        myArr[i]["balAnggota"]
+                                    ).toLocaleString() +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td>" +
+                                    parseInt(
+                                        myArr[i]["balKoperasi"]
+                                    ).toLocaleString() +
+                                    "</td> ";
+                                b =
+                                    b +
+                                    " <td><input type='number' class='form-control jma' name='jma' placeholder='Amount' onkeyup=calcShu(" +
+                                    i +
+                                    ") ></td> ";
+                                b =
+                                    b +
+                                    " <td><input type='number' class='form-control jua' name='jua' placeholder='Amount' onkeyup=calcShu(" +
+                                    i +
+                                    ") ></td> ";
+                                b = b + " <td><span name='shu'>0</span></td> ";
+                                b = b + "</tr>";
+                                c = c + 1;
+                            }
                         }
+                        swalFinishLoading();
+                        //$('#total_real_amount2').text(total_real_amount.toLocaleString());
+                        var table = $("#fix-header2").DataTable();
+                        table.destroy();
+                        $("#tableResult2").html(b);
+                        isiTable = b;
                     }
-                    swalFinishLoading();
-                    //$('#total_real_amount2').text(total_real_amount.toLocaleString());
-                    var table = $('#fix-header2').DataTable();
-                    table.destroy();
-                    $("#tableResult2").html(b);
-                    isiTable = b;
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                     swalFinishLoading();
                 });
@@ -244,21 +332,28 @@
                 console.log($(this).val());
                 if ($(this).val() == "" || $(this).val() == 0) {
                     //salert("Harap Lengkapi Data Dahulu ! ", 'warning', 'Warning');
-
                 }
             });
             var presentase = $(".presentase");
             presentase.each(function () {
                 console.log($(this).val());
                 if ($(this).val() == "" || $(this).val() == 0) {
-                    salert("Harap Lengkapi Data Dahulu ! ", 'warning', 'Warning');
+                    salert(
+                        "Harap Lengkapi Data Dahulu ! ",
+                        "warning",
+                        "Warning"
+                    );
                 }
             });
             var item = $(".item");
             item.each(function () {
                 console.log($(this).val());
                 if ($(this).val() == "" || $(this).val() == 0) {
-                    salert("Harap Lengkapi Data Dahulu ! ", 'warning', 'Warning');
+                    salert(
+                        "Harap Lengkapi Data Dahulu ! ",
+                        "warning",
+                        "Warning"
+                    );
                 }
             });
         } else if (a[1].className.search("active") > 0) {
@@ -269,7 +364,7 @@
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -279,48 +374,75 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
-
-
 </script>
 <!-- Row start -->
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; SHU Global</a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; SHU Global</a
+                >
                 <div class="slide"></div>
             </li>
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link " data-toggle="tab" href="#query2" role="tab" id="tab_query2">
-                    <i class="icofont icofont-search"></i>&nbsp; SHU Anggota</a>
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#query2"
+                    role="tab"
+                    id="tab_query2"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; SHU Anggota</a
+                >
                 <div class="slide"></div>
             </li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label  ">Periode</label>
+                            <label class="col-sm-3 col-form-label"
+                                >Periode</label
+                            >
                             <div class="col-sm-9">
-                                <input type="month" id="t1_tgl_awal" class="form-control ">
+                                <input
+                                    type="month"
+                                    id="t1_tgl_awal"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
@@ -329,28 +451,43 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                            <div
+                                class="card-header"
+                                style="padding: 0.4rem 0.1rem !important"
+                            >
                                 <div class="card-header-right">
-                                    <ul class="list-unstyled card-option">
-                                    </ul>
+                                    <ul class="list-unstyled card-option"></ul>
                                 </div>
                             </div>
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock"><button
-                                        class='btn btn-success' onclick="calculateShu()">Calculate SHU
-                                        Anggota</button>
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap mt-2">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <button
+                                        class="btn btn-success"
+                                        onclick="calculateShu()"
+                                    >
+                                        Calculate SHU Anggota
+                                    </button>
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap mt-2"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No</td>
                                                 <td>Nama Item</td>
                                                 <td>Value</td>
-                                                <td class="bg-success">Amount</td>
+                                                <td class="bg-success">
+                                                    Amount
+                                                </td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -358,13 +495,21 @@
                     </div>
                 </div>
             </div>
-            <div name="tab-idx" class="tab-pane " id="query2" role="tabpanel">
+            <div name="tab-idx" class="tab-pane" id="query2" role="tabpanel">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label  ">Periode</label>
+                            <label class="col-sm-3 col-form-label"
+                                >Periode</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" style="width:50%;" id="t2_tgl_awal" class="form-control " readonly>
+                                <input
+                                    type="date"
+                                    style="width: 50%"
+                                    id="t2_tgl_awal"
+                                    class="form-control"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
@@ -373,33 +518,59 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header" style="padding: .4rem .1rem !important;">
+                            <div
+                                class="card-header"
+                                style="padding: 0.4rem 0.1rem !important"
+                            >
                                 <div class="card-header-right">
-                                    <ul class="list-unstyled card-option">
-                                    </ul>
+                                    <ul class="list-unstyled card-option"></ul>
                                 </div>
                             </div>
                             <div class="card-block">
-                                <button class='btn btn-success mb-2' onclick="calculateShu()">Approve SHU</button>
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header2" class="table table-striped table-bordered nowrap">
+                                <button
+                                    class="btn btn-success mb-2"
+                                    onclick="calculateShu()"
+                                >
+                                    Approve SHU
+                                </button>
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header2"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader2" class="text-white">
+                                            <tr
+                                                id="tableHeader2"
+                                                class="text-white"
+                                            >
                                                 <td>No</td>
                                                 <td>No Anggota</td>
                                                 <td>Nama</td>
-                                                <td class="bg-success">Jumlah Simpan</td>
-                                                <td class="bg-warning">Jumlah Ambil</td>
-                                                <td class="bg-primary">Balance Agt</td>
-                                                <td class="bg-primary">Balance Kop</td>
-                                                <td class="bg-primary">Jasa Modal Anggota</td>
-                                                <td class="bg-primary">Jasa Usaha Anggota</td>
+                                                <td class="bg-success">
+                                                    Jumlah Simpan
+                                                </td>
+                                                <td class="bg-warning">
+                                                    Jumlah Ambil
+                                                </td>
+                                                <td class="bg-primary">
+                                                    Balance Agt
+                                                </td>
+                                                <td class="bg-primary">
+                                                    Balance Kop
+                                                </td>
+                                                <td class="bg-primary">
+                                                    Jasa Modal Anggota
+                                                </td>
+                                                <td class="bg-primary">
+                                                    Jasa Usaha Anggota
+                                                </td>
                                                 <td class="bg-primary">SHU</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult2">
-
-                                        </tbody>
+                                        <tbody id="tableResult2"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -408,6 +579,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

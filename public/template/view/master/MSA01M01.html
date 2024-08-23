@@ -3,20 +3,22 @@
 
     function setDefault() {
         //salert("Tidak Ada Data",'warning','Warning');
-        if ($('#login_kop_id').val() == "") { $("#tokoSection").css("display", "none"); }
+        if ($("#login_kop_id").val() == "") {
+            $("#tokoSection").css("display", "none");
+        }
         fnInquery();
         tipeUser();
         selKoperasi();
         //selToko();
     }
 
-
     function tipeUser() {
-
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selTipeUser",
-            kop_id: $('#login_kop_id').val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selTipeUser",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
@@ -25,7 +27,7 @@
                 var x = document.getElementById("tipeUser");
                 var y = document.getElementById("t2_tipeUser");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option = document.createElement("option");
@@ -39,25 +41,28 @@
                         y.add(option2, y[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "warning", "Warning");
+            // Handle error here
+        });
     }
 
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: $('#login_kop_id').val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
                 var b = "";
                 var y = document.getElementById("t2_kop_id");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option2 = document.createElement("option");
@@ -66,35 +71,37 @@
                         y.add(option2, y[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "warning", "Warning");
+            // Handle error here
+        });
     }
 
     function selToko(tokoId) {
         var kop_id = "";
-        if ($('#login_kop_id').val() == "") {
-            kop_id = $('#t2_kop_id').val();
+        if ($("#login_kop_id").val() == "") {
+            kop_id = $("#t2_kop_id").val();
         } else {
-            kop_id = $('#login_kop_id').val();
+            kop_id = $("#login_kop_id").val();
         }
 
-        $('#t2_toko_id')
+        $("#t2_toko_id")
             .empty()
-            .append('<option   value="" >Chosee..</option>')
-            ;
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selToko",
-            kop_id: kop_id,
-            toko_id: ""
-        },
+            .append('<option   value="" >Chosee..</option>');
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selToko",
+                kop_id: kop_id,
+                toko_id: "",
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 const myArr = JSON.parse(data);
                 var b = "";
-                var y = document.getElementById("t2_toko_id");;
+                var y = document.getElementById("t2_toko_id");
                 if (myArr.length == 0) {
                     //salert("Tidak Ada Data", 'warning', 'Warning');
                 } else {
@@ -105,38 +112,32 @@
                         y.add(option2, y[i]);
                     }
                     if (tokoId != "") {
-                        $('#t2_toko_id').val(tokoId);
+                        $("#t2_toko_id").val(tokoId);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                //salert("Error: " + e, 'warning', 'Warning');
-                // Handle error here
-            });
-
+            }
+        ).fail(function (e) {
+            console.log(e);
+            //salert("Error: " + e, 'warning', 'Warning');
+            // Handle error here
+        });
     }
-
-
-
-
 
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
-            $('#t2_userId').val("");
-            $('#t2_cfmPass').val("");
-            $('#t2_userId').removeAttr('readonly');
-            $('#t2_userNm').val("");
-            $('#t2_userPwd').val("");
-            $('#t2_namaUser').val("");
-            $('#t2_aktif').val("Y");
-            $('#t2_tipeUser').val("");
-            $('#t2_toko_id').val("");
-            $('#t2_kop_id').val("");
+            $("#t2_userId").val("");
+            $("#t2_cfmPass").val("");
+            $("#t2_userId").removeAttr("readonly");
+            $("#t2_userNm").val("");
+            $("#t2_userPwd").val("");
+            $("#t2_namaUser").val("");
+            $("#t2_aktif").val("Y");
+            $("#t2_tipeUser").val("");
+            $("#t2_toko_id").val("");
+            $("#t2_kop_id").val("");
             getNumber();
         }
     }
@@ -144,96 +145,127 @@
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-                cmd: "selUserNomor"
-            },
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                {
+                    cmd: "selUserNomor",
+                },
                 function (data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
                     const myArr = JSON.parse(data);
                     if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
+                        salert("Tidak Ada Data", "warning", "Warning");
                     } else {
-                        $('#t2_userId').val(myArr[0]["noUser"]);
-                        $('#t2_userId').attr('readonly', 'readonly');
+                        $("#t2_userId").val(myArr[0]["noUser"]);
+                        $("#t2_userId").attr("readonly", "readonly");
                     }
-                }).fail(function (e) {
-                    console.log(e);
-                    salert("Error: " + e, 'warning', 'Warning');
-                });
+                }
+            ).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, "warning", "Warning");
+            });
         }
     }
 
-    function _changeTab(userId, userNm, userPwd, aktif, level, kop_id, namaUser, toko_id) {
-        $('#t2_userId').val(userId);
-        $('#t2_userId').attr('readonly', 'readonly');
-        $('#t2_userNm').val(userNm);
-        $('#t2_userPwd').val(userPwd);
-        $('#t2_aktif').val(aktif);
-        $('#t2_namaUser').val(namaUser);
-        $('#t2_tipeUser').val(level);
-        $('#t2_kop_id').val(kop_id);
-        $('#t2_toko_id').val(toko_id);
+    function _changeTab(
+        userId,
+        userNm,
+        userPwd,
+        aktif,
+        level,
+        kop_id,
+        namaUser,
+        toko_id
+    ) {
+        $("#t2_userId").val(userId);
+        $("#t2_userId").attr("readonly", "readonly");
+        $("#t2_userNm").val(userNm);
+        $("#t2_userPwd").val(userPwd);
+        $("#t2_aktif").val(aktif);
+        $("#t2_namaUser").val(namaUser);
+        $("#t2_tipeUser").val(level);
+        $("#t2_kop_id").val(kop_id);
+        $("#t2_toko_id").val(toko_id);
         selToko(toko_id);
         // tab_query
-        $('#tab_entry').click();
-        $('#tab_entry').text('Edit Data');
+        $("#tab_entry").click();
+        $("#tab_entry").text("Edit Data");
     }
-
 
     function _action(tipe, idx) {
         var param = [idx];
         if (tipe == "DELETE") {
-            salertOptionFunction(" Data Akan Di Delete ?", "question", ' Anda Yakin ?', "_del", param);
+            salertOptionFunction(
+                " Data Akan Di Delete ?",
+                "question",
+                " Anda Yakin ?",
+                "_del",
+                param
+            );
         }
     }
 
     function _del(param) {
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-            cmd: "delUser",
-            userId: param[0]
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            {
+                cmd: "delUser",
+                userId: param[0],
+            },
             function (data, status) {
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr["sts"] == "OK") {
-                    salertFunction("Delete Complete !", 'success', 'Success', 'fnInquery', '');
+                    salertFunction(
+                        "Delete Complete !",
+                        "success",
+                        "Success",
+                        "fnInquery",
+                        ""
+                    );
                 } else {
-                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    salert(
+                        "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                        "error",
+                        "Error"
+                    );
                 }
-            }).fail(function (e) {
-                console.log(e);
-                // Handle error here
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            // Handle error here
+        });
     }
-
-
 
     function inq() {
         //alert("tab 2");
-        $('#tab_entry').text('Tambah Data');
-        $('#t2_userId').val("");
-        var tipeUser = $('#tipeUser').val();
+        $("#tab_entry").text("Tambah Data");
+        $("#t2_userId").val("");
+        var tipeUser = $("#tipeUser").val();
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selUser",
-            tipeUser: tipeUser,
-            kop_id: $('#login_kop_id').val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selUser",
+                tipeUser: tipeUser,
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
-                        b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
                         b = b + "<td>" + c + "</td> ";
                         //b = b + " <td>" + myArr[i]["userId"] + "</td> ";
                         b = b + " <td>" + myArr[i]["userNm"] + "</td> ";
@@ -245,27 +277,50 @@
                         if (myArr[i]["level"] == "ADMINISTRATOR") {
                             b = b + " <td> &nbsp;</td> ";
                         } else {
-                            b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["userId"] + "','" + myArr[i]["userNm"] + "','" + myArr[i]["userPwd"] + "','" + myArr[i]["aktif"] + "','" + myArr[i]["level"] + "','" + myArr[i]["no_koperasi"] + "','" + myArr[i]["namaUser"] + "','" + myArr[i]["no_toko"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
-                            b = b + "          </button>&nbsp;&nbsp;<button onclick=\"_action('DELETE','" + myArr[i]["userId"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" + "</td> ";
-
+                            b =
+                                b +
+                                " <td>" +
+                                "<button onclick=\"_changeTab('" +
+                                myArr[i]["userId"] +
+                                "','" +
+                                myArr[i]["userNm"] +
+                                "','" +
+                                myArr[i]["userPwd"] +
+                                "','" +
+                                myArr[i]["aktif"] +
+                                "','" +
+                                myArr[i]["level"] +
+                                "','" +
+                                myArr[i]["no_koperasi"] +
+                                "','" +
+                                myArr[i]["namaUser"] +
+                                "','" +
+                                myArr[i]["no_toko"] +
+                                "')\"   class='btn btn-warning btn-icon btn_grid' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                            b =
+                                b +
+                                "          </button>&nbsp;&nbsp;<button onclick=\"_action('DELETE','" +
+                                myArr[i]["userId"] +
+                                "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" +
+                                "</td> ";
                         }
                         b = b + "</tr>";
                         c = c + 1;
                     }
                 }
                 swalFinishLoading();
-                var table = $('#fix-header').DataTable();
+                var table = $("#fix-header").DataTable();
                 table.destroy();
                 document.getElementById("tableResult").innerHTML = b;
                 isiTable = b;
-                $('#fix-header').DataTable({
-                    fixedHeader: true
+                $("#fix-header").DataTable({
+                    fixedHeader: true,
                 });
-
-            }).fail(function (e) {
-                console.log(e);
-                swalFinishLoading();
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
     }
 
     function fnInquery() {
@@ -273,47 +328,50 @@
         if (a[0].className.search("active") > 0) {
             inq();
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
-            var userIns = $('#login_userId').val();
-            var kop_id = $('#t2_kop_id').val();
-            var userId = $('#t2_userId').val();
-            var userNm = $('#t2_userNm').val();
-            var namaUser = $('#t2_namaUser').val();
-            var userPwd = $('#t2_userPwd').val();
-            var aktif = $('#t2_aktif').val();
-            var tipeUser = $('#t2_tipeUser').val();
-            var cfmPass = $('#t2_cfmPass').val();
-            var toko_id = $('#t2_toko_id').val();
+            var userIns = $("#login_userId").val();
+            var kop_id = $("#t2_kop_id").val();
+            var userId = $("#t2_userId").val();
+            var userNm = $("#t2_userNm").val();
+            var namaUser = $("#t2_namaUser").val();
+            var userPwd = $("#t2_userPwd").val();
+            var aktif = $("#t2_aktif").val();
+            var tipeUser = $("#t2_tipeUser").val();
+            var cfmPass = $("#t2_cfmPass").val();
+            var toko_id = $("#t2_toko_id").val();
             if (kop_id == "" && toko_id == "") {
-                salert("Tolong Pilih Koperasi Atau Toko Dahulu !", 'warning', 'Warning');
+                salert(
+                    "Tolong Pilih Koperasi Atau Toko Dahulu !",
+                    "warning",
+                    "Warning"
+                );
                 return;
             }
 
             if (userPwd == cfmPass) {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-                    cmd: "InsUser",
-                    userIns: userIns,
-                    kop_id: kop_id,
-                    userId: userId,
-                    userNm: userNm,
-                    userPwd: userPwd,
-                    aktif: aktif,
-                    tipeUser: tipeUser,
-                    toko_id: toko_id,
-                    namaUser: namaUser
-                },
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    {
+                        cmd: "InsUser",
+                        userIns: userIns,
+                        kop_id: kop_id,
+                        userId: userId,
+                        userNm: userNm,
+                        userPwd: userPwd,
+                        aktif: aktif,
+                        tipeUser: tipeUser,
+                        toko_id: toko_id,
+                        namaUser: namaUser,
+                    },
                     function (data, status) {
                         //alert("Data: " + data + "\nStatus: " + status);
                         var c = 1;
@@ -321,31 +379,39 @@
                         const myArr = JSON.parse(data);
                         console.log(myArr.length);
                         if (myArr["sts"] == "OK") {
-                            salert("Save Complete !", 'success', 'Success');
+                            salert("Save Complete !", "success", "Success");
                         } else {
-                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                            salert(
+                                "Error ! " +
+                                    myArr["desc"] +
+                                    "\n" +
+                                    myArr["msg"],
+                                "error",
+                                "Error"
+                            );
                         }
                         //swalFinishLoading();
                         clearForm();
-                    }).fail(function (e) {
-                        console.log(e);
-                        // Handle error here
-                        //swalFinishLoading();
-                    });
+                    }
+                ).fail(function (e) {
+                    console.log(e);
+                    // Handle error here
+                    //swalFinishLoading();
+                });
             } else {
-                salert("Password dan Confirm Password Harus Sama !!", 'error', 'Error');
+                salert(
+                    "Password dan Confirm Password Harus Sama !!",
+                    "error",
+                    "Error"
+                );
             }
-
         }
     }
-
-
-
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -355,18 +421,18 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
     /*
@@ -377,10 +443,10 @@
                 downloadExcell("#tableHeader", isiTable);
             } else if (a[1].className.search("active") > 0) {
                 alert("Not Setting Tab 1!");
-
+    
             }
         }
-
+    
         function openAll() {
             var a = document.getElementsByName("tab-idx");
             if (a[0].className.search("active") > 0) {
@@ -390,7 +456,7 @@
                 alert("Not Setting Tab 1!");
             }
         }
-
+    
         function gridAll() {
             var a = document.getElementsByName("tab-idx");
             if (a[0].className.search("active") > 0) {
@@ -401,36 +467,68 @@
             }
         }
     */
-
 </script>
 <!-- Row start -->
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px ;">
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;" onclick="inq()">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important; border-bottom: 0px"
+        >
+            <li
+                class="nav-item"
+                style="width: calc(100% / 3.1) !important"
+                onclick="inq()"
+            >
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
 
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data
+                </a>
                 <div class="slide"></div>
             </li>
-
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-3">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris">User Group</label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                                >User Group</label
+                            >
                             <div class="col-sm-8">
-                                <select name="tipeUser" id="tipeUser" class="form-control combobox_hris">
+                                <select
+                                    name="tipeUser"
+                                    id="tipeUser"
+                                    class="form-control combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -438,7 +536,9 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right txt_hris"></label>
+                            <label
+                                class="col-sm-4 col-form-label text-right txt_hris"
+                            ></label>
                             <div class="col-sm-8">
                                 <!-- <input type="date" id="tgl2" anem="expire" class="form-control txt_hris"
                                         style="width:auto"> -->
@@ -446,25 +546,29 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group row frm_grp">
-
-                        </div>
+                        <div class="form-group row frm_grp"></div>
                     </div>
-                    <div class="col-sm-3">
-
-                    </div>
+                    <div class="col-sm-3"></div>
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No.</td>
                                                 <!--<td>UserId</td>-->
                                                 <td>User Name</td>
@@ -476,9 +580,7 @@
                                                 <td>Action</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -488,32 +590,52 @@
                 </div>
             </div>
 
-
             <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
                 <div class="row">
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Id</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Id</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_userId" class="form-control txt_hris" readonly>
+                                <input
+                                    type="text"
+                                    id="t2_userId"
+                                    class="form-control txt_hris"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Nama</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Nama</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_namaUser" class="form-control txt_hris">
+                                <input
+                                    type="text"
+                                    id="t2_namaUser"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Group</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Group</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select id="t2_tipeUser" class="form-control combobox_hris">
+                                <select
+                                    id="t2_tipeUser"
+                                    class="form-control combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -522,39 +644,69 @@
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Name</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Name</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_userNm" class="form-control txt_hris">
+                                <input
+                                    type="text"
+                                    id="t2_userNm"
+                                    class="form-control txt_hris"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">User Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >User Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_userPwd" alt="maximal 35 char"
-                                    class="form-control txt_hris" maxlength="35">
+                                <input
+                                    type="password"
+                                    id="t2_userPwd"
+                                    alt="maximal 35 char"
+                                    class="form-control txt_hris"
+                                    maxlength="35"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Confirm Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Confirm Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_cfmPass" alt="maximal 35 char"
-                                    class="form-control txt_hris" maxlength="35">
+                                <input
+                                    type="password"
+                                    id="t2_cfmPass"
+                                    alt="maximal 35 char"
+                                    class="form-control txt_hris"
+                                    maxlength="35"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Koperasi</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Koperasi</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="aktif" id="t2_kop_id" class="form-control form-select combobox_hris"
-                                    onchange="selToko('')">
+                                <select
+                                    name="aktif"
+                                    id="t2_kop_id"
+                                    class="form-control form-select combobox_hris"
+                                    onchange="selToko('')"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -562,9 +714,16 @@
                     </div>
                     <div class="col-12 col-sm-12" id="tokoSection">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Toko</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Toko</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="aktif" id="t2_toko_id" class="form-control form-select combobox_hris">
+                                <select
+                                    name="aktif"
+                                    id="t2_toko_id"
+                                    class="form-control form-select combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -572,30 +731,24 @@
                     </div>
                     <div class="col-12 col-sm-12">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left txt_hris">Status</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left txt_hris"
+                                >Status</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="aktif" id="t2_aktif" class="form-control form-select combobox_hris">
+                                <select
+                                    name="aktif"
+                                    id="t2_aktif"
+                                    class="form-control form-select combobox_hris"
+                                >
                                     <option value="Y" selected>Yes</option>
                                     <option value="N">No</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>

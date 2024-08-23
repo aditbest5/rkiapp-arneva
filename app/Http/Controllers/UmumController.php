@@ -34,25 +34,25 @@ class UmumController extends Controller
         SELECT a.* ,b.nama_koperasi,b.idx,c.nama_toko,b.noAccount
         from mst_user a
         LEFT JOIN mst_koperasi b ON a.no_koperasi=b.idx
-        LEFT JOIN mst_toko c ON a.no_toko=c.toko_id
+        LEFT JOIN mst_toko c ON a.no_toko=c.toko_id 
         where (userid=? OR usernm=?)  and userPwd=?
         ";
         $results = DB::select($sql, [$user, $user, $userPwd]);
 
         if (count($results) > 0) {
-            $sql = "
+            $sql = " 
             SELECT * FROM user_sysmenu a
             JOIN sysmenu b ON a.menuId=b.menuCode  where userid=? and showYn='Y'  and menuClass='MODUL'
             ORDER BY menuorder   ";
             $homePrevileges = DB::select($sql, [$results[0]->userId]);
 
-            $sql = "
+            $sql = " 
             SELECT * FROM user_sysmenu a
-            JOIN sysmenu b ON a.menuId=b.menuCode  where userid=? and showYn='Y'  and menuClass='MENU'
+            JOIN sysmenu b ON a.menuId=b.menuCode  where userid=? and showYn='Y'  and menuClass='MENU' 
             ORDER BY menuorder   ";
             $menuPrevileges = DB::select($sql, [$results[0]->userId]);
 
-            $sql = "
+            $sql = " 
             SELECT * FROM user_sysmenu a
             JOIN sysmenu b ON a.menuId=b.menuCode  where userid=? and showYn='Y' and menuClass='STEP1'
             ORDER BY menuorder   ";
@@ -198,8 +198,8 @@ class UmumController extends Controller
             //$resutlMsg = array("sts" => "OK", "desc" => "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " Canot Upload To Server Please ReUpload Image Again.", "msg" => "");
             $resutlMsg = array("sts" => "OK", "desc" => "The file  Canot Upload To Server Please ReUpload Image Again.", "msg" => "");
             return json_encode($resutlMsg);
-            }
-
+            } 
+            
             } else {
             //echo "Sorry, there was an error uploading your file.";
             $results = DB::delete($sql);

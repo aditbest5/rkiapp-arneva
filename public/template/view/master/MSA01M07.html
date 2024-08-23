@@ -8,170 +8,181 @@
         var d = new Date();
         var curr_date = d.getDate();
         var curr_month = d.getMonth() + 1;
-        if (curr_month.length == 1) { curr_month = "0" + curr_month }
+        if (curr_month.length == 1) {
+            curr_month = "0" + curr_month;
+        }
         var curr_year = d.getFullYear();
-        $('#t2_tanggal_lahir').val(curr_year + "-0" + curr_month + "-" + curr_date);
-        $('#t2_tanggal_masuk').val(curr_year + "-0" + curr_month + "-" + curr_date);
-
+        $("#t2_tanggal_lahir").val(
+            curr_year + "-0" + curr_month + "-" + curr_date
+        );
+        $("#t2_tanggal_masuk").val(
+            curr_year + "-0" + curr_month + "-" + curr_date
+        );
     }
 
     function koperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: $("#login_kop_id").val()
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("kop_id");
-            var y = document.getElementById("t2_nama_koperasi");
-            //alert($("#login_kop_id").val());
-            if ($("#login_kop_id").val() == "") {
-                $('#kop_id').empty()
-                    /*.append('<option selected="selected"  value="">Chosee..</option>') */;
-                $('#t2_nama_koperasi').empty()
-                    /*.append('<option selected="selected"  value="">Chosee..</option>')*/;
-            } else {
-                $('#kop_id').empty()
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: $("#login_kop_id").val(),
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("kop_id");
+                var y = document.getElementById("t2_nama_koperasi");
+                //alert($("#login_kop_id").val());
+                if ($("#login_kop_id").val() == "") {
+                    $("#kop_id").empty();
+                    /*.append('<option selected="selected"  value="">Chosee..</option>') */
+                    $("#t2_nama_koperasi").empty();
+                    /*.append('<option selected="selected"  value="">Chosee..</option>')*/
+                } else {
+                    $("#kop_id").empty();
                     /*.append('<option selected="selected" disabled value="">Chosee..</option>') */
-                    ;
-                $('#t2_nama_koperasi').empty();
-            }
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["nama_koperasi"];
-                    option.value = myArr[i]["idx"];
-                    x.add(option, x[i]);
-
-                    var option1 = document.createElement("option");
-                    option1.text = myArr[i]["nama_koperasi"];
-                    option1.value = myArr[i]["idx"];
-                    y.add(option1, y[i]);
+                    $("#t2_nama_koperasi").empty();
                 }
-            }
-        }).fail(function (e) {
-            console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
-            // Handle error here
-        });
-    }
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["nama_koperasi"];
+                        option.value = myArr[i]["idx"];
+                        x.add(option, x[i]);
 
-
-    function allCode() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selAllCodeAnggota"
-        }, function (data, status) {
-            //alert("Data: " + data + "\nStatus: " + status);
-            const myArr = JSON.parse(data);
-            console.log(myArr);
-            var b = "";
-            var k = document.getElementById("t2_agama");
-            var l = document.getElementById("t2_pendidikan");
-            var m = document.getElementById("t2_status_perkawinan");
-            var n = document.getElementById("t2_jenis_kelamin");
-            var o = document.getElementById("t2_pekerjaan");
-
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    if (myArr[i]["masterCode"] == "1000001") {
-                        //Jenis kelamin
                         var option1 = document.createElement("option");
-                        option1.text = myArr[i]["detailName"];
-                        option1.value = myArr[i]["detailCode"];
-                        n.add(option1, n[i]);
-                    } else if (myArr[i]["masterCode"] == "1000002") {
-                        //pendidikan ,
-                        var option2 = document.createElement("option");
-                        option2.text = myArr[i]["detailName"];
-                        option2.value = myArr[i]["detailCode"];
-                        l.add(option2, l[i]);
-                    } else if (myArr[i]["masterCode"] == "1000003") {
-                        //menikah ,
-                        var option3 = document.createElement("option");
-                        option3.text = myArr[i]["detailName"];
-                        option3.value = myArr[i]["detailCode"];
-                        m.add(option3, m[i]);
-                    } else if (myArr[i]["masterCode"] == "1000004") {
-                        //agama ,
-                        var option4 = document.createElement("option");
-                        option4.text = myArr[i]["detailName"];
-                        option4.value = myArr[i]["detailCode"];
-                        k.add(option4, k[i]);
-                    } else if (myArr[i]["masterCode"] == "1000005") {
-                        //pekerjaan ,
-                        var option5 = document.createElement("option");
-                        option5.text = myArr[i]["detailName"];
-                        option5.value = myArr[i]["detailCode"];
-                        o.add(option5, o[i]);
+                        option1.text = myArr[i]["nama_koperasi"];
+                        option1.value = myArr[i]["idx"];
+                        y.add(option1, y[i]);
                     }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'warning', 'Warning');
+            salert("Error: " + e, "error", "Warning");
             // Handle error here
         });
     }
 
+    function allCode() {
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selAllCodeAnggota",
+            },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                const myArr = JSON.parse(data);
+                console.log(myArr);
+                var b = "";
+                var k = document.getElementById("t2_agama");
+                var l = document.getElementById("t2_pendidikan");
+                var m = document.getElementById("t2_status_perkawinan");
+                var n = document.getElementById("t2_jenis_kelamin");
+                var o = document.getElementById("t2_pekerjaan");
 
-
-
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (myArr[i]["masterCode"] == "1000001") {
+                            //Jenis kelamin
+                            var option1 = document.createElement("option");
+                            option1.text = myArr[i]["detailName"];
+                            option1.value = myArr[i]["detailCode"];
+                            n.add(option1, n[i]);
+                        } else if (myArr[i]["masterCode"] == "1000002") {
+                            //pendidikan ,
+                            var option2 = document.createElement("option");
+                            option2.text = myArr[i]["detailName"];
+                            option2.value = myArr[i]["detailCode"];
+                            l.add(option2, l[i]);
+                        } else if (myArr[i]["masterCode"] == "1000003") {
+                            //menikah ,
+                            var option3 = document.createElement("option");
+                            option3.text = myArr[i]["detailName"];
+                            option3.value = myArr[i]["detailCode"];
+                            m.add(option3, m[i]);
+                        } else if (myArr[i]["masterCode"] == "1000004") {
+                            //agama ,
+                            var option4 = document.createElement("option");
+                            option4.text = myArr[i]["detailName"];
+                            option4.value = myArr[i]["detailCode"];
+                            k.add(option4, k[i]);
+                        } else if (myArr[i]["masterCode"] == "1000005") {
+                            //pekerjaan ,
+                            var option5 = document.createElement("option");
+                            option5.text = myArr[i]["detailName"];
+                            option5.value = myArr[i]["detailCode"];
+                            o.add(option5, o[i]);
+                        }
+                    }
+                }
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "warning", "Warning");
+            // Handle error here
+        });
+    }
 
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
-            var no_koperasi = $('#login_kop_id').val();
+            var no_koperasi = $("#login_kop_id").val();
             if ($("#login_kop_id").val() != "") {
-                $('#t2_nama_koperasi').val($('#login_kop_id').val());
+                $("#t2_nama_koperasi").val($("#login_kop_id").val());
             }
-            $('#t2_userNm').val("");
-            $('#t2_usernm').prop("readonly", false);
-            $('#t2_userPwd').val("");
+            $("#t2_userNm").val("");
+            $("#t2_usernm").prop("readonly", false);
+            $("#t2_userPwd").val("");
             //$('#t2_aktif').val("");
             //$('#t2_tipeUser').val("");
-            $('#t2_nik').val("");
-            $('#t2_no_anggota').val("");
-            $('#t2_no_anggota_internal').val("");
-            $('#t2_usernm').val("");
+            $("#t2_nik").val("");
+            $("#t2_no_anggota").val("");
+            $("#t2_no_anggota_internal").val("");
+            $("#t2_usernm").val("");
 
-            $('#t2_pass').val("");
-            $('#t2_cfmPass').val("");
-            $('#t2_nama').val("");
-            $('#t2_no_karyawan').val("");
-            $('#t2_no_telp').val("");
-            $('#t2_email').val("");
-            $('#t2_pendidikan').val("");
-            $('#t2_status_perkawinan').val("");
-            $('#t2_jenis_kelamin').val("");
-            $('#t2_tempat_lahir').val("");
-            $('#t2_tanggal_lahir').val("");
-            $('#t2_alamat').val("");
-            $('#t2_kode_pos').val("");
-            $('#t2_pekerjaan').val("");
-            $('#t2_agama').val("");
-            $('#t2_hubungan_kerabat').val("");
-            $('#t2_no_telp_kerabat').val("");
-            $('#t2_kelompok').val("");
-            $('#t2_nama_ibu_kandung').val("");
+            $("#t2_pass").val("");
+            $("#t2_cfmPass").val("");
+            $("#t2_nama").val("");
+            $("#t2_no_karyawan").val("");
+            $("#t2_no_telp").val("");
+            $("#t2_email").val("");
+            $("#t2_pendidikan").val("");
+            $("#t2_status_perkawinan").val("");
+            $("#t2_jenis_kelamin").val("");
+            $("#t2_tempat_lahir").val("");
+            $("#t2_tanggal_lahir").val("");
+            $("#t2_alamat").val("");
+            $("#t2_kode_pos").val("");
+            $("#t2_pekerjaan").val("");
+            $("#t2_agama").val("");
+            $("#t2_hubungan_kerabat").val("");
+            $("#t2_no_telp_kerabat").val("");
+            $("#t2_kelompok").val("");
+            $("#t2_nama_ibu_kandung").val("");
 
-            $("#t2_image_anggota").attr("src", "../template/files/assets/images/ADMIN.jpg");
-            $("#t2_image_anggota_ktp").attr("src", "../template/files/assets/images/ADMIN.jpg");
+            $("#t2_image_anggota").attr(
+                "src",
+                "../template/files/assets/images/ADMIN.jpg"
+            );
+            $("#t2_image_anggota_ktp").attr(
+                "src",
+                "../template/files/assets/images/ADMIN.jpg"
+            );
             $("#editYn").val("N");
 
             //button
-            $('#button-ktp').prop("disabled", true);
-            $('#button-kk').prop("disabled", true);
-            $('#button-npwp').prop("disabled", true);
-            $('#button-gaji').prop("disabled", true);
-            $('#button-rk').prop("disabled", true);
+            $("#button-ktp").prop("disabled", true);
+            $("#button-kk").prop("disabled", true);
+            $("#button-npwp").prop("disabled", true);
+            $("#button-gaji").prop("disabled", true);
+            $("#button-rk").prop("disabled", true);
 
             getNumber();
         }
@@ -180,194 +191,348 @@
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-                cmd: "selAnggotaNomor"
-            }, function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                const myArr = JSON.parse(data);
-                if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
-                } else {
-                    $('#t2_no_anggota').val(myArr[0]["noAgt"]);
-                    $('#t2_no_anggota').attr('readonly', 'readonly');
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                {
+                    cmd: "selAnggotaNomor",
+                },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", "warning", "Warning");
+                    } else {
+                        $("#t2_no_anggota").val(myArr[0]["noAgt"]);
+                        $("#t2_no_anggota").attr("readonly", "readonly");
+                    }
                 }
-            }).fail(function (e) {
+            ).fail(function (e) {
                 console.log(e);
-                salert("Error: " + e, 'warning', 'Warning');
+                salert("Error: " + e, "warning", "Warning");
             });
         }
     }
-
 
     function readURL(input, idx) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             if (idx == "KTP") {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota_ktp').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota_ktp").attr("src", e.target.result);
+                };
             } else if (idx == "KK") {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota_kk').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota_kk").attr("src", e.target.result);
+                };
             } else if (idx == "NPWP") {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota_npwp').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota_npwp").attr("src", e.target.result);
+                };
             } else if (idx == "RK") {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota_rk').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota_rk").attr("src", e.target.result);
+                };
             } else if (idx == "GAJI") {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota_gaji').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota_gaji").attr("src", e.target.result);
+                };
             } else {
                 reader.onload = function (e) {
-                    $('#t2_image_anggota').attr('src', e.target.result);
-                }
+                    $("#t2_image_anggota").attr("src", e.target.result);
+                };
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    function _changeTab(nik, no_anggota, no_anggota_internal, usernm, pass, nama, no_karyawan, no_telp, email, pendidikan, status_perkawinan, jenis_kelamin, tempat_lahir, tanggal_lahir, alamat, kode_pos, pekerjaan, agama, hubungan_kerabat, no_telp_kerabat, kelompok, no_koperasi, tanggal_masuk, nama_ibu_kandung) {
-
+    function _changeTab(
+        nik,
+        no_anggota,
+        no_anggota_internal,
+        usernm,
+        pass,
+        nama,
+        no_karyawan,
+        no_telp,
+        email,
+        pendidikan,
+        status_perkawinan,
+        jenis_kelamin,
+        tempat_lahir,
+        tanggal_lahir,
+        alamat,
+        kode_pos,
+        pekerjaan,
+        agama,
+        hubungan_kerabat,
+        no_telp_kerabat,
+        kelompok,
+        no_koperasi,
+        tanggal_masuk,
+        nama_ibu_kandung
+    ) {
         //alert(no_koperasi);
-        $('#t2_nik').val(nik);
-        $('#t2_no_anggota').val(no_anggota);
-        $('#t2_no_anggota_internal').val(no_anggota_internal);
-        $('#t2_usernm').val(usernm);
-        $('#t2_usernm').prop("readonly", true);
+        $("#t2_nik").val(nik);
+        $("#t2_no_anggota").val(no_anggota);
+        $("#t2_no_anggota_internal").val(no_anggota_internal);
+        $("#t2_usernm").val(usernm);
+        $("#t2_usernm").prop("readonly", true);
 
-        $('#t2_pass').val(pass);
-        $('#t2_cfmPass').val(pass);
-        $('#t2_nama').val(nama);
-        $('#t2_no_karyawan').val(no_karyawan);
+        $("#t2_pass").val(pass);
+        $("#t2_cfmPass").val(pass);
+        $("#t2_nama").val(nama);
+        $("#t2_no_karyawan").val(no_karyawan);
 
-        $('#t2_no_telp').val(no_telp);
-        $('#t2_email').val(email);
-        $('#t2_pendidikan').val(pendidikan);
-        $('#t2_status_perkawinan').val(status_perkawinan);
-        $('#t2_jenis_kelamin').val(jenis_kelamin);
-        $('#t2_tempat_lahir').val(tempat_lahir);
-        $('#t2_tanggal_lahir').val(tanggal_lahir);
-        $('#t2_alamat').val(alamat);
-        $('#t2_kode_pos').val(kode_pos);
-        $('#t2_pekerjaan').val(pekerjaan);
-        $('#t2_agama').val(agama);
-        $('#t2_tanggal_masuk').val(tanggal_masuk);
-        $('#t2_hubungan_kerabat').val(hubungan_kerabat);
-        $('#t2_no_telp_kerabat').val(no_telp_kerabat);
-        $('#t2_kelompok').val(kelompok);
-        $('#t2_nama_koperasi').val(no_koperasi);
-        $('#t2_nama_ibu_kandung').val(nama_ibu_kandung);
+        $("#t2_no_telp").val(no_telp);
+        $("#t2_email").val(email);
+        $("#t2_pendidikan").val(pendidikan);
+        $("#t2_status_perkawinan").val(status_perkawinan);
+        $("#t2_jenis_kelamin").val(jenis_kelamin);
+        $("#t2_tempat_lahir").val(tempat_lahir);
+        $("#t2_tanggal_lahir").val(tanggal_lahir);
+        $("#t2_alamat").val(alamat);
+        $("#t2_kode_pos").val(kode_pos);
+        $("#t2_pekerjaan").val(pekerjaan);
+        $("#t2_agama").val(agama);
+        $("#t2_tanggal_masuk").val(tanggal_masuk);
+        $("#t2_hubungan_kerabat").val(hubungan_kerabat);
+        $("#t2_no_telp_kerabat").val(no_telp_kerabat);
+        $("#t2_kelompok").val(kelompok);
+        $("#t2_nama_koperasi").val(no_koperasi);
+        $("#t2_nama_ibu_kandung").val(nama_ibu_kandung);
 
         var y = new Date();
-        var imageRefresh = y.getFullYear() + "" + y.getMonth() + "" + y.getDate() + "" + y.getHours() + "" + y.getMinutes() + "" + y.getSeconds() + y.getMilliseconds();
-        $('#t2_image_anggota').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + ".jpg?imageRefresh=" + imageRefresh);
-        $('#t2_image_anggota_ktp').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + "-ktp.jpg?imageRefresh=" + imageRefresh);
-        $('#t2_image_anggota_kk').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + "-kk.jpg?imageRefresh=" + imageRefresh);
-        $('#t2_image_anggota_npwp').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + "-npwp.jpg?imageRefresh=" + imageRefresh);
-        $('#t2_image_anggota_gaji').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + "-gaji.jpg?imageRefresh=" + imageRefresh);
-        $('#t2_image_anggota_rk').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + "-rk.jpg?imageRefresh=" + imageRefresh);
+        var imageRefresh =
+            y.getFullYear() +
+            "" +
+            y.getMonth() +
+            "" +
+            y.getDate() +
+            "" +
+            y.getHours() +
+            "" +
+            y.getMinutes() +
+            "" +
+            y.getSeconds() +
+            y.getMilliseconds();
+        $("#t2_image_anggota").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                ".jpg?imageRefresh=" +
+                imageRefresh
+        );
+        $("#t2_image_anggota_ktp").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                "-ktp.jpg?imageRefresh=" +
+                imageRefresh
+        );
+        $("#t2_image_anggota_kk").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                "-kk.jpg?imageRefresh=" +
+                imageRefresh
+        );
+        $("#t2_image_anggota_npwp").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                "-npwp.jpg?imageRefresh=" +
+                imageRefresh
+        );
+        $("#t2_image_anggota_gaji").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                "-gaji.jpg?imageRefresh=" +
+                imageRefresh
+        );
+        $("#t2_image_anggota_rk").attr(
+            "src",
+            "https://storage.cloud.google.com/atous-product-images/anggota/" +
+                no_anggota +
+                "-rk.jpg?imageRefresh=" +
+                imageRefresh
+        );
 
         //$('#t2_image_anggota_ktp').attr("src", "https://storage.cloud.google.com/atous-product-images/anggota/" + no_anggota + ".jpg?imageRefresh=" + imageRefresh);
         $("#editYn").val("Y");
 
         //button
-        $('#button-ktp').prop("disabled", false);
-        $('#button-kk').prop("disabled", false);
-        $('#button-npwp').prop("disabled", false);
-        $('#button-gaji').prop("disabled", false);
-        $('#button-rk').prop("disabled", false);
+        $("#button-ktp").prop("disabled", false);
+        $("#button-kk").prop("disabled", false);
+        $("#button-npwp").prop("disabled", false);
+        $("#button-gaji").prop("disabled", false);
+        $("#button-rk").prop("disabled", false);
         //$('#button-kk').prop("disabled", false);
         // tab_query
-        $('#tab_entry').click();
-        $('#tab_entry').text('Edit Data');
-
+        $("#tab_entry").click();
+        $("#tab_entry").text("Edit Data");
     }
 
     function _deleteRow(no_anggota) {
-
         Swal.fire({
-            title: 'Are you sure?',
+            title: "Are you sure?",
             text: "Delete This Data ?",
-            icon: 'question',
+            icon: "question",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
         }).then((result) => {
             if (result.isConfirmed) {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-                    cmd: "delAnggota",
-                    no_anggota: no_anggota,
-                    kop_id: $("#login_kop_id").val()
-                }, function (data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var c = 1;
-                    var b = "";
-                    const myArr = JSON.parse(data);
-                    console.log(myArr.length);
-                    if (myArr["sts"] == "OK") {
-                        salertFunction(myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "fnInquery", "");
-                    } else {
-                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    {
+                        cmd: "delAnggota",
+                        no_anggota: no_anggota,
+                        kop_id: $("#login_kop_id").val(),
+                    },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salertFunction(
+                                myArr["desc"] + "\n" + myArr["msg"],
+                                "success",
+                                "Success",
+                                "fnInquery",
+                                ""
+                            );
+                        } else {
+                            salert(
+                                "Error ! " +
+                                    myArr["desc"] +
+                                    "\n" +
+                                    myArr["msg"],
+                                "error",
+                                "Error"
+                            );
+                        }
                     }
-
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                     // Handle error here
                     swalFinishLoading();
                 });
             }
-        })
-
+        });
     }
 
-
-
     function inq() {
-        $('#tab_entry').text('Tambah Data');
+        $("#tab_entry").text("Tambah Data");
         swalStartLoading();
-        var no_koperasi = $('#login_kop_id').val();
+        var no_koperasi = $("#login_kop_id").val();
         if ($("#login_kop_id").val() == "") {
-            no_koperasi = $('#kop_id').val();
+            no_koperasi = $("#kop_id").val();
         }
 
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selAnggota",
-            kop_id: no_koperasi,
-            nama_anggota: ""
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selAnggota",
+                kop_id: no_koperasi,
+                nama_anggota: "",
+            },
             function (data, status) {
                 //alert("Data: " + data + "\nStatus: " + status);
                 var c = 1;
                 var b = "";
                 const myArr = JSON.parse(data);
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
-                        b = b + "<tr   onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
+                        b =
+                            b +
+                            '<tr   onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
                         b = b + "<td>" + c + "</td> ";
-                        b = b + " <td>" + "<button onclick=\"_changeTab('" + myArr[i]["nik"] + "','" + myArr[i]["no_anggota"] + "','" + myArr[i]["no_anggota_internal"] + "','" + myArr[i]["usernm"] + "','" + myArr[i]["pass"] + "',";
-                        b = b + " '" + myArr[i]["nama"] + "','" + myArr[i]["no_karyawan"] + "','" + myArr[i]["no_telp"] + "','" + myArr[i]["email"] + "','" + myArr[i]["pendidikan"] + "', ";
-                        b = b + " '" + myArr[i]["status_perkawinan"] + "','" + myArr[i]["jenis_kelamin"] + "','" + myArr[i]["tempat_lahir"] + "','" + myArr[i]["tanggal_lahir"] + "', ";
-                        b = b + " '" + myArr[i]["alamat"] + "','" + myArr[i]["kode_pos"] + "','" + myArr[i]["pekerjaan"] + "','" + myArr[i]["agama"] + "', ";
+                        b =
+                            b +
+                            " <td>" +
+                            "<button onclick=\"_changeTab('" +
+                            myArr[i]["nik"] +
+                            "','" +
+                            myArr[i]["no_anggota"] +
+                            "','" +
+                            myArr[i]["no_anggota_internal"] +
+                            "','" +
+                            myArr[i]["usernm"] +
+                            "','" +
+                            myArr[i]["pass"] +
+                            "',";
+                        b =
+                            b +
+                            " '" +
+                            myArr[i]["nama"] +
+                            "','" +
+                            myArr[i]["no_karyawan"] +
+                            "','" +
+                            myArr[i]["no_telp"] +
+                            "','" +
+                            myArr[i]["email"] +
+                            "','" +
+                            myArr[i]["pendidikan"] +
+                            "', ";
+                        b =
+                            b +
+                            " '" +
+                            myArr[i]["status_perkawinan"] +
+                            "','" +
+                            myArr[i]["jenis_kelamin"] +
+                            "','" +
+                            myArr[i]["tempat_lahir"] +
+                            "','" +
+                            myArr[i]["tanggal_lahir"] +
+                            "', ";
+                        b =
+                            b +
+                            " '" +
+                            myArr[i]["alamat"] +
+                            "','" +
+                            myArr[i]["kode_pos"] +
+                            "','" +
+                            myArr[i]["pekerjaan"] +
+                            "','" +
+                            myArr[i]["agama"] +
+                            "', ";
                         b = b + " '" + myArr[i]["hubungan_kerabat"] + "', ";
-                        b = b + " '" + myArr[i]["no_telp_kerabat"] + "','" + myArr[i]["kelompok"] + "','" + myArr[i]["no_koperasi"] + "','" + myArr[i]["tanggal_masuk"] + "','" + myArr[i]["nama_ibu_kandung"] + "')\"   class='btn btn-warning btn-icon btn_grid' title='EDIT'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
+                        b =
+                            b +
+                            " '" +
+                            myArr[i]["no_telp_kerabat"] +
+                            "','" +
+                            myArr[i]["kelompok"] +
+                            "','" +
+                            myArr[i]["no_koperasi"] +
+                            "','" +
+                            myArr[i]["tanggal_masuk"] +
+                            "','" +
+                            myArr[i]["nama_ibu_kandung"] +
+                            "')\"   class='btn btn-warning btn-icon btn_grid' title='EDIT'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-pencil'></i>";
 
-                        b = b + "          </button>&nbsp;&nbsp;<button onclick=\"_deleteRow('" + myArr[i]["no_anggota"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" + "</td> ";
-
+                        b =
+                            b +
+                            "          </button>&nbsp;&nbsp;<button onclick=\"_deleteRow('" +
+                            myArr[i]["no_anggota"] +
+                            "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button>" +
+                            "</td> ";
 
                         b = b + " <td>" + myArr[i]["nik"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["no_anggota_internal"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["no_anggota_internal"] +
+                            "</td> ";
                         b = b + " <td>" + myArr[i]["usernm"] + "</td> ";
                         b = b + " <td>" + myArr[i]["pass"] + "</td> ";
                         b = b + " <td>" + myArr[i]["nama"] + "</td> ";
@@ -377,7 +542,11 @@
                         b = b + " <td>" + myArr[i]["email"] + "</td> ";
                         b = b + " <td>" + myArr[i]["st_pendidikan"] + "</td> ";
                         b = b + " <td>" + myArr[i]["st_menikah"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["st_jenis_kelamin"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["st_jenis_kelamin"] +
+                            "</td> ";
                         b = b + " <td>" + myArr[i]["tempat_lahir"] + "</td> ";
                         b = b + " <td>" + myArr[i]["tanggal_lahir"] + "</td> ";
                         b = b + " <td>" + myArr[i]["alamat"] + "</td> ";
@@ -392,21 +561,20 @@
                         b = b + "</tr>";
                         c = c + 1;
                     }
-
                 }
                 swalFinishLoading();
-                var table = $('#fix-header').DataTable();
+                var table = $("#fix-header").DataTable();
                 table.destroy();
                 document.getElementById("tableResult").innerHTML = b;
                 isiTable = b;
-                $('#fix-header').DataTable({
-                    fixedHeader: true
+                $("#fix-header").DataTable({
+                    fixedHeader: true,
                 });
-
-            }).fail(function (e) {
-                console.log(e);
-                swalFinishLoading();
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            swalFinishLoading();
+        });
     }
 
     function fnInquery() {
@@ -414,182 +582,232 @@
         if (a[0].className.search("active") > 0) {
             inq();
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
-            var userIns = $('#login_userId').val();
-            var no_koperasi = $('#login_kop_id').val();
+            var userIns = $("#login_userId").val();
+            var no_koperasi = $("#login_kop_id").val();
 
             if ($("#login_kop_id").val() == "") {
-                no_koperasi = $('#t2_nama_koperasi').val();
+                no_koperasi = $("#t2_nama_koperasi").val();
             }
 
-            var nik = $('#t2_nik').val();
-            var no_anggota = $('#t2_no_anggota').val();
-            var no_anggota_internal = $('#t2_no_anggota_internal').val();
-            var usernm = $('#t2_usernm').val();
-            var pass = $('#t2_pass').val();
-            var cfmPass = $('#t2_cfmPass').val();
-            var nama = $('#t2_nama').val();
-            var no_karyawan = $('#t2_no_karyawan').val();
-            var no_telp = $('#t2_no_telp').val();
-            var photo = $('#t2_nik').val();
-            var email = $('#t2_email').val();
-            var pendidikan = $('#t2_pendidikan').val();
-            var status_perkawinan = $('#t2_status_perkawinan').val();
-            var jenis_kelamin = $('#t2_jenis_kelamin').val();
-            var tempat_lahir = $('#t2_tempat_lahir').val();
-            var tanggal_lahir = $('#t2_tanggal_lahir').val();
-            var tanggal_masuk = $('#t2_tanggal_masuk').val();
-            var alamat = $('#t2_alamat').val();
-            var kode_pos = $('#t2_kode_pos').val();
-            var pekerjaan = $('#t2_pekerjaan').val();
-            var agama = $('#t2_agama').val();
-            var hubungan_kerabat = $('#t2_hubungan_kerabat').val();
-            var no_telp_kerabat = $('#t2_no_telp_kerabat').val();
-            var kelompok = $('#t2_kelompok').val();
-            var nama_ibu_kandung = $('#t2_nama_ibu_kandung').val();
+            var nik = $("#t2_nik").val();
+            var no_anggota = $("#t2_no_anggota").val();
+            var no_anggota_internal = $("#t2_no_anggota_internal").val();
+            var usernm = $("#t2_usernm").val();
+            var pass = $("#t2_pass").val();
+            var cfmPass = $("#t2_cfmPass").val();
+            var nama = $("#t2_nama").val();
+            var no_karyawan = $("#t2_no_karyawan").val();
+            var no_telp = $("#t2_no_telp").val();
+            var photo = $("#t2_nik").val();
+            var email = $("#t2_email").val();
+            var pendidikan = $("#t2_pendidikan").val();
+            var status_perkawinan = $("#t2_status_perkawinan").val();
+            var jenis_kelamin = $("#t2_jenis_kelamin").val();
+            var tempat_lahir = $("#t2_tempat_lahir").val();
+            var tanggal_lahir = $("#t2_tanggal_lahir").val();
+            var tanggal_masuk = $("#t2_tanggal_masuk").val();
+            var alamat = $("#t2_alamat").val();
+            var kode_pos = $("#t2_kode_pos").val();
+            var pekerjaan = $("#t2_pekerjaan").val();
+            var agama = $("#t2_agama").val();
+            var hubungan_kerabat = $("#t2_hubungan_kerabat").val();
+            var no_telp_kerabat = $("#t2_no_telp_kerabat").val();
+            var kelompok = $("#t2_kelompok").val();
+            var nama_ibu_kandung = $("#t2_nama_ibu_kandung").val();
 
             var fd = new FormData();
-            var files = $('#fileToUpload')[0].files;
-
+            var files = $("#fileToUpload")[0].files;
 
             if (tanggal_lahir.length == 0) {
-                salert('Tolong Isi Tanggal Lahir Dahulu ', 'warning', 'Warning');
+                salert(
+                    "Tolong Isi Tanggal Lahir Dahulu ",
+                    "warning",
+                    "Warning"
+                );
                 return;
             }
             if (tanggal_masuk.length == 0) {
-                salert('Tolong Isi Tanggal Masuk Dahulu ', 'warning', 'Warning');
+                salert(
+                    "Tolong Isi Tanggal Masuk Dahulu ",
+                    "warning",
+                    "Warning"
+                );
                 return;
             }
 
             var tgl = tanggal_lahir.substring(0, 4);
             var y = new Date();
             var nowe = y.getFullYear();
-            if ((nowe * 1) - (tgl * 1) < 17) {
-                salert('Umur Anggota Minimal 17 Tahun ', 'warning', 'Warning');
+            if (nowe * 1 - tgl * 1 < 17) {
+                salert("Umur Anggota Minimal 17 Tahun ", "warning", "Warning");
                 return;
             }
             if (nama == "") {
-                salert('Tolong Isi Nama Dahulu ', 'warning', 'Warning');
+                salert("Tolong Isi Nama Dahulu ", "warning", "Warning");
                 return;
             }
 
             if (no_anggota == "") {
-                salert("No Anggota Kosong ! \n Please Click New Button First", 'warning', 'Warning');
+                salert(
+                    "No Anggota Kosong ! \n Please Click New Button First",
+                    "warning",
+                    "Warning"
+                );
                 clearForm();
             } else {
                 if (pass == cfmPass) {
                     swalStartLoading();
-                    $.post("https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster", {
-                        cmd: "insAnggota",
-                        userIns: userIns,
-                        nik: nik,
-                        no_koperasi: no_koperasi,
-                        no_anggota: no_anggota,
-                        no_anggota_internal: no_anggota_internal,
-                        usernm: usernm,
-                        pass: pass,
-                        nama: nama,
-                        no_karyawan: no_karyawan,
-                        no_telp: no_telp,
-                        photo: photo,
-                        email: email,
-                        pendidikan: pendidikan,
-                        status_perkawinan: status_perkawinan,
-                        jenis_kelamin: jenis_kelamin,
-                        tempat_lahir: tempat_lahir,
-                        tanggal_lahir: tanggal_lahir,
-                        tanggal_masuk: tanggal_masuk,
-                        alamat: alamat,
-                        kode_pos: kode_pos,
-                        pekerjaan: pekerjaan,
-                        agama: agama,
-                        hubungan_kerabat: hubungan_kerabat,
-                        no_telp_kerabat: no_telp_kerabat,
-                        kelompok: kelompok,
-                        nama_ibu_kandung: nama_ibu_kandung
-                    }, function (data, status) {
-                        //alert("Data: " + data + "\nStatus: " + status);
-                        var c = 1;
-                        var b = "";
-                        const myArr = JSON.parse(data);
-                        console.log(myArr.length);
-                        if (myArr["sts"] == "OK") {
-                            //swalFinishLoading();
-                            //salert("Save Complete !", 'success', 'Success');
-                            // Check file selected or not
-                            if (files.length == 0) {
-                                salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "clearForm", "");
-                                clearForm();
-                            } else {
-                                fd.append('fileToUpload', files[0]);
-                                fd.append('fileName', no_anggota);
-                                fd.append('cmd', "uploadImage");
-                                fd.append('folder', "anggota");
+                    $.post(
+                        "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                        {
+                            cmd: "insAnggota",
+                            userIns: userIns,
+                            nik: nik,
+                            no_koperasi: no_koperasi,
+                            no_anggota: no_anggota,
+                            no_anggota_internal: no_anggota_internal,
+                            usernm: usernm,
+                            pass: pass,
+                            nama: nama,
+                            no_karyawan: no_karyawan,
+                            no_telp: no_telp,
+                            photo: photo,
+                            email: email,
+                            pendidikan: pendidikan,
+                            status_perkawinan: status_perkawinan,
+                            jenis_kelamin: jenis_kelamin,
+                            tempat_lahir: tempat_lahir,
+                            tanggal_lahir: tanggal_lahir,
+                            tanggal_masuk: tanggal_masuk,
+                            alamat: alamat,
+                            kode_pos: kode_pos,
+                            pekerjaan: pekerjaan,
+                            agama: agama,
+                            hubungan_kerabat: hubungan_kerabat,
+                            no_telp_kerabat: no_telp_kerabat,
+                            kelompok: kelompok,
+                            nama_ibu_kandung: nama_ibu_kandung,
+                        },
+                        function (data, status) {
+                            //alert("Data: " + data + "\nStatus: " + status);
+                            var c = 1;
+                            var b = "";
+                            const myArr = JSON.parse(data);
+                            console.log(myArr.length);
+                            if (myArr["sts"] == "OK") {
+                                //swalFinishLoading();
+                                //salert("Save Complete !", 'success', 'Success');
+                                // Check file selected or not
+                                if (files.length == 0) {
+                                    salertFunction(
+                                        "Success ! " +
+                                            myArr["desc"] +
+                                            "\n" +
+                                            myArr["msg"],
+                                        "success",
+                                        "Success",
+                                        "clearForm",
+                                        ""
+                                    );
+                                    clearForm();
+                                } else {
+                                    fd.append("fileToUpload", files[0]);
+                                    fd.append("fileName", no_anggota);
+                                    fd.append("cmd", "uploadImage");
+                                    fd.append("folder", "anggota");
 
-                                $.ajax({
-                                    /* url: 'http://103.232.66.72:82/test/upload.php', */
-                                    url: "api/umum/",
-                                    type: 'post',
-                                    data: fd,
-                                    contentType: false,
-                                    processData: false,
-                                    cors: true,
-                                    success: function (response) {
-                                        if (response != 0) {
-                                            const myArr = JSON.parse(data);
-                                            if (myArr["sts"] == "OK") {
-                                                salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "clearForm", "");
-
+                                    $.ajax({
+                                        /* url: 'http://103.232.66.72:82/test/upload.php', */
+                                        url: "api/umum/",
+                                        type: "post",
+                                        data: fd,
+                                        contentType: false,
+                                        processData: false,
+                                        cors: true,
+                                        success: function (response) {
+                                            if (response != 0) {
+                                                const myArr = JSON.parse(data);
+                                                if (myArr["sts"] == "OK") {
+                                                    salertFunction(
+                                                        "Success ! " +
+                                                            myArr["desc"] +
+                                                            "\n" +
+                                                            myArr["msg"],
+                                                        "success",
+                                                        "Success",
+                                                        "clearForm",
+                                                        ""
+                                                    );
+                                                } else {
+                                                    salert(
+                                                        "Error ! " +
+                                                            myArr["desc"] +
+                                                            "\n" +
+                                                            myArr["msg"],
+                                                        "error",
+                                                        "Error"
+                                                    );
+                                                }
                                             } else {
-                                                salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                                                salert("file not uploaded");
                                             }
-                                        } else {
-                                            salert('file not uploaded');
-                                        }
-                                    },
-                                });
+                                        },
+                                    });
+                                }
+                            } else {
+                                //swalFinishLoading();
+                                salert(
+                                    "Error ! " +
+                                        myArr["desc"] +
+                                        "\n" +
+                                        myArr["msg"],
+                                    "error",
+                                    "Error"
+                                );
                             }
-                        } else {
-                            //swalFinishLoading();
-                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
                         }
-                    }).fail(function (e) {
+                    ).fail(function (e) {
                         //swalFinishLoading();
-                        salert("Error ! Undefined Error " + myArr["msg"], 'error', 'Error');
+                        salert(
+                            "Error ! Undefined Error " + myArr["msg"],
+                            "error",
+                            "Error"
+                        );
                     });
                 } else {
                     //swalFinishLoading();
-                    salert("Password dan Confirm Password Harus Sama !!", 'error', 'Error');
+                    salert(
+                        "Password dan Confirm Password Harus Sama !!",
+                        "error",
+                        "Error"
+                    );
                 }
             }
-
         }
     }
 
     function uploadDokument(idx, ext) {
-        var no_anggota = $('#t2_no_anggota').val();
+        var no_anggota = $("#t2_no_anggota").val();
         var fd = new FormData();
-        var files = $('#' + idx)[0].files;
-        fd.append('fileToUpload', files[0]);
-        fd.append('fileName', no_anggota + "-" + ext);
-        fd.append('cmd', "uploadImage");
-        fd.append('folder', "anggota");
+        var files = $("#" + idx)[0].files;
+        fd.append("fileToUpload", files[0]);
+        fd.append("fileName", no_anggota + "-" + ext);
+        fd.append("cmd", "uploadImage");
+        fd.append("folder", "anggota");
 
         $.ajax({
             /* url: 'http://103.232.66.72:82/test/upload.php', */
             url: "api/umum/",
-            type: 'post',
+            type: "post",
             data: fd,
             contentType: false,
             processData: false,
@@ -598,24 +816,30 @@
                 if (response != 0) {
                     const myArr = JSON.parse(response);
                     if (myArr["sts"] == "OK") {
-                        salert(myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success');
+                        salert(
+                            myArr["desc"] + "\n" + myArr["msg"],
+                            "success",
+                            "Success"
+                        );
                         //clearForm();
                     } else {
-                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                        salert(
+                            "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                            "error",
+                            "Error"
+                        );
                     }
                 } else {
-                    salert('file not uploaded');
+                    salert("file not uploaded");
                 }
             },
         });
     }
 
-
-
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -625,39 +849,36 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function exportExcel() {
-
         //alert("tab");
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Download Excel", 'info', 'Info');
+            salert("Download Excel", "info", "Info");
             downloadExcell("#tableHeader", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
-
         }
     }
 
     function openAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Maximum View", 'info', 'Info');
+            salert("Maximum View", "info", "Info");
             openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
@@ -665,11 +886,10 @@
     }
 
     function gridAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Minimum View", 'info', 'Info');
-            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+            salert("Minimum View", "info", "Info");
+            minimizeAllGrid("#fix-header", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
         }
@@ -679,30 +899,62 @@
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-            <li class="nav-item" style="width: calc(100% / 2.9) !important;" onclick="inq();">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li
+                class="nav-item"
+                style="width: calc(100% / 2.9) !important"
+                onclick="inq();"
+            >
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
 
-            <li class="nav-item" style="width: calc(100% /2.9) !important;">
-                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+            <li class="nav-item" style="width: calc(100% / 2.9) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data
+                </a>
                 <div class="slide"></div>
             </li>
-
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-3">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-left txt_hris">Nama Koperasi</label>
+                            <label
+                                class="col-sm-4 col-form-label text-left txt_hris"
+                                >Nama Koperasi</label
+                            >
                             <div class="col-sm-8">
-                                <select id="kop_id" class="form-control combobox_hris">
+                                <select
+                                    id="kop_id"
+                                    class="form-control combobox_hris"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -710,32 +962,36 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-left txt_hris"></label>
-                            <div class="col-sm-8">
-
-                            </div>
+                            <label
+                                class="col-sm-4 col-form-label text-left txt_hris"
+                            ></label>
+                            <div class="col-sm-8"></div>
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="form-group row frm_grp">
-
-                        </div>
+                        <div class="form-group row frm_grp"></div>
                     </div>
-                    <div class="col-sm-3">
-
-                    </div>
+                    <div class="col-sm-3"></div>
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No.</td>
                                                 <td>Action</td>
                                                 <td>NIK</td>
@@ -759,9 +1015,7 @@
                                                 <td>Kelompok</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -771,14 +1025,19 @@
                 </div>
             </div>
 
-
             <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nama Koperasi</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Nama Koperasi</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select id="t2_nama_koperasi" class="form-control ">
+                                <select
+                                    id="t2_nama_koperasi"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -787,79 +1046,148 @@
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">User Name</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >User Name</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_usernm" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_usernm"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">No Anggota</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >No Anggota</label
+                            >
                             <div class="col-md-10 col-sm-9">
                                 <div class="row">
                                     <div class="col-8">
-                                        <input type="text" id="t2_no_anggota_internal" class="form-control ">
-                                        <input type="hidden" id="editYn" class="form-control " readonly>
+                                        <input
+                                            type="text"
+                                            id="t2_no_anggota_internal"
+                                            class="form-control"
+                                        />
+                                        <input
+                                            type="hidden"
+                                            id="editYn"
+                                            class="form-control"
+                                            readonly
+                                        />
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" id="t2_no_anggota" class="form-control " readonly>
+                                        <input
+                                            type="text"
+                                            id="t2_no_anggota"
+                                            class="form-control"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">User Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >User Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_pass" class="form-control ">
+                                <input
+                                    type="password"
+                                    id="t2_pass"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Kelompok</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Kelompok</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="hidden" id="t2_no_telp_kerabat" class="form-control ">
-                                <input type="text" id="t2_kelompok" class="form-control ">
+                                <input
+                                    type="hidden"
+                                    id="t2_no_telp_kerabat"
+                                    class="form-control"
+                                />
+                                <input
+                                    type="text"
+                                    id="t2_kelompok"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Cfm Password</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Cfm Password</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="password" id="t2_cfmPass" class="form-control ">
+                                <input
+                                    type="password"
+                                    id="t2_cfmPass"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nama</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Nama</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_nama" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_nama"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">No Karyawan</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >No Karyawan</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_no_karyawan" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_no_karyawan"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Status</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Status</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="t2_status_perkawinan" id="t2_status_perkawinan" class="form-control ">
+                                <select
+                                    name="t2_status_perkawinan"
+                                    id="t2_status_perkawinan"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -867,33 +1195,61 @@
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Tempat Lahir</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Tempat Lahir</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_tempat_lahir" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_tempat_lahir"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Tanggal Lahir</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Tanggal Lahir</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input id="t2_tanggal_lahir" type="date" class="form-control ">
+                                <input
+                                    id="t2_tanggal_lahir"
+                                    type="date"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Tanggal Masuk</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Tanggal Masuk</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input id="t2_tanggal_masuk" type="date" class="form-control ">
+                                <input
+                                    id="t2_tanggal_masuk"
+                                    type="date"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Jenis Kelamin</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Jenis Kelamin</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="t2_jenis_kelamin" id="t2_jenis_kelamin" class="form-control ">
+                                <select
+                                    name="t2_jenis_kelamin"
+                                    id="t2_jenis_kelamin"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -902,9 +1258,16 @@
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Agama</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Agama</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="t2_agama" id="t2_agama" class="form-control ">
+                                <select
+                                    name="t2_agama"
+                                    id="t2_agama"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -913,17 +1276,31 @@
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Alamat</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Alamat</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_alamat" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_alamat"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Pekerjaan</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Pekerjaan</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="t2_pekerjaan" id="t2_pekerjaan" class="form-control ">
+                                <select
+                                    name="t2_pekerjaan"
+                                    id="t2_pekerjaan"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -932,17 +1309,31 @@
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Kode POS</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Kode POS</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="number" id="t2_kode_pos" class="form-control ">
+                                <input
+                                    type="number"
+                                    id="t2_kode_pos"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Pendidikan</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Pendidikan</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <select name="t2_pendidikan" id="t2_pendidikan" class="form-control ">
+                                <select
+                                    name="t2_pendidikan"
+                                    id="t2_pendidikan"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -951,149 +1342,286 @@
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">No Handphone</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >No Handphone</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="number" id="t2_no_telp" class="form-control ">
+                                <input
+                                    type="number"
+                                    id="t2_no_telp"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">No.KTP</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >No.KTP</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="number" id="t2_nik" class="form-control ">
+                                <input
+                                    type="number"
+                                    id="t2_nik"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <input type="hidden" id="t2_hubungan_kerabat" class="form-control ">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Email</label>
+                            <input
+                                type="hidden"
+                                id="t2_hubungan_kerabat"
+                                class="form-control"
+                            />
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Email</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_email" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_email"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-6 col-xs-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-md-2 col-sm-3 col-form-label text-left ">Nama Ibu</label>
+                            <label
+                                class="col-md-2 col-sm-3 col-form-label text-left"
+                                >Nama Ibu</label
+                            >
                             <div class="col-md-10 col-sm-9">
-                                <input type="text" id="t2_nama_ibu_kandung" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_nama_ibu_kandung"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <form id="uploadImage" runat="server">
                     <div class="row p-3">
                         <div class="col-md-6 col-xs-12 col-sm-6">
-                            <input type="file" accept=".jpg" class="form-control " id="fileToUpload" name="fileToUpload"
-                                onchange="readURL(this,'');" />
+                            <input
+                                type="file"
+                                accept=".jpg"
+                                class="form-control"
+                                id="fileToUpload"
+                                name="fileToUpload"
+                                onchange="readURL(this,'');"
+                            />
                             <div class="text-center">
-                                Upload Foto<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota" class="rounded"
-                                    width="300" height="250" alt="Upload Your Image" />
+                                Upload Foto<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota"
+                                    class="rounded"
+                                    width="300"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12 col-sm-6 mt-2">
                             <div class="input-group mb-3">
-                                <input type="file" accept=".jpg" class="form-control " id="fileToUploadKtp"
-                                    name="fileToUpload" onchange="readURL(this,'KTP');">
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    class="form-control"
+                                    id="fileToUploadKtp"
+                                    name="fileToUpload"
+                                    onchange="readURL(this,'KTP');"
+                                />
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" onclick="uploadDokument('fileToUploadKtp','ktp');"
-                                        type="button" id="button-ktp" disabled><i
-                                            class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <button
+                                        class="btn btn-success"
+                                        onclick="uploadDokument('fileToUploadKtp','ktp');"
+                                        type="button"
+                                        id="button-ktp"
+                                        disabled
+                                    >
+                                        <i
+                                            class="fa-solid fa-cloud-arrow-up"
+                                        ></i>
+                                        Upload
+                                    </button>
                                 </div>
                             </div>
                             <div class="text-center">
-                                Upload KTP From Mobile/Web<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota_ktp"
-                                    class="rounded" width="350" height="250" alt="Upload Your Image">
+                                Upload KTP From Mobile/Web<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota_ktp"
+                                    class="rounded"
+                                    width="350"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
 
                         <div class="col-md-6 col-xs-12 col-sm-6 mt-2">
                             <div class="input-group mb-3">
-                                <input type="file" accept=".jpg" class="form-control " id="fileToUploadKk"
-                                    name="fileToUpload" onchange="readURL(this,'KK');">
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    class="form-control"
+                                    id="fileToUploadKk"
+                                    name="fileToUpload"
+                                    onchange="readURL(this,'KK');"
+                                />
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" type="button" id="button-kk"
-                                        onclick="uploadDokument('fileToUploadKk','kk');" disabled><i
-                                            class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <button
+                                        class="btn btn-success"
+                                        type="button"
+                                        id="button-kk"
+                                        onclick="uploadDokument('fileToUploadKk','kk');"
+                                        disabled
+                                    >
+                                        <i
+                                            class="fa-solid fa-cloud-arrow-up"
+                                        ></i>
+                                        Upload
+                                    </button>
                                 </div>
                             </div>
                             <div class="text-center">
-                                Upload Kartu Keluarga<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota_kk"
-                                    class="rounded" width="350" height="250" alt="Upload Your Image">
+                                Upload Kartu Keluarga<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota_kk"
+                                    class="rounded"
+                                    width="350"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
 
                         <div class="col-md-6 col-xs-12 col-sm-6 mt-2">
                             <div class="input-group mb-3">
-                                <input type="file" accept=".jpg" class="form-control " id="fileToUploadNpwp"
-                                    name="fileToUpload" onchange="readURL(this,'NPWP');">
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    class="form-control"
+                                    id="fileToUploadNpwp"
+                                    name="fileToUpload"
+                                    onchange="readURL(this,'NPWP');"
+                                />
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" type="button" id="button-npwp"
-                                        onclick="uploadDokument('fileToUploadNpwp','npwp');" disabled><i
-                                            class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <button
+                                        class="btn btn-success"
+                                        type="button"
+                                        id="button-npwp"
+                                        onclick="uploadDokument('fileToUploadNpwp','npwp');"
+                                        disabled
+                                    >
+                                        <i
+                                            class="fa-solid fa-cloud-arrow-up"
+                                        ></i>
+                                        Upload
+                                    </button>
                                 </div>
                             </div>
                             <div class="text-center">
-                                Upload NPWP<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota_npwp"
-                                    class="rounded" width="350" height="250" alt="Upload Your Image">
+                                Upload NPWP<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota_npwp"
+                                    class="rounded"
+                                    width="350"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12 col-sm-6 mt-2">
                             <div class="input-group mb-3">
-                                <input type="file" accept=".jpg" class="form-control " id="fileToUploadGaji"
-                                    name="fileToUpload" onchange="readURL(this,'GAJI');">
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    class="form-control"
+                                    id="fileToUploadGaji"
+                                    name="fileToUpload"
+                                    onchange="readURL(this,'GAJI');"
+                                />
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" type="button" id="button-gaji"
-                                        onclick="uploadDokument('fileToUploadGaji','gaji');" disabled><i
-                                            class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <button
+                                        class="btn btn-success"
+                                        type="button"
+                                        id="button-gaji"
+                                        onclick="uploadDokument('fileToUploadGaji','gaji');"
+                                        disabled
+                                    >
+                                        <i
+                                            class="fa-solid fa-cloud-arrow-up"
+                                        ></i>
+                                        Upload
+                                    </button>
                                 </div>
                             </div>
                             <div class="text-center">
-                                Upload Slip Gaji<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota_gaji"
-                                    class="rounded" width="350" height="250" alt="Upload Your Image">
+                                Upload Slip Gaji<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota_gaji"
+                                    class="rounded"
+                                    width="350"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-12 col-sm-6 mt-2">
                             <div class="input-group mb-3">
-                                <input type="file" accept=".jpg" class="form-control " id="fileToUploadRk"
-                                    name="fileToUpload" onchange="readURL(this,'RK');">
+                                <input
+                                    type="file"
+                                    accept=".jpg"
+                                    class="form-control"
+                                    id="fileToUploadRk"
+                                    name="fileToUpload"
+                                    onchange="readURL(this,'RK');"
+                                />
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" type="button" id="button-rk"
-                                        onclick="uploadDokument('fileToUploadRk','rk');" disabled><i
-                                            class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <button
+                                        class="btn btn-success"
+                                        type="button"
+                                        id="button-rk"
+                                        onclick="uploadDokument('fileToUploadRk','rk');"
+                                        disabled
+                                    >
+                                        <i
+                                            class="fa-solid fa-cloud-arrow-up"
+                                        ></i>
+                                        Upload
+                                    </button>
                                 </div>
                             </div>
                             <div class="text-center">
-                                Upload Rekening Koran<br>
-                                <img src="template/files/assets/images/ADMIN.jpg" id="t2_image_anggota_rk"
-                                    class="rounded" width="350" height="250" alt="Upload Your Image">
+                                Upload Rekening Koran<br />
+                                <img
+                                    src="template/files/assets/images/ADMIN.jpg"
+                                    id="t2_image_anggota_rk"
+                                    class="rounded"
+                                    width="350"
+                                    height="250"
+                                    alt="Upload Your Image"
+                                />
                             </div>
                         </div>
-
                     </div>
                 </form>
-
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>

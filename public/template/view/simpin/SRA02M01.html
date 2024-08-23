@@ -5,16 +5,29 @@
         //salert("Tidak Ada Data",'warning','Warning');
         selDefault();
         //selKoperasi();
-
     }
     var d = new Date();
-    var pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
+    var pktr =
+        d.getFullYear() +
+        "" +
+        d.getMonth() +
+        "" +
+        d.getDate() +
+        "" +
+        d.getHours() +
+        "" +
+        d.getMinutes() +
+        "" +
+        d.getSeconds() +
+        d.getMilliseconds();
 
     function selDefault() {
-        $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-            cmd: "selDefaultPengajuan",
-            kop_id: $("#login_kop_id").val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+            {
+                cmd: "selDefaultPengajuan",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 const myArr = JSON.parse(data);
                 var b = "";
@@ -27,14 +40,19 @@
                 z.add(option2, z[0]);
 
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
-
                     for (var i = 0; i < myArr.length; i += 1) {
                         if (myArr[i]["masterCode"] == "1000010") {
                             var option = document.createElement("option");
-                            option.text = myArr[i]["detailName"] + "-" + myArr[i]["detailName2"];
-                            option.value = myArr[i]["detailName"] + "-" + myArr[i]["detailCode"];
+                            option.text =
+                                myArr[i]["detailName"] +
+                                "-" +
+                                myArr[i]["detailName2"];
+                            option.value =
+                                myArr[i]["detailName"] +
+                                "-" +
+                                myArr[i]["detailCode"];
                             y.add(option, y[i]);
                         } else if (myArr[i]["masterCode"] == "1000011") {
                             var option1 = document.createElement("option");
@@ -44,25 +62,26 @@
                         }
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'error', 'Warning');
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "error", "Warning");
+        });
     }
 
-
-
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selKoperasi",
-            kop_id: $("#login_kop_id").val()
-        },
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selKoperasi",
+                kop_id: $("#login_kop_id").val(),
+            },
             function (data, status) {
                 const myArr = JSON.parse(data);
                 var b = "";
                 var x = document.getElementById("modal_nama_koperasi");
                 if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
+                    salert("Tidak Ada Data", "warning", "Warning");
                 } else {
                     for (var i = 0; i < myArr.length; i += 1) {
                         var option = document.createElement("option");
@@ -71,12 +90,12 @@
                         x.add(option, x[i]);
                     }
                 }
-            }).fail(function (e) {
-                console.log(e);
-                salert("Error: " + e, 'error', 'Warning');
-            });
+            }
+        ).fail(function (e) {
+            console.log(e);
+            salert("Error: " + e, "error", "Warning");
+        });
     }
-
 
     function setAnggota(no_agt, nama, sts) {
         if (sts != "OK") {
@@ -90,72 +109,99 @@
 
     function toMoney() {
         if ($("#t2_lama_pinjaman").val() == "") {
-            salert("Tolong Pilih Lama Pinjaman Dahulu !", 'error', 'Warning');
+            salert("Tolong Pilih Lama Pinjaman Dahulu !", "error", "Warning");
             $("#t2_jumlah_pinjaman").val("");
         } else {
             if ($("#t2_jumlah_pinjaman").val() == "") {
             } else {
-                var strBunga = $("#t2_lama_pinjaman option:selected").text().split("-");
+                var strBunga = $("#t2_lama_pinjaman option:selected")
+                    .text()
+                    .split("-");
                 var strValue = $("#t2_lama_pinjaman").val().split("-");
                 var bunga = strBunga[1];
                 bunga = bunga.replace("%", "");
-                var b = (parseInt($("#t2_jumlah_pinjaman").val()) * bunga / 100) + parseInt($("#t2_jumlah_pinjaman").val());
+                var b =
+                    (parseInt($("#t2_jumlah_pinjaman").val()) * bunga) / 100 +
+                    parseInt($("#t2_jumlah_pinjaman").val());
                 var c = b / strBunga[0];
                 $("#t2_bunga_amount").val(b.toLocaleString());
-                $("#t2_bunga").val((parseInt($("#t2_jumlah_pinjaman").val()) * bunga / 100).toLocaleString());
+                $("#t2_bunga").val(
+                    (
+                        (parseInt($("#t2_jumlah_pinjaman").val()) * bunga) /
+                        100
+                    ).toLocaleString()
+                );
                 $("#t2_jumlah_angsuran").val(Math.round(c));
-                $("#t2_string_jumlah_angsuran").text("Rp " + parseInt(c).toLocaleString());
-                $("#t2_string_jumlah_pinjaman").text("Rp " + parseInt($("#t2_jumlah_pinjaman").val()).toLocaleString());
+                $("#t2_string_jumlah_angsuran").text(
+                    "Rp " + parseInt(c).toLocaleString()
+                );
+                $("#t2_string_jumlah_pinjaman").text(
+                    "Rp " +
+                        parseInt(
+                            $("#t2_jumlah_pinjaman").val()
+                        ).toLocaleString()
+                );
             }
         }
     }
 
     function searchAnggota() {
-
         /*
         if ($("#modal_nama_koperasi").val() == "") {
             $('#modalResult').html("Silahkan Pilih Koperasi Lebih Dahulu ! ");
         } else {
             */
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selAnggota",
-            kop_id: $("#login_kop_id").val(),
-            nama_anggota: $("#modal_namaAnggota").val()
-        }, function (data, status) {
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    b = b + "<tr    onmouseover=\"changeColor(this,'#modalResult');\" onmouseout=\"backColor(this);\"  ondblclick=\"setAnggota('" + myArr[i]["no_anggota"] + "','" + myArr[i]["nama"] + "','" + myArr[i]["sts"] + "');\" >";
-                    b = b + " <td>" + myArr[i]["no_anggota"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["no_anggota_internal"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nik"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["tanggal_masuk"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["sts"] + "</td> ";
-                    b = b + "</tr>";
-                    c = c + 1;
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selAnggota",
+                kop_id: $("#login_kop_id").val(),
+                nama_anggota: $("#modal_namaAnggota").val(),
+            },
+            function (data, status) {
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#modalResult\');" onmouseout="backColor(this);"  ondblclick="setAnggota(\'' +
+                            myArr[i]["no_anggota"] +
+                            "','" +
+                            myArr[i]["nama"] +
+                            "','" +
+                            myArr[i]["sts"] +
+                            "');\" >";
+                        b = b + " <td>" + myArr[i]["no_anggota"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            myArr[i]["no_anggota_internal"] +
+                            "</td> ";
+                        b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nik"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["tanggal_masuk"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["sts"] + "</td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
                 }
-
+                var table = $("#fix-header-modal").DataTable();
+                table.destroy();
+                $("#modalResult").html(b);
+                $("#fix-header-modal").DataTable({
+                    fixedHeader: true,
+                });
             }
-            var table = $('#fix-header-modal').DataTable();
-            table.destroy();
-            $('#modalResult').html(b);
-            $('#fix-header-modal').DataTable({
-                fixedHeader: true
-            });
-
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             swalFinishLoading();
         });
         //}
     }
-
-
 
     function openModalAnggota() {
         $("#modalAnggota").modal("show");
@@ -168,103 +214,106 @@
     function getDetail(masterCode) {
         //alert("tab 2");
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selCodeDetail",
-            kop_id: $("#login_kop_id").val(),
-            masterCode: masterCode
-        }, function (data, status) {
-            //alert("Data: " + data + "\nStatus: " + status);
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-
-                for (var i = 0; i < myArr.length; i += 1) {
-                    b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
-                    b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailName2"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailDesc"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailIdx"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
-                    /*
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selCodeDetail",
+                kop_id: $("#login_kop_id").val(),
+                masterCode: masterCode,
+            },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
+                        b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName2"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailDesc"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailIdx"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                        /*
                     if (myArr[i]["deleteYn"] == "Y") {
                         b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
                     } else {
                         b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
                     }
                     */
-                    b = b + "</tr>";
-                    c = c + 1;
+                        b = b + "</tr>";
+                        c = c + 1;
+                    }
                 }
 
+                swalFinishLoading();
+                var table = $("#fix-header2").DataTable();
+                table.destroy();
+
+                $("#tableResult2").html(b);
+                isiTable = b;
+                $("#fix-header2").DataTable({
+                    fixedHeader: true,
+                });
             }
-
-            swalFinishLoading();
-            var table = $('#fix-header2').DataTable();
-            table.destroy();
-
-            $('#tableResult2').html(b);
-            isiTable = b;
-            $('#fix-header2').DataTable({
-                fixedHeader: true
-            });
-
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             swalFinishLoading();
         });
     }
 
-
-
     function clearForm() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
             var mnth = d.getMonth() + 1;
             var dt = d.getDate().toString();
-            if (mnth.length > 1) { mnth = mnth } else {
-                mnth = "0" + mnth
+            if (mnth.length > 1) {
+                mnth = mnth;
+            } else {
+                mnth = "0" + mnth;
             }
-            if (dt.length > 1) { dt = dt } else {
-                dt = "0" + dt
+            if (dt.length > 1) {
+                dt = dt;
+            } else {
+                dt = "0" + dt;
             }
             var www = d.getFullYear() + "-" + mnth + "-" + dt;
-            $('#t2_tgl_transaksi').val(www);
+            $("#t2_tgl_transaksi").val(www);
 
-            $('#t2_kode_transaksi').val("");
-            $('#t2_tgl_transaksi').removeAttr('readonly');
+            $("#t2_kode_transaksi").val("");
+            $("#t2_tgl_transaksi").removeAttr("readonly");
 
-            $('#t2_keterangan').val("");
-            $('#t2_keterangan').removeAttr('readonly');
+            $("#t2_keterangan").val("");
+            $("#t2_keterangan").removeAttr("readonly");
 
-            $('#t2_noAnggota').val("");
-            $('#t2_namaAnggota').val("");
+            $("#t2_noAnggota").val("");
+            $("#t2_namaAnggota").val("");
 
-            $('#t2_jumlah_pinjaman').val("");
-            $('#t2_jumlah_pinjaman').removeAttr('readonly');
-            $('#t2_string_jumlah_pinjaman').text("Rp. 0");
+            $("#t2_jumlah_pinjaman").val("");
+            $("#t2_jumlah_pinjaman").removeAttr("readonly");
+            $("#t2_string_jumlah_pinjaman").text("Rp. 0");
             $("#t2_bunga_amount").val("");
             $("#t2_bunga").val("");
-            $('#t2_jumlah_angsuran').val("");
+            $("#t2_jumlah_angsuran").val("");
             //$('#t2_jumlah_angsuran').removeAttr('readonly');
-            $('#t2_string_jumlah_angsuran').text("Rp. 0");
+            $("#t2_string_jumlah_angsuran").text("Rp. 0");
 
-            $('t2_status_pinjaman').val("");
-            $('t2_lama_pinjaman').val("");
-            $('t2_tipe_pinjaman').val("");
-            $('#t2_tipe_pinjaman').prop('disabled', false);
-            $('#t2_lama_pinjaman').prop('disabled', false);
-            $('#t2_status_pinjaman').prop('disabled', false);
+            $("t2_status_pinjaman").val("");
+            $("t2_lama_pinjaman").val("");
+            $("t2_tipe_pinjaman").val("");
+            $("#t2_tipe_pinjaman").prop("disabled", false);
+            $("#t2_lama_pinjaman").prop("disabled", false);
+            $("#t2_status_pinjaman").prop("disabled", false);
 
             getNumber();
         }
@@ -273,74 +322,113 @@
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                cmd: "selNomorPengajuan"
-            },
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                {
+                    cmd: "selNomorPengajuan",
+                },
                 function (data, status) {
                     //alert("Data: " + data + "\nStatus: " + status);
                     const myArr = JSON.parse(data);
                     if (myArr.length == 0) {
-                        salert("Tidak Ada Data", 'warning', 'Warning');
+                        salert("Tidak Ada Data", "warning", "Warning");
                     } else {
-                        $('#t2_kode_transaksi').val(myArr[0]["noTran"]);
+                        $("#t2_kode_transaksi").val(myArr[0]["noTran"]);
                     }
-                }).fail(function (e) {
-                    console.log(e);
-                    salert("Error: " + e, 'error', 'Error');
-                });
+                }
+            ).fail(function (e) {
+                console.log(e);
+                salert("Error: " + e, "error", "Error");
+            });
         }
     }
-
-
-
-
-
 
     function fnInquery() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
             //alert("tab 2");
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-                cmd: "selPengajuan",
-                tgl_awal: $('#t1_tgl_awal').val(),
-                tgl_akhir: $('#t1_tgl_akhir').val(),
-                kop_id: $('#login_kop_id').val()
-            }, function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                var c = 1;
-                var b = "";
-                var sts = "info";
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                {
+                    cmd: "selPengajuan",
+                    tgl_awal: $("#t1_tgl_awal").val(),
+                    tgl_akhir: $("#t1_tgl_akhir").val(),
+                    kop_id: $("#login_kop_id").val(),
+                },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    var sts = "info";
 
-                const myArr = JSON.parse(data);
-                if (myArr.length == 0) {
-                    salert("Tidak Ada Data", 'warning', 'Warning');
-                } else {
-                    for (var i = 0; i < myArr.length; i += 1) {
-                        if (myArr[i]["stsPengajuan"] == "DI AJUKAN") {
-                            sts = "warning";
-                        } else if (myArr[i]["stsPengajuan"] == "DI TOLAK") {
-                            sts = "danger";
-                        } else {
-                            sts = "success";
-                        }
+                    const myArr = JSON.parse(data);
+                    if (myArr.length == 0) {
+                        salert("Tidak Ada Data", "warning", "Warning");
+                    } else {
+                        for (var i = 0; i < myArr.length; i += 1) {
+                            if (myArr[i]["stsPengajuan"] == "DI AJUKAN") {
+                                sts = "warning";
+                            } else if (myArr[i]["stsPengajuan"] == "DI TOLAK") {
+                                sts = "danger";
+                            } else {
+                                sts = "success";
+                            }
 
-                        b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                        b = b + " <td>" + c + "</td> ";
-                        b = b + " <td>" + myArr[i]["noPengajuan"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["tglPengajuan"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["namaTipePinjaman"] + "</td> ";
-                        b = b + " <td>" + myArr[i]["lamaPinjaman"] + " Bulan</td> ";
-                        b = b + " <td>" + myArr[i]["nama"] + "</td> ";
-                        b = b + " <td>" + parseInt(myArr[i]["jumlah_pinjaman"]).toLocaleString() + "</td> ";
-                        b = b + " <td>" + parseInt(myArr[i]["jumlah_angsuran"]).toLocaleString() + "</td> ";
+                            b =
+                                b +
+                                "<tr  onDblClick=\"Tab2(this,'#tableResult','" +
+                                myArr[i]["masterCode"] +
+                                '\')"  onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                            b = b + " <td>" + c + "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["noPengajuan"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["tglPengajuan"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["namaTipePinjaman"] +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                myArr[i]["lamaPinjaman"] +
+                                " Bulan</td> ";
+                            b = b + " <td>" + myArr[i]["nama"] + "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(
+                                    myArr[i]["jumlah_pinjaman"]
+                                ).toLocaleString() +
+                                "</td> ";
+                            b =
+                                b +
+                                " <td>" +
+                                parseInt(
+                                    myArr[i]["jumlah_angsuran"]
+                                ).toLocaleString() +
+                                "</td> ";
 
-                        b = b + " <td> <span class='text-" + sts + " font-weight-bold' title='" + myArr[i]["stsPengajuan"] + "'  > " + myArr[i]["stsPengajuan"] + "</span></td> ";
-                        /*
+                            b =
+                                b +
+                                " <td> <span class='text-" +
+                                sts +
+                                " font-weight-bold' title='" +
+                                myArr[i]["stsPengajuan"] +
+                                "'  > " +
+                                myArr[i]["stsPengajuan"] +
+                                "</span></td> ";
+                            /*
                         b = b + " <td>";
                         if (myArr[i]["stsPengajuan"] == "DI AJUKAN") {
                             b = b + " <button onclick=\"_action('TOLAK','" + myArr[i]["noPengajuan"] + "','" + myArr[i]["status"] + "','" + myArr[i]["appYn"] + "','" + myArr[i]["verify"] + "')\"   class='btn btn-danger btn-icon btn_grid' title='TOLAK'  ><i style='font-size:20px;margin-right:0 !important;' class='fa fa-times'></i>";
@@ -348,120 +436,146 @@
                         }
                         b = b + " </td> ";
                         */
-                        b = b + "</tr>";
-                        c = c + 1;
+                            b = b + "</tr>";
+                            c = c + 1;
+                        }
                     }
-
+                    swalFinishLoading();
+                    var table = $("#fix-header").DataTable();
+                    table.destroy();
+                    document.getElementById("tableResult").innerHTML = b;
+                    isiTable = b;
+                    $("#fix-header").DataTable({
+                        fixedHeader: true,
+                    });
                 }
-                swalFinishLoading();
-                var table = $('#fix-header').DataTable();
-                table.destroy();
-                document.getElementById("tableResult").innerHTML = b;
-                isiTable = b;
-                $('#fix-header').DataTable({
-                    fixedHeader: true
-                });
-
-            }).fail(function (e) {
+            ).fail(function (e) {
                 console.log(e);
                 swalFinishLoading();
             });
-
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-
             const d = new Date();
             var ms = d.getMilliseconds();
-            var userIns = $('#login_userId').val();
-            var kop_id = $("#login_kop_id").val()
-            var kode_transaksi = $('#t2_kode_transaksi').val();
+            var userIns = $("#login_userId").val();
+            var kop_id = $("#login_kop_id").val();
+            var kode_transaksi = $("#t2_kode_transaksi").val();
             //var tgl_transaksi = $('#t2_tgl_transaksi').val();
-            var tipe_pinjaman = $('#t2_tipe_pinjaman').val();
-            var keterangan = $('#t2_keterangan').val();
-            var noAnggota = $('#t2_noAnggota').val();
-            var jumlah_pinjaman = $('#t2_jumlah_pinjaman').val();
-            var jumlah_angsuran = $('#t2_jumlah_angsuran').val();
-            var lama = $('#t2_lama_pinjaman').val().split("-");
+            var tipe_pinjaman = $("#t2_tipe_pinjaman").val();
+            var keterangan = $("#t2_keterangan").val();
+            var noAnggota = $("#t2_noAnggota").val();
+            var jumlah_pinjaman = $("#t2_jumlah_pinjaman").val();
+            var jumlah_angsuran = $("#t2_jumlah_angsuran").val();
+            var lama = $("#t2_lama_pinjaman").val().split("-");
 
             var lama_pinjaman_bulan = lama[0];
             var lama_pinjaman = lama[1];
 
-            var status_pinjaman = $('#t2_status_pinjaman').val();
+            var status_pinjaman = $("#t2_status_pinjaman").val();
             var no_pengajuan = ms;
             if (status_pinjaman == "") {
-                salert("Isi Status Pinjaman!", 'error', 'Error');
+                salert("Isi Status Pinjaman!", "error", "Error");
                 return;
             }
             if (tipe_pinjaman == "") {
-                salert("Isi Tipe Pinjaman!", 'error', 'Error');
+                salert("Isi Tipe Pinjaman!", "error", "Error");
                 return;
             }
-            if ($('#t2_lama_pinjaman').val() == "") {
-                salert("Isi Lama Pinjaman!", 'error', 'Error');
+            if ($("#t2_lama_pinjaman").val() == "") {
+                salert("Isi Lama Pinjaman!", "error", "Error");
                 return;
             }
             if (jumlah_pinjaman == "" || jumlah_pinjaman == "") {
-                salert("Isi Jumlah Pinjaman!", 'error', 'Error');
+                salert("Isi Jumlah Pinjaman!", "error", "Error");
                 return;
             }
 
             if (kode_transaksi == "") {
-                salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
+                salert(
+                    "Harap Tekan Tombol New Terlebih Dahulu !",
+                    "error",
+                    "Error"
+                );
             } else {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
-                    cmd: "InsTrPengajuanPinjaman",
-                    userIns: userIns,
-                    kop_id: kop_id,
-                    kode_transaksi: kode_transaksi,
-                    /* tgl_transaksi: tgl_transaksi, */
-                    tipe_pinjaman: tipe_pinjaman,
-                    keterangan: keterangan,
-                    noAnggota: noAnggota,
-                    jumlah_pinjaman: jumlah_pinjaman,
-                    jumlah_angsuran: jumlah_angsuran,
-                    lama_pinjaman_bulan: lama_pinjaman_bulan,
-                    lama_pinjaman: lama_pinjaman,
-                    status_pinjaman: status_pinjaman,
-                    no_pengajuan: no_pengajuan,
-                    pktr: "COP" + "-" + pktr
-
-                }, function (data, status) {
-                    //alert("Data: " + data + "\nStatus: " + status);
-                    var c = 1;
-                    var b = "";
-                    const myArr = JSON.parse(data);
-                    console.log(myArr.length);
-                    if (myArr["sts"] == "OK") {
-                        salertFunction("Save Complete !", 'success', 'Success', "clearForm", "");
-                        pktr = d.getFullYear() + "" + d.getMonth() + "" + d.getDate() + "" + d.getHours() + "" + d.getMinutes() + "" + d.getSeconds() + d.getMilliseconds();
-                    } else {
-                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                    {
+                        cmd: "InsTrPengajuanPinjaman",
+                        userIns: userIns,
+                        kop_id: kop_id,
+                        kode_transaksi: kode_transaksi,
+                        /* tgl_transaksi: tgl_transaksi, */
+                        tipe_pinjaman: tipe_pinjaman,
+                        keterangan: keterangan,
+                        noAnggota: noAnggota,
+                        jumlah_pinjaman: jumlah_pinjaman,
+                        jumlah_angsuran: jumlah_angsuran,
+                        lama_pinjaman_bulan: lama_pinjaman_bulan,
+                        lama_pinjaman: lama_pinjaman,
+                        status_pinjaman: status_pinjaman,
+                        no_pengajuan: no_pengajuan,
+                        pktr: "COP" + "-" + pktr,
+                    },
+                    function (data, status) {
+                        //alert("Data: " + data + "\nStatus: " + status);
+                        var c = 1;
+                        var b = "";
+                        const myArr = JSON.parse(data);
+                        console.log(myArr.length);
+                        if (myArr["sts"] == "OK") {
+                            salertFunction(
+                                "Save Complete !",
+                                "success",
+                                "Success",
+                                "clearForm",
+                                ""
+                            );
+                            pktr =
+                                d.getFullYear() +
+                                "" +
+                                d.getMonth() +
+                                "" +
+                                d.getDate() +
+                                "" +
+                                d.getHours() +
+                                "" +
+                                d.getMinutes() +
+                                "" +
+                                d.getSeconds() +
+                                d.getMilliseconds();
+                        } else {
+                            salert(
+                                "Error ! " +
+                                    myArr["desc"] +
+                                    "\n" +
+                                    myArr["msg"],
+                                "error",
+                                "Error"
+                            );
+                        }
                     }
-                }).fail(function (e) {
+                ).fail(function (e) {
                     console.log(e);
                     // Handle error here
                     swalFinishLoading();
                 });
             }
-
         }
     }
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -471,38 +585,36 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function exportExcel() {
-
         //alert("tab");
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Download Excel", 'info', 'Info');
+            salert("Download Excel", "info", "Info");
             downloadExcell("#tableHeader", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
-
         }
     }
 
     function openAll() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Maximum View", 'info', 'Info');
+            salert("Maximum View", "info", "Info");
             openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
@@ -512,8 +624,8 @@
     function gridAll() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Minimum View", 'info', 'Info');
-            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+            salert("Minimum View", "info", "Info");
+            minimizeAllGrid("#fix-header", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
         }
@@ -523,56 +635,98 @@
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;border-bottom: 0px" >
-            <li class="nav-item  " style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#query" role="tab" id="tab_query">
-                    <i class="icofont icofont-search"></i>&nbsp; View Data </a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important; border-bottom: 0px"
+        >
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query"
+                    role="tab"
+                    id="tab_query"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; View Data
+                </a>
                 <div class="slide"></div>
             </li>
 
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link " data-toggle="tab" href="#entry" role="tab" id="tab_entry">
-                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data </a>
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#entry"
+                    role="tab"
+                    id="tab_entry"
+                >
+                    <i class="icofont icofont-list"></i>&nbsp; Tambah Data
+                </a>
                 <div class="slide"></div>
             </li>
-
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-6">
                         <!-- Parameter Section 1 -->
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Tanggal Awal</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Tanggal Awal</label
+                            >
                             <div class="col-sm-8">
-                                <input type="date" id="t1_tgl_awal" class="form-control ">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_awal"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Tanggal Akhir</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Tanggal Akhir</label
+                            >
                             <div class="col-sm-8">
-                                <input type="date" id="t1_tgl_akhir" class="form-control ">
+                                <input
+                                    type="date"
+                                    id="t1_tgl_akhir"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No</td>
-                                                <td>Kode Transaksi </td>
-                                                <td>Tanggal </td>
+                                                <td>Kode Transaksi</td>
+                                                <td>Tanggal</td>
                                                 <td>Tipe Pinjaman</td>
                                                 <td>Lama Pinjaman</td>
                                                 <td>Nama Anggota</td>
@@ -582,9 +736,7 @@
                                                 <!--<td>Action</td>-->
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -594,59 +746,95 @@
                 </div>
             </div>
 
-
             <div name="tab-idx" class="tab-pane" id="entry" role="tabpanel">
                 <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="form-group row frm_grp">
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Kode Transaksi</label
+                            >
+                            <div class="col-sm-8">
+                                <input
+                                    type="text"
+                                    id="t2_kode_transaksi"
+                                    class="form-control"
+                                    readonly
+                                />
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Kode Transaksi</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Status</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_kode_transaksi" class="form-control " readonly>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-12 col-sm-6 ">
-                        <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Status</label>
-                            <div class="col-sm-8">
-                                <select id="t2_status_pinjaman" class="form-control " disabled>
+                                <select
+                                    id="t2_status_pinjaman"
+                                    class="form-control"
+                                    disabled
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
-                                <input type="hidden" id="t2_tgl_transaksi" readonly class="form-control ">
+                                <input
+                                    type="hidden"
+                                    id="t2_tgl_transaksi"
+                                    readonly
+                                    class="form-control"
+                                />
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row">
-
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Keterangan</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Keterangan</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_keterangan" readonly class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_keterangan"
+                                    readonly
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Nama Anggota</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Nama Anggota</label
+                            >
                             <div class="col-sm-8">
-
-                                <div class="input-group" style="margin-bottom: 0px !important;">
-                                    <input type="hidden" id="t2_noAnggota" readonly class="form-control ">
-                                    <input type="text" id="t2_namaAnggota" class="form-control " readonly>
+                                <div
+                                    class="input-group"
+                                    style="margin-bottom: 0px !important"
+                                >
+                                    <input
+                                        type="hidden"
+                                        id="t2_noAnggota"
+                                        readonly
+                                        class="form-control"
+                                    />
+                                    <input
+                                        type="text"
+                                        id="t2_namaAnggota"
+                                        class="form-control"
+                                        readonly
+                                    />
                                     &nbsp;
                                     <div class="input-group-append">
-                                        <button onClick="openModalAnggota();" class="input-group-text bg-success ">
-                                            <i class="fa fa-search "></i></button>
+                                        <button
+                                            onClick="openModalAnggota();"
+                                            class="input-group-text bg-success"
+                                        >
+                                            <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -655,9 +843,15 @@
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Tipe Pinjaman</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Tipe Pinjaman</label
+                            >
                             <div class="col-sm-8">
-                                <select id="t2_tipe_pinjaman" class="form-control " disabled>
+                                <select
+                                    id="t2_tipe_pinjaman"
+                                    class="form-control"
+                                    disabled
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -666,10 +860,16 @@
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Lama Pinjaman</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Lama Pinjaman</label
+                            >
                             <div class="col-sm-8">
-                                <select id="t2_lama_pinjaman" class="form-control " onchange="toMoney()"
-                                    disabled>
+                                <select
+                                    id="t2_lama_pinjaman"
+                                    class="form-control"
+                                    onchange="toMoney()"
+                                    disabled
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -677,64 +877,91 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Bunga</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Bunga</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_bunga" readonly="" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_bunga"
+                                    readonly=""
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Amaount + Bunga</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Amaount + Bunga</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_bunga_amount" readonly="" class="form-control ">
+                                <input
+                                    type="text"
+                                    id="t2_bunga_amount"
+                                    readonly=""
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Jumlah Pengajuan</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Jumlah Pengajuan</label
+                            >
                             <div class="col-sm-8">
-                                <input type="number" id="t2_jumlah_pinjaman" onkeyup="toMoney()" readonly
-                                    class="form-control ">
-                                <span id="t2_string_jumlah_pinjaman" style="font-size:25px;font-weight:bold;">Rp
-                                    0</span>
+                                <input
+                                    type="number"
+                                    id="t2_jumlah_pinjaman"
+                                    onkeyup="toMoney()"
+                                    readonly
+                                    class="form-control"
+                                />
+                                <span
+                                    id="t2_string_jumlah_pinjaman"
+                                    style="font-size: 25px; font-weight: bold"
+                                    >Rp 0</span
+                                >
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Jumlah Angsuran</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Jumlah Angsuran</label
+                            >
                             <div class="col-sm-8">
-                                <input type="text" id="t2_jumlah_angsuran" readonly class="form-control ">
-                                <span id="t2_string_jumlah_angsuran" style="font-size:25px;font-weight:bold;">Rp
-                                    0</span>
+                                <input
+                                    type="text"
+                                    id="t2_jumlah_angsuran"
+                                    readonly
+                                    class="form-control"
+                                />
+                                <span
+                                    id="t2_string_jumlah_angsuran"
+                                    style="font-size: 25px; font-weight: bold"
+                                    >Rp 0</span
+                                >
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>
 
 <!-- The Modal -->
-<div class="modal " id="modalAnggota">
+<div class="modal" id="modalAnggota">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-success ">
-                <span style="font-weight:bold ;">Cari Anggota </span> <button type="button" class="close"
-                    data-dismiss="modal">&times;</button>
+            <div class="modal-header bg-success">
+                <span style="font-weight: bold">Cari Anggota </span>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
@@ -754,10 +981,18 @@
 
                     <div class="col-12 col-sm-12 form-inline">
                         <span>Nama Anggota </span>&nbsp;&nbsp;&nbsp;
-                        <input type="text" id="modal_namaAnggota" style="width: 50%;"
-                            class="form-control ">&nbsp;&nbsp;
-                        <button onClick="searchAnggota();" class="input-group-text bg-success ">
-                            <i class="fa fa-search "></i></button>
+                        <input
+                            type="text"
+                            id="modal_namaAnggota"
+                            style="width: 50%"
+                            class="form-control"
+                        />&nbsp;&nbsp;
+                        <button
+                            onClick="searchAnggota();"
+                            class="input-group-text bg-success"
+                        >
+                            <i class="fa fa-search"></i>
+                        </button>
                         <!--
                         <div class="form-group row frm_grp">
                             <label class="col-sm-4 col-form-label text-right ">Nama Anggota</label>
@@ -778,11 +1013,17 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlockModal">
-                                    <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlockModal"
+                                >
+                                    <table
+                                        id="fix-header-modal"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
                                             <tr id="modalHeader">
-                                                <td>No Anggota </td>
+                                                <td>No Anggota</td>
                                                 <td>Id</td>
                                                 <td>Nama Anggota</td>
                                                 <td>No KTP</td>
@@ -790,16 +1031,13 @@
                                                 <td>Status</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="modalResult">
-
-                                        </tbody>
+                                        <tbody id="modalResult"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

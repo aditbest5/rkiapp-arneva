@@ -226,21 +226,21 @@ function changeMenu(menus, title, menuid) {
         return;
     }
     if (title == "POS" || title == "POS SIMPLE" || title == "PPOB") {
-        $("#btnNew").removeClass("toolbar_hris");
+        $("#btnNew").removeClass("toolbar_hris"); 
         $("#btnInq").removeClass("toolbar_hris");
         $("#btnSave").removeClass("toolbar_hris");
-        $("#btnPrint").removeClass("toolbar_hris");
+        $("#btnPrint").removeClass("toolbar_hris"); 
         $("#btnNew").addClass("btn-disabled toolbar_hris_disabled");
         $("#btnInq").addClass("btn-disabled toolbar_hris_disabled");
         $("#btnSave").addClass("btn-disabled toolbar_hris_disabled");
         $("#btnPrint").addClass("btn-disabled toolbar_hris_disabled");
-
+        
         $("#btnNew").css("display", "none");
         $("#btnInq").css("display", "none");
         $("#btnSave").css("display", "none");
         $("#btnPrint").css("display", "none");
         $("#btnDelete").css("display", "none");
-
+        
         /*
         $("#btnNew").addClass("btn-disabled toolbar_hris_disabled");
         $("#btnInq").addClass("btn-disabled toolbar_hris_disabled");
@@ -302,7 +302,7 @@ function Logout() {
                 } else {
 
                     window.location.href=window.location.origin;
-
+                    
                 }
             }
         }).fail(function (e) {

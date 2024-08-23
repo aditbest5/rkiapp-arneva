@@ -8,141 +8,186 @@
     }
 
     function selCoaL2() {
-        $('#t2_coa_2nd').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selCoaL2",
-            kop_id: $("#login_kop_id").val(),
-            coa: ""
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_coa_2nd");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_coa_2nd").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selCoaL2",
+                kop_id: $("#login_kop_id").val(),
+                coa: "",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_coa_2nd");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
 
     function selJeniTransaksi() {
-        $('#t2_jenis_transaksi').empty();
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
-            cmd: "selJenisTranKas",
-            kop_id: $("#login_kop_id").val(),
-            coa: "0101"
-        }, function (data, status) {
-            const myArr = JSON.parse(data);
-            var b = "";
-            var x = document.getElementById("t2_jenis_transaksi");
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    var option = document.createElement("option");
-                    option.text = myArr[i]["detailName"];
-                    option.value = myArr[i]["detailCode"];
-                    x.add(option, x[i]);
+        $("#t2_jenis_transaksi").empty();
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            {
+                cmd: "selJenisTranKas",
+                kop_id: $("#login_kop_id").val(),
+                coa: "0101",
+            },
+            function (data, status) {
+                const myArr = JSON.parse(data);
+                var b = "";
+                var x = document.getElementById("t2_jenis_transaksi");
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        var option = document.createElement("option");
+                        option.text = myArr[i]["detailName"];
+                        option.value = myArr[i]["detailCode"];
+                        x.add(option, x[i]);
+                    }
                 }
             }
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
-            salert("Error: " + e, 'error', 'Warning');
+            salert("Error: " + e, "error", "Warning");
         });
     }
 
     function getDetail(masterCode) {
         //alert("tab 2");
         swalStartLoading();
-        $.post("master", {
-            cmd: "selCodeDetail",
-            kop_id: $("#login_kop_id").val(),
-            masterCode: masterCode
-        }, function (data, status) {
-            //alert("Data: " + data + "\nStatus: " + status);
-            var c = 1;
-            var b = "";
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    b = b + "<tr    onmouseover=\"changeColor(this,'#tableResult2');\" onmouseout=\"backColor(this);\" >";
-                    b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailName2"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailDesc"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailIdx"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
-                    if (myArr[i]["deleteYn"] == "Y") {
-                        b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
-                    } else {
-                        b = b + " <td>" + "<button onclick=\"_deleteRow('" + myArr[i]["deleteYn"] + "','" + myArr[i]["masterCode"] + "','" + myArr[i]["detailCode"] + "','" + myArr[i]["detailKop"] + "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+        $.post(
+            "master",
+            {
+                cmd: "selCodeDetail",
+                kop_id: $("#login_kop_id").val(),
+                masterCode: masterCode,
+            },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        b =
+                            b +
+                            '<tr    onmouseover="changeColor(this,\'#tableResult2\');" onmouseout="backColor(this);" >';
+                        b = b + " <td>" + myArr[i]["masterCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailCode"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailName2"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailDesc"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailIdx"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["useYn"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["detailKop"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_koperasi"] + "</td> ";
+                        if (myArr[i]["deleteYn"] == "Y") {
+                            b =
+                                b +
+                                " <td>" +
+                                "<button onclick=\"_deleteRow('" +
+                                myArr[i]["deleteYn"] +
+                                "','" +
+                                myArr[i]["masterCode"] +
+                                "','" +
+                                myArr[i]["detailCode"] +
+                                "','" +
+                                myArr[i]["detailKop"] +
+                                "')\"   title='DELETE' class='btn btn-danger btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                        } else {
+                            b =
+                                b +
+                                " <td>" +
+                                "<button onclick=\"_deleteRow('" +
+                                myArr[i]["deleteYn"] +
+                                "','" +
+                                myArr[i]["masterCode"] +
+                                "','" +
+                                myArr[i]["detailCode"] +
+                                "','" +
+                                myArr[i]["detailKop"] +
+                                "')\"   title='DELETE' class='btn btn-secondary btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-trash'></i></button></td> ";
+                        }
+                        b = b + "</tr>";
+                        c = c + 1;
                     }
-                    b = b + "</tr>";
-                    c = c + 1;
                 }
+
+                swalFinishLoading();
+                var table = $("#fix-header2").DataTable();
+                table.destroy();
+                $("#tableResult2").html(b);
+                isiTable = b;
+                $("#fix-header2").DataTable({
+                    fixedHeader: true,
+                });
             }
-
-            swalFinishLoading();
-            var table = $('#fix-header2').DataTable();
-            table.destroy();
-            $('#tableResult2').html(b);
-            isiTable = b;
-            $('#fix-header2').DataTable({
-                fixedHeader: true
-            });
-
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             swalFinishLoading();
         });
     }
 
-
-
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#t2_image_bukti')
-                    .attr('src', e.target.result);
+                $("#t2_image_bukti").attr("src", e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-
-
-
-
     function _action(tipe, noTrans) {
         openModalUpload();
-        $('#modalUploadKodeTransaksi').val(noTrans);
-        $('#modalUploadKodeTransaksiText').text(noTrans);
+        $("#modalUploadKodeTransaksi").val(noTrans);
+        $("#modalUploadKodeTransaksiText").text(noTrans);
         var y = new Date();
-        var imageRefresh = y.getFullYear() + "" + y.getMonth() + "" + y.getDate() + "" + y.getHours() + "" + y.getMinutes() + "" + y.getSeconds() + y.getMilliseconds();
-        $('#t2_image_bukti').attr("src", "https://storage.googleapis.com/atous-product-images/bukti/" + noTrans + ".jpg?ignoreCache=0&imageRefresh=" + imageRefresh);
+        var imageRefresh =
+            y.getFullYear() +
+            "" +
+            y.getMonth() +
+            "" +
+            y.getDate() +
+            "" +
+            y.getHours() +
+            "" +
+            y.getMinutes() +
+            "" +
+            y.getSeconds() +
+            y.getMilliseconds();
+        $("#t2_image_bukti").attr(
+            "src",
+            "https://storage.googleapis.com/atous-product-images/bukti/" +
+                noTrans +
+                ".jpg?ignoreCache=0&imageRefresh=" +
+                imageRefresh
+        );
         //var param = [noTrans, appSts, verify];
         if (tipe == "APPROVE") {
             //salertOptionFunction(" Data Akan Di Tolak ?", "question", ' Anda Yakin ?', "_tolak", param);
-            $('#modalUploadKodeTransaksiButton').css('visibility', 'hidden');
+            $("#modalUploadKodeTransaksiButton").css("visibility", "hidden");
         } else if (tipe == "NOTAPPROVE") {
-            $('#modalUploadKodeTransaksiButton').css('visibility', 'visible');
+            $("#modalUploadKodeTransaksiButton").css("visibility", "visible");
             //salertOptionFunction(" Apakah Anda Yakin Uang sudah Diterima  ?", "question", 'Anda Yakin ?', "_app", param);
         }
-
     }
 
     function openModalUpload() {
@@ -156,144 +201,201 @@
     function _app(param) {
         hideModalUpload();
         if (param == "APPROVE") {
-            salert("Data Sudah Di Approve ! \n Tidak Dapat Di Update", 'warning', 'Warning');
+            salert(
+                "Data Sudah Di Approve ! \n Tidak Dapat Di Update",
+                "warning",
+                "Warning"
+            );
         } else {
-
             swalStartLoading();
             var fd = new FormData();
-            var files = $('#fileToUpload')[0].files;
+            var files = $("#fileToUpload")[0].files;
             if (files.length == 0) {
-                salert("Upload Bukti Transaksi Dahulu ", 'warning', 'Warning');
+                salert("Upload Bukti Transaksi Dahulu ", "warning", "Warning");
                 return;
             }
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
-                cmd: "appTran",
-                userIns: $('#login_userId').val(),
-                sts: "APPROVE",
-                noTrans: $('#modalUploadKodeTransaksi').val()
-            }, function (data, status) {
-                var c = 1;
-                var b = "";
-                const myArr = JSON.parse(data);
-                if (myArr["sts"] == "OK") {
-                    //salertFunction("Save Complete !", 'success', 'Success', "fnInquery", "");
-                    // Check file selected or not
-                    fd.append('fileToUpload', files[0]);
-                    fd.append('fileName', $('#modalUploadKodeTransaksi').val());
-                    fd.append('cmd', "uploadImage");
-                    fd.append('folder', "bukti");
+            $.post(
+                "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                {
+                    cmd: "appTran",
+                    userIns: $("#login_userId").val(),
+                    sts: "APPROVE",
+                    noTrans: $("#modalUploadKodeTransaksi").val(),
+                },
+                function (data, status) {
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    if (myArr["sts"] == "OK") {
+                        //salertFunction("Save Complete !", 'success', 'Success', "fnInquery", "");
+                        // Check file selected or not
+                        fd.append("fileToUpload", files[0]);
+                        fd.append(
+                            "fileName",
+                            $("#modalUploadKodeTransaksi").val()
+                        );
+                        fd.append("cmd", "uploadImage");
+                        fd.append("folder", "bukti");
 
-                    $.ajax({
-                        url: "api/umum/",
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        cors: true,
-                        success: function (response) {
-                            if (response != 0) {
-                                const myArr = JSON.parse(response);
-                                if (myArr["sts"] == "OK") {
-                                    salertFunction("Success ! " + myArr["desc"] + "\n" + myArr["msg"], 'success', 'Success', "fnInquery", "");
+                        $.ajax({
+                            url: "api/umum/",
+                            type: "post",
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            cors: true,
+                            success: function (response) {
+                                if (response != 0) {
+                                    const myArr = JSON.parse(response);
+                                    if (myArr["sts"] == "OK") {
+                                        salertFunction(
+                                            "Success ! " +
+                                                myArr["desc"] +
+                                                "\n" +
+                                                myArr["msg"],
+                                            "success",
+                                            "Success",
+                                            "fnInquery",
+                                            ""
+                                        );
+                                    } else {
+                                        salert(
+                                            "Error ! " +
+                                                myArr["desc"] +
+                                                "\n" +
+                                                myArr["msg"],
+                                            "error",
+                                            "Error"
+                                        );
+                                    }
                                 } else {
-                                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                                    salert(
+                                        "file not uploaded",
+                                        "error",
+                                        "Error"
+                                    );
                                 }
-                            } else {
-                                salert('file not uploaded', 'error', 'Error');
-                            }
-                        },
-                    });
-
-                } else {
-                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                            },
+                        });
+                    } else {
+                        salert(
+                            "Error ! " + myArr["desc"] + "\n" + myArr["msg"],
+                            "error",
+                            "Error"
+                        );
+                    }
                 }
-            }).fail(function (e) {
+            ).fail(function (e) {
                 console.log(e);
                 // Handle error here
-
             });
         }
     }
 
-
     function fnInquery() {
-
-        var tgl_awal = $('#t1_tgl_awal').val();
-        var tgl_akhir = $('#t1_tgl_akhir').val();
-        var coa = $('#t2_coa_2nd').val();
-        var jenisTran = $('#t2_jenis_transaksi').val();
+        var tgl_awal = $("#t1_tgl_awal").val();
+        var tgl_akhir = $("#t1_tgl_akhir").val();
+        var coa = $("#t2_coa_2nd").val();
+        var jenisTran = $("#t2_jenis_transaksi").val();
 
         //alert("tab 2");
         swalStartLoading();
         var total_real_amount = 0;
-        $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
-            cmd: "selKasTransaksi",
-            tgl_awal: tgl_awal,
-            tgl_akhir: tgl_akhir,
-            kop_id: $("#login_kop_id").val(),
-            coa: coa,
-            jenisTran: jenisTran
-        }, function (data, status) {
-            //alert("Data: " + data + "\nStatus: " + status);
-            var c = 1;
-            var b = "";
-            var appYn = "warning";
-            var verify = "warning";
+        $.post(
+            "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+            {
+                cmd: "selKasTransaksi",
+                tgl_awal: tgl_awal,
+                tgl_akhir: tgl_akhir,
+                kop_id: $("#login_kop_id").val(),
+                coa: coa,
+                jenisTran: jenisTran,
+            },
+            function (data, status) {
+                //alert("Data: " + data + "\nStatus: " + status);
+                var c = 1;
+                var b = "";
+                var appYn = "warning";
+                var verify = "warning";
 
-            const myArr = JSON.parse(data);
-            if (myArr.length == 0) {
-                salert("Tidak Ada Data", 'warning', 'Warning');
-                $('#total_real_amount').text(0);
-            } else {
-                for (var i = 0; i < myArr.length; i += 1) {
-                    if (myArr[i]["appYn"] == "APPROVE") {
-                        appYn = "success";
-                    } else {
-                        appYn = "warning";
-                    }
-                    if (myArr[i]["verify"] == "VERIFY") {
-                        verify = "success";
-                    } else {
-                        verify = "warning";
-                    }
+                const myArr = JSON.parse(data);
+                if (myArr.length == 0) {
+                    salert("Tidak Ada Data", "warning", "Warning");
+                    $("#total_real_amount").text(0);
+                } else {
+                    for (var i = 0; i < myArr.length; i += 1) {
+                        if (myArr[i]["appYn"] == "APPROVE") {
+                            appYn = "success";
+                        } else {
+                            appYn = "warning";
+                        }
+                        if (myArr[i]["verify"] == "VERIFY") {
+                            verify = "success";
+                        } else {
+                            verify = "warning";
+                        }
 
-                    total_real_amount = total_real_amount + parseInt(myArr[i]["amount"]);
-                    b = b + "<tr  onDblClick=\"Tab2(this,'#tableResult','" + myArr[i]["masterCode"] + "')\"  onmouseover=\"changeColor(this,'#tableResult');\" onmouseout=\"backColor(this);\" >";
-                    b = b + " <td>" + c + "</td> ";
-                    b = b + " <td>" + myArr[i]["dateIns"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["coaName"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["jenisTransaksi"] + "</td> ";
-                    b = b + " <td>" + myArr[i]["nama_transaksi"] + "</td> ";
-                    b = b + " <td>" + parseInt(myArr[i]["amount"]).toLocaleString() + "</td> ";
-                    b = b + " <td> <span class='text-" + appYn + " rounded font-weight-bold' title='" + myArr[i]["appYn"] + "'  > " + myArr[i]["appYn"] + "</span></td> ";
+                        total_real_amount =
+                            total_real_amount + parseInt(myArr[i]["amount"]);
+                        b =
+                            b +
+                            "<tr  onDblClick=\"Tab2(this,'#tableResult','" +
+                            myArr[i]["masterCode"] +
+                            '\')"  onmouseover="changeColor(this,\'#tableResult\');" onmouseout="backColor(this);" >';
+                        b = b + " <td>" + c + "</td> ";
+                        b = b + " <td>" + myArr[i]["dateIns"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["coaName"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["jenisTransaksi"] + "</td> ";
+                        b = b + " <td>" + myArr[i]["nama_transaksi"] + "</td> ";
+                        b =
+                            b +
+                            " <td>" +
+                            parseInt(myArr[i]["amount"]).toLocaleString() +
+                            "</td> ";
+                        b =
+                            b +
+                            " <td> <span class='text-" +
+                            appYn +
+                            " rounded font-weight-bold' title='" +
+                            myArr[i]["appYn"] +
+                            "'  > " +
+                            myArr[i]["appYn"] +
+                            "</span></td> ";
 
-                    b = b + " <td>" + "";
-                    if (myArr[i]["appYn"] == "APPROVE") {
-                        b = b + " <button onclick=\"_action('APPROVE','" + myArr[i]["noTran"] + "')\"   class='btn btn-info rounded' title='Details'  ><i style='font-size:20px;margin-right:0 !important;' class='fa-solid fa-list'></i></button> ";
-                    } else {
-                        b = b + " <button onclick=\"_action('NOTAPPROVE','" + myArr[i]["noTran"] + "')\"   class='btn btn-success rounded' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa-solid fa-cloud-arrow-up'></i></button> ";
-                        //b = b + "  &nbsp;&nbsp;<button onclick=\"_verify('" + myArr[i]["noSimpan"] + "')\"   title='VERYFY' class='btn btn-success btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-usd'></i></button>" ;
+                        b = b + " <td>" + "";
+                        if (myArr[i]["appYn"] == "APPROVE") {
+                            b =
+                                b +
+                                " <button onclick=\"_action('APPROVE','" +
+                                myArr[i]["noTran"] +
+                                "')\"   class='btn btn-info rounded' title='Details'  ><i style='font-size:20px;margin-right:0 !important;' class='fa-solid fa-list'></i></button> ";
+                        } else {
+                            b =
+                                b +
+                                " <button onclick=\"_action('NOTAPPROVE','" +
+                                myArr[i]["noTran"] +
+                                "')\"   class='btn btn-success rounded' title='APPROVE'  ><i style='font-size:20px;margin-right:0 !important;' class='fa-solid fa-cloud-arrow-up'></i></button> ";
+                            //b = b + "  &nbsp;&nbsp;<button onclick=\"_verify('" + myArr[i]["noSimpan"] + "')\"   title='VERYFY' class='btn btn-success btn-icon btn_grid'><i style='font-size:20px;margin-right:0 !important;' class='fa fa-usd'></i></button>" ;
+                        }
+                        b = b + " </td> ";
+                        b = b + "</tr>";
+                        c = c + 1;
                     }
-                    b = b + " </td> ";
-                    b = b + "</tr>";
-                    c = c + 1;
                 }
+                swalFinishLoading();
 
-
+                $("#total_real_amount").text(
+                    total_real_amount.toLocaleString()
+                );
+                var table = $("#fix-header").DataTable();
+                table.destroy();
+                $("#tableResult").html(b);
+                isiTable = b;
+                $("#fix-header").DataTable({
+                    fixedHeader: true,
+                });
             }
-            swalFinishLoading();
-
-
-            $('#total_real_amount').text(total_real_amount.toLocaleString());
-            var table = $('#fix-header').DataTable();
-            table.destroy();
-            $("#tableResult").html(b);
-            isiTable = b;
-            $('#fix-header').DataTable({
-                fixedHeader: true
-            });
-
-        }).fail(function (e) {
+        ).fail(function (e) {
             console.log(e);
             swalFinishLoading();
         });
@@ -302,40 +404,41 @@
     function fnSave() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
-
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             const d = new Date();
             var ms = d.getMilliseconds();
 
-            var userIns = $('#login_userId').val();
-            var kode_transaksi = $('#t2_kode_transaksi').val();
-            var tgl_transaksi = $('#t2_tgl_transaksi').val();
-            var coa_2nd = $('#t2_coa_2nd').val();
-            var amount = $('#t2_amount').val();
-            var noAnggota = $('#t2_noAnggota').val();
-            var coa_3rd = $('#t2_coa_3rd').val();
+            var userIns = $("#login_userId").val();
+            var kode_transaksi = $("#t2_kode_transaksi").val();
+            var tgl_transaksi = $("#t2_tgl_transaksi").val();
+            var coa_2nd = $("#t2_coa_2nd").val();
+            var amount = $("#t2_amount").val();
+            var noAnggota = $("#t2_noAnggota").val();
+            var coa_3rd = $("#t2_coa_3rd").val();
             var no_pengajuan = ms;
 
             if (kode_transaksi == "") {
-                salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
+                salert(
+                    "Harap Tekan Tombol New Terlebih Dahulu !",
+                    "error",
+                    "Error"
+                );
             } else {
-
-
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
-                    cmd: "InsTrSimpan",
-                    userIns: userIns,
-                    kode_transaksi: kode_transaksi,
-                    tgl_transaksi: tgl_transaksi,
-                    coa_2nd: coa_2nd,
-                    amount: amount,
-                    noAnggota: noAnggota,
-                    coa_3rd: coa_3rd,
-                    no_pengajuan: no_pengajuan
-
-                },
+                $.post(
+                    "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                    {
+                        cmd: "InsTrSimpan",
+                        userIns: userIns,
+                        kode_transaksi: kode_transaksi,
+                        tgl_transaksi: tgl_transaksi,
+                        coa_2nd: coa_2nd,
+                        amount: amount,
+                        noAnggota: noAnggota,
+                        coa_3rd: coa_3rd,
+                        no_pengajuan: no_pengajuan,
+                    },
                     function (data, status) {
                         //alert("Data: " + data + "\nStatus: " + status);
                         var c = 1;
@@ -345,27 +448,31 @@
                         if (myArr["sts"] == "OK") {
                             swalFinishLoading();
                             clearForm();
-                            salert("Save Complete !", 'success', 'Success');
+                            salert("Save Complete !", "success", "Success");
                         } else {
-                            salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                            salert(
+                                "Error ! " +
+                                    myArr["desc"] +
+                                    "\n" +
+                                    myArr["msg"],
+                                "error",
+                                "Error"
+                            );
                         }
-                    }).fail(function (e) {
-                        console.log(e);
-                        // Handle error here
-                        swalFinishLoading();
-                    });
+                    }
+                ).fail(function (e) {
+                    console.log(e);
+                    // Handle error here
+                    swalFinishLoading();
+                });
             }
-
         }
     }
-
-
-
 
     function fnNew() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             //salert("Not Setting Tab 2!", 'warning', 'Warning');
             clearForm();
@@ -375,39 +482,36 @@
     function fnDelete() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function fnPrint() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Not Setting Tab 1!", 'warning', 'Warning');
+            salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
-            salert("Not Setting Tab 2!", 'warning', 'Warning');
+            salert("Not Setting Tab 2!", "warning", "Warning");
         }
     }
 
     function exportExcel() {
-
         //alert("tab");
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Download Excel", 'info', 'Info');
+            salert("Download Excel", "info", "Info");
             downloadExcell("#tableHeader", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
-
         }
     }
 
     function openAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Maximum View", 'info', 'Info');
+            salert("Maximum View", "info", "Info");
             openAllGrid("#fix-header", "#cardBlock", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
@@ -415,11 +519,10 @@
     }
 
     function gridAll() {
-
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            salert("Minimum View", 'info', 'Info');
-            minimizeAllGrid('#fix-header', '#tableResult', isiTable);
+            salert("Minimum View", "info", "Info");
+            minimizeAllGrid("#fix-header", "#tableResult", isiTable);
         } else if (a[1].className.search("active") > 0) {
             alert("Not Setting Tab 1!");
         }
@@ -429,10 +532,22 @@
 <div class="row" id="start">
     <div class="col-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs md-tabs " role="tablist" style="display: flex !important;">
-            <li class="nav-item" style="width: calc(100% / 3.1) !important;">
-                <a class="nav-link active" data-toggle="tab" href="#query1" role="tab" id="tab_query1">
-                    <i class="icofont icofont-search"></i>&nbsp; Data From Core</a>
+        <ul
+            class="nav nav-tabs md-tabs"
+            role="tablist"
+            style="display: flex !important"
+        >
+            <li class="nav-item" style="width: calc(100% / 3.1) !important">
+                <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#query1"
+                    role="tab"
+                    id="tab_query1"
+                >
+                    <i class="icofont icofont-search"></i>&nbsp; Data From
+                    Core</a
+                >
                 <div class="slide"></div>
             </li>
             <!--
@@ -445,21 +560,40 @@
         </ul>
         <!-- Tab panes -->
         <div class="tab-content card-block">
-            <div name="tab-idx" class="tab-pane active" id="query1" role="tabpanel">
+            <div
+                name="tab-idx"
+                class="tab-pane active"
+                id="query1"
+                role="tabpanel"
+            >
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label  ">Tanggal Awal</label>
+                            <label class="col-sm-3 col-form-label"
+                                >Tanggal Awal</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" style="width:50%;" id="t1_tgl_awal" class="form-control ">
+                                <input
+                                    type="date"
+                                    style="width: 50%"
+                                    id="t1_tgl_awal"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label  ">Tanggal Akhir</label>
+                            <label class="col-sm-3 col-form-label"
+                                >Tanggal Akhir</label
+                            >
                             <div class="col-sm-9">
-                                <input type="date" style="width:50%;" id="t1_tgl_akhir" class="form-control ">
+                                <input
+                                    type="date"
+                                    style="width: 50%"
+                                    id="t1_tgl_akhir"
+                                    class="form-control"
+                                />
                             </div>
                         </div>
                     </div>
@@ -467,9 +601,11 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left ">Akun </label>
+                            <label class="col-sm-3 col-form-label text-left"
+                                >Akun
+                            </label>
                             <div class="col-sm-9">
-                                <select id="t2_coa_2nd" class="form-control ">
+                                <select id="t2_coa_2nd" class="form-control">
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -477,26 +613,39 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-3 col-form-label text-left ">Jenis Transaksi</label>
+                            <label class="col-sm-3 col-form-label text-left"
+                                >Jenis Transaksi</label
+                            >
                             <div class="col-sm-9">
-                                <select id="t2_jenis_transaksi" class="form-control ">
+                                <select
+                                    id="t2_jenis_transaksi"
+                                    class="form-control"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="row">
                     <!-- Basic Header fix table start -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlock">
-                                    <table id="fix-header" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlock"
+                                >
+                                    <table
+                                        id="fix-header"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
-                                            <tr id="tableHeader" class="text-white">
+                                            <tr
+                                                id="tableHeader"
+                                                class="text-white"
+                                            >
                                                 <td>No</td>
                                                 <td>Tanggal Transaksi</td>
                                                 <td>Jurnal</td>
@@ -508,43 +657,53 @@
                                                 <td>Approve</td>
                                                 <td>Verify</td>-->
                                                 <td>Action</td>
-
                                             </tr>
                                         </thead>
-                                        <tbody id="tableResult">
-
-                                        </tbody>
+                                        <tbody id="tableResult"></tbody>
                                     </table>
                                 </div>
-                                <span class="text-right font-weight-bold">Core Total Real Amount: </span> <span
-                                    class="text-right font-weight-bold" id="total_real_amount">0</span>
+                                <span class="text-right font-weight-bold"
+                                    >Core Total Real Amount:
+                                </span>
+                                <span
+                                    class="text-right font-weight-bold"
+                                    id="total_real_amount"
+                                    >0</span
+                                >
                             </div>
                         </div>
                         <!-- Basic Header fix table end -->
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
 <!-- The Modal -->
-<div class="modal " id="modalAnggota">
+<div class="modal" id="modalAnggota">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-success ">
-                <span style="font-weight:bold ;">Cari Anggota </span> <button type="button" class="close"
-                    data-dismiss="modal">&times;</button>
+            <div class="modal-header bg-success">
+                <span style="font-weight: bold">Cari Anggota </span>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Nama Koperasi</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Nama Koperasi</label
+                            >
                             <div class="col-sm-8">
-                                <select id="modal_nama_koperasi" class="form-control " style="width:auto">
+                                <select
+                                    id="modal_nama_koperasi"
+                                    class="form-control"
+                                    style="width: auto"
+                                >
                                     <option value="">Chosee..</option>
                                 </select>
                             </div>
@@ -553,14 +712,28 @@
 
                     <div class="col-6 col-sm-6">
                         <div class="form-group row frm_grp">
-                            <label class="col-sm-4 col-form-label text-right ">Nama Anggota</label>
+                            <label class="col-sm-4 col-form-label text-right"
+                                >Nama Anggota</label
+                            >
                             <div class="col-sm-8">
-                                <div class="input-group" style="margin-bottom: 0px !important;">
-                                    <input type="text" style="width:50%;" id="modal_namaAnggota"
-                                        class="form-control "> &nbsp;
+                                <div
+                                    class="input-group"
+                                    style="margin-bottom: 0px !important"
+                                >
+                                    <input
+                                        type="text"
+                                        style="width: 50%"
+                                        id="modal_namaAnggota"
+                                        class="form-control"
+                                    />
+                                    &nbsp;
                                     <div class="input-group-append">
-                                        <button onClick="searchAnggota();" class="input-group-text bg-success ">
-                                            <i class="fa fa-search "></i></button>
+                                        <button
+                                            onClick="searchAnggota();"
+                                            class="input-group-text bg-success"
+                                        >
+                                            <i class="fa fa-search"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -571,39 +744,43 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-block">
-                                <div class="dt-responsive table-responsive" id="cardBlockModal">
-                                    <table id="fix-header-modal" class="table table-striped table-bordered nowrap">
+                                <div
+                                    class="dt-responsive table-responsive"
+                                    id="cardBlockModal"
+                                >
+                                    <table
+                                        id="fix-header-modal"
+                                        class="table table-striped table-bordered nowrap"
+                                    >
                                         <thead class="bg-rki">
                                             <tr id="modalHeader">
-                                                <td>No Anggota </td>
+                                                <td>No Anggota</td>
                                                 <td>Id</td>
                                                 <td>Nama Anggota</td>
                                                 <td>No KTP</td>
                                             </tr>
                                         </thead>
-                                        <tbody id="modalResult">
-
-                                        </tbody>
+                                        <tbody id="modalResult"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
-
 <!-- The Modal -->
-<div class="modal " id="modalUpload">
+<div class="modal" id="modalUpload">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-success ">
-                <span style="font-weight:bold ;">Upload Bukti Transaksi </span> <button type="button" class="close"
-                    data-dismiss="modal">&times;</button>
+            <div class="modal-header bg-success">
+                <span style="font-weight: bold">Upload Bukti Transaksi </span>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
             <!-- Modal body -->
             <div class="modal-body">
@@ -612,35 +789,67 @@
                         <div class="form-group row frm_grp">
                             <div class="col-sm-12">
                                 <span id="modalUploadKodeTransaksiText"></span>
-                                <input type="hidden" id="modalUploadKodeTransaksi" class="form-control " readonly>
+                                <input
+                                    type="hidden"
+                                    id="modalUploadKodeTransaksi"
+                                    class="form-control"
+                                    readonly
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <form id="uploadImage" runat="server" method="post" enctype="multipart/form-data">
+                        <form
+                            id="uploadImage"
+                            runat="server"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
                             Upload Bukti Transaksi
-                            <br>
-                            <input type="file" accept=".jpg" class="form-control" id="fileToUpload" name="fileToUpload"
-                                onchange="readURL(this);">
+                            <br />
+                            <input
+                                type="file"
+                                accept=".jpg"
+                                class="form-control"
+                                id="fileToUpload"
+                                name="fileToUpload"
+                                onchange="readURL(this);"
+                            />
 
-                            <br>
+                            <br />
                             <center>
-                                <img src="../template/files/assets/images/admin.jpg" id="t2_image_bukti" class="rounded"
-                                    alt="Upload Your Image Maksimal 500 Kb" title=" Upload Your Image Maksimal 500 Kb"
-                                    width="304" height="300">
+                                <img
+                                    src="../template/files/assets/images/admin.jpg"
+                                    id="t2_image_bukti"
+                                    class="rounded"
+                                    alt="Upload Your Image Maksimal 500 Kb"
+                                    title=" Upload Your Image Maksimal 500 Kb"
+                                    width="304"
+                                    height="300"
+                                />
                             </center>
                         </form>
                     </div>
                     <div class="col-12 text-center mt-2">
-                        <button onclick="_app('NOTAPPROVE')" class='btn btn-success' title='APPROVE'
-                            id="modalUploadKodeTransaksiButton"><i style='font-size:20px;margin-right:0 !important;'
-                                class='fa fa-check'></i>
-                            APPROVE</button>
+                        <button
+                            onclick="_app('NOTAPPROVE')"
+                            class="btn btn-success"
+                            title="APPROVE"
+                            id="modalUploadKodeTransaksiButton"
+                        >
+                            <i
+                                style="
+                                    font-size: 20px;
+                                    margin-right: 0 !important;
+                                "
+                                class="fa fa-check"
+                            ></i>
+                            APPROVE
+                        </button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
