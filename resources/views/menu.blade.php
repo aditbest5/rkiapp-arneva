@@ -48,7 +48,7 @@ if (!isset($_SESSION['userId'])) {
         ";
         } ?>
 
-        {{-- @include('include') --}}
+        @include('include')
     </head>
 
     <body onLoad="getDonut();">
