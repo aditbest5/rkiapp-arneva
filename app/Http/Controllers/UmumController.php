@@ -13,7 +13,7 @@ class UmumController extends Controller
 
     public function run(Request $request)
     {
-        $cmd = $request->get("cmd");
+        $cmd = $request->input("cmd");
         if ($cmd == "selLogin") {
             $result = $this->selLogin($request, $cmd);
         } else if ($cmd == "uploadImage") {
@@ -33,8 +33,8 @@ class UmumController extends Controller
         header('Access-Control-Allow-Methods: GET, POST');
 
         header("Access-Control-Allow-Headers: X-Requested-With");
-        $user = $request->get("userId");
-        $userPwd = $request->get("userPwd");
+        $user = $request->input("userId");
+        $userPwd = $request->input("userPwd");
         $sql = "
         SELECT a.* ,b.nama_koperasi,b.idx,c.nama_toko,b.noAccount
         from mst_user a
@@ -90,8 +90,8 @@ class UmumController extends Controller
         header('Access-Control-Allow-Methods: GET, POST');
 
         header("Access-Control-Allow-Headers: X-Requested-With");
-        $id = $request->get("idx");
-        $yy = $request->get("yy");
+        $id = $request->input("idx");
+        $yy = $request->input("yy");
         //
         return 'irsan' . $id . "   " . $yy;
     }
