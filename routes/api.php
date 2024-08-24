@@ -17,6 +17,6 @@ use App\Http\Controllers\UmumController;
 
 Route::post('umum', [UmumController::class, 'run']);
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
