@@ -90,7 +90,7 @@
                 return;
             }
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                 {
                     cmd: "appSimpanan",
                     userIns: $("#login_userId").val(),
@@ -186,7 +186,7 @@
         //alert("tab 2");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+            "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
             {
                 cmd: "selTrSimpan",
                 tgl_awal: $("#t1_tgl_awal").val(),

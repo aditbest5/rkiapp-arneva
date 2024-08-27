@@ -113,7 +113,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+                "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
                 {
                     cmd: "selNomorSimpan",
                 },
@@ -149,7 +149,7 @@
                 if (result.isConfirmed) {
                     swalStartLoading();
                     $.post(
-                        "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                        "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
                         {
                             cmd: "updAppTrSimpan",
                             userIns: $("#login_userId").val(),
@@ -200,7 +200,7 @@
                 if (result.isConfirmed) {
                     swalStartLoading();
                     $.post(
-                        "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                        "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
                         {
                             cmd: "updVerifyTrSimpan",
                             userIns: $("#login_userId").val(),
@@ -257,7 +257,7 @@
         swalStartLoading();
         var total_real_amount = 0;
         $.post(
-            "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+            "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
             {
                 cmd: cmd,
                 tgl_awal: tgl_awal,
@@ -405,7 +405,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                    "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
                     {
                         cmd: "InsTrSimpan",
                         userIns: userIns,

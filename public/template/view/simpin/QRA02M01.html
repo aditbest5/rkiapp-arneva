@@ -2,7 +2,7 @@
     var isiTable;
 
     function setDefault() {
-        //salert("Tidak Ada Data",'warning','Warning'); 
+        //salert("Tidak Ada Data",'warning','Warning');
     }
 
     function clearForm() {
@@ -48,7 +48,7 @@
             salert("Data Sudah Di Terima ! \n Tidak Dapat Di Update", 'warning', 'Warning');
         } else {
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
+            $.post("https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
                 cmd: "updPengajuan",
                 userIns: $('#login_userId').val(),
                 sts: "000002",
@@ -79,7 +79,7 @@
             salert("Data Sudah Di Terima ! \n Tidak Dapat Di Update", 'warning', 'Warning');
         } else {
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
+            $.post("https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi", {
                 cmd: "updPengajuan",
                 userIns: $('#login_userId').val(),
                 sts: "000003",
@@ -122,7 +122,7 @@
 
     function _list(no_pengajuan) {
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
+        $.post("https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
             cmd: "selAngsuranDetail",
             kop_id: $('#login_kop_id').val(),
             noPengajuan: no_pengajuan,
@@ -207,7 +207,7 @@
 
         //alert("tab 2");
         swalStartLoading();
-        $.post("https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
+        $.post("https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi", {
             cmd: "selPengajuan",
             tgl_awal: $('#t1_tgl_awal').val(),
             tgl_akhir: $('#t1_tgl_akhir').val(),
@@ -295,7 +295,7 @@
                 salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
             } else {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
+                $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
                     cmd: "InsTrSimpan",
                     userIns: userIns,
                     kode_transaksi: kode_transaksi,

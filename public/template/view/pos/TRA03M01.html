@@ -27,7 +27,7 @@
             if (barcode == "") {
             } else {
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                    "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
                     {
                         cmd: "insPos",
                         userIns: $("#login_userId").val(),
@@ -120,7 +120,7 @@
     function _del(param) {
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+            "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
             {
                 cmd: "delPos",
                 kop_id: $("#login_kop_id").val(),
@@ -155,7 +155,7 @@
     function _delAll() {
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+            "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
             {
                 cmd: "delPosAll",
                 kop_id: $("#login_kop_id").val(),
@@ -203,7 +203,7 @@
         //alert("tab 2");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCodeDetail",
                 kop_id: $("#login_kop_id").val(),
@@ -304,7 +304,7 @@
 
     function fnInquery() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+            "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
             {
                 cmd: "selPosBarcode",
                 userIns: $("#login_userId").val(),

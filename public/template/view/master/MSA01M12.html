@@ -38,7 +38,7 @@
             //alert("tab 2");
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+                "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
                 {
                     cmd: "selClosing",
                     kop_id: $("#login_kop_id").val(),
@@ -102,7 +102,7 @@
         //alert("tab 2");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+            "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
             {
                 cmd: "selClosingByDate",
                 kop_id: $("#login_kop_id").val(),

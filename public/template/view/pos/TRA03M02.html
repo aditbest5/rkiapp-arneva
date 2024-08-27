@@ -24,7 +24,7 @@
     var strukDtl = "";
 
     function posSetting() {
-        $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+        $.post("https://api-rki.rkicoop.co.id/api/pos/QueryPos", {
             cmd: "selPosDefaultSetting",
             kop_id: $("#login_kop_id").val()
         },
@@ -69,7 +69,7 @@
         var imageRefresh = y.getFullYear() + "" + y.getMonth() + "" + y.getDate() + "" + y.getHours() + "" + y.getMinutes() + "" + y.getSeconds() + y.getMilliseconds();
         var itemNm = "";
         if (kategori == "") { itemNm = $("#textAllSearch").val() }
-        $.post("https://backendrki.rkicoop.co.id/api/pos/QueryPos", {
+        $.post("https://api-rki.rkicoop.co.id/api/pos/QueryPos", {
             cmd: "selAllItem",
             kop_id: $("#login_kop_id").val(),
             toko_id: $("#login_toko_id").val(),
@@ -279,7 +279,7 @@
         var d = new Date();
         var mnth = parseInt(d.getMonth()) + 1;
         var nowe = d.getFullYear() + "-" + mnth + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds();
-        $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
+        $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
             cmd: "insPosSimpleMaster",
             userIns: $('#login_userId').val(),
             kop_id: $("#login_kop_id").val(),
@@ -392,7 +392,7 @@
         var d = new Date();
         var mnth = parseInt(d.getMonth()) + 1;
         var nowe = d.getFullYear() + "-" + mnth + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-        $.post("https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos", {
+        $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
             cmd: "insPosSimple",
             userIns: $('#login_userId').val(),
             kop_id: $("#login_kop_id").val(),
@@ -970,7 +970,7 @@
                             Pembayaran
                         </button>
                         <iframe id="printf" name="printf" style="display:none;"></iframe>
-                        <!-- test print 
+                        <!-- test print
                         <button class="btn btn-success " id="modalTranSubmit" style="font-weight: bold;width:100%;"
                             onclick="printStruck()">print
                             Pembayaran

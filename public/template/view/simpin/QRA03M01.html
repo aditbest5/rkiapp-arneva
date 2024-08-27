@@ -10,7 +10,7 @@
     function selCoaL2() {
         $("#t2_coa_2nd").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCoaL2",
                 kop_id: $("#login_kop_id").val(),
@@ -40,7 +40,7 @@
     function selJeniTransaksi() {
         $("#t2_jenis_transaksi").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selJenisTranKas",
                 kop_id: $("#login_kop_id").val(),
@@ -215,7 +215,7 @@
                 return;
             }
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                 {
                     cmd: "appTran",
                     userIns: $("#login_userId").val(),
@@ -302,7 +302,7 @@
         swalStartLoading();
         var total_real_amount = 0;
         $.post(
-            "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+            "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
             {
                 cmd: "selKasTransaksi",
                 tgl_awal: tgl_awal,
@@ -427,7 +427,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/pos/InsUpDelPos",
+                    "https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos",
                     {
                         cmd: "InsTrSimpan",
                         userIns: userIns,

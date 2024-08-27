@@ -25,7 +25,7 @@
     function selCoaL2() {
         $("#t2_coa_2nd").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCoaL2",
                 kop_id: $("#login_kop_id").val(),
@@ -55,7 +55,7 @@
     function selJenisSimpanan() {
         $("#t2_jenis_simpanan").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selJenisSimpanan",
                 kop_id: $("#login_kop_id").val(),
@@ -84,7 +84,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -131,7 +131,7 @@
             return;
         } else {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selSaldoSimpanan",
                     kop_id: $("#login_kop_id").val(),
@@ -173,7 +173,7 @@
             $('#modalResult').html("Silahkan Pilih Koperasi Lebih Dahulu ! ");
         } else {*/
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selAnggota",
                 kop_id: $("#login_kop_id").val(),
@@ -251,7 +251,7 @@
         } else {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                 {
                     cmd: "appSimpanan",
                     userIns: $("#login_userId").val(),
@@ -335,7 +335,7 @@
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selNomorSimpan",
                 },
@@ -365,7 +365,7 @@
             //alert("tab 2");
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selTrSimpan",
                     tgl_awal: $("#t1_tgl_awal").val(),
@@ -501,7 +501,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                    "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                     {
                         cmd: "InsTrSimpan",
                         userIns: userIns,
@@ -965,7 +965,7 @@
                         >
                             <i class="fa fa-search"></i>
                         </button>
-                        <!--    
+                        <!--
                         <div class="form-group row frm_grp">
                             <label class="col-sm-4 col-form-label text-left txt_hris">Nama Anggota</label>
                             <div class="col-sm-8">

@@ -22,7 +22,7 @@
 
     function koperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -68,7 +68,7 @@
 
     function allCode() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selAllCodeAnggota",
             },
@@ -194,7 +194,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selAnggotaNomor",
                 },
@@ -388,7 +388,7 @@
             if (result.isConfirmed) {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "delAnggota",
                         no_anggota: no_anggota,
@@ -437,7 +437,7 @@
         }
 
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selAnggota",
                 kop_id: no_koperasi,
@@ -667,7 +667,7 @@
                 if (pass == cfmPass) {
                     swalStartLoading();
                     $.post(
-                        "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                        "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                         {
                             cmd: "insAnggota",
                             userIns: userIns,

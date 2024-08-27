@@ -34,7 +34,7 @@
 
     function searchBarang() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selBarang",
                 kop_id: $("#login_kop_id").val(),
@@ -153,7 +153,7 @@
     function _del(param) {
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
             {
                 cmd: "delKoperasi",
                 idx: param[0],
@@ -187,7 +187,7 @@
         $("#tab_entry").text("Tambah Data");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selBarcode",
                 kop_id: $("#login_kop_id").val(),
@@ -270,7 +270,7 @@
         var barcode = $("#t2_barcode").val();
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selBarcodeDetail",
                 kop_id: $("#login_kop_id").val(),
@@ -358,7 +358,7 @@
             if (kode_barang != "") {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "insBarangRutin",
                         kop_id: kop_id,

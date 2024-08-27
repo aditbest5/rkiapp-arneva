@@ -359,7 +359,7 @@
         hideModal();
         if (Biller == "PLN_PREPAID") {
             $.ajax({
-                url: "https://backendrki.rkicoop.co.id/api/fello",
+                url: "https://api-rki.rkicoop.co.id/api/fello",
                 type: "POST",
                 data: {
                     cmd: "felloPlnReversal",
@@ -374,7 +374,7 @@
                     } else {
                         //Transaksi Advice
                         $.ajax({
-                            url: "https://backendrki.rkicoop.co.id/api/fello",
+                            url: "https://api-rki.rkicoop.co.id/api/fello",
                             type: "POST",
                             data: {
                                 cmd: "felloPlnReversalExecute",
@@ -432,7 +432,7 @@
                                         //Repeat Advice Sama Dengan Advice
                                         if (data["bit39"] == "18") {
                                             $.ajax({
-                                                url: "https://backendrki.rkicoop.co.id/api/fello",
+                                                url: "https://api-rki.rkicoop.co.id/api/fello",
                                                 type: "POST",
                                                 data: {
                                                     cmd: "felloMultiBillerReversalExecute",
@@ -531,7 +531,7 @@
             });
         } else {
             $.ajax({
-                url: "https://backendrki.rkicoop.co.id/api/fello",
+                url: "https://api-rki.rkicoop.co.id/api/fello",
                 type: "POST",
                 data: {
                     cmd: "felloMultiBillerReversal",
@@ -546,7 +546,7 @@
                     } else {
                         //Transaksi Advice
                         $.ajax({
-                            url: "https://backendrki.rkicoop.co.id/api/fello",
+                            url: "https://api-rki.rkicoop.co.id/api/fello",
                             type: "POST",
                             data: {
                                 cmd: "felloMultiBillerReversalExecute",
@@ -598,7 +598,7 @@
                                         //Repeat Advice Sama Dengan Advice
                                         if (data[39] == "18") {
                                             $.ajax({
-                                                url: "https://backendrki.rkicoop.co.id/api/fello",
+                                                url: "https://api-rki.rkicoop.co.id/api/fello",
                                                 type: "POST",
                                                 data: {
                                                     cmd: "felloMultiBillerReversalExecute",
@@ -702,7 +702,7 @@
 
         if (Biller == "PLN_NONTAGLIST" || Biller == "PLN_POSTPAID") {
             $.ajax({
-                url: "https://backendrki.rkicoop.co.id/api/fello",
+                url: "https://api-rki.rkicoop.co.id/api/fello",
                 type: "POST",
                 data: {
                     cmd: "felloPlnReversal",
@@ -717,7 +717,7 @@
                     } else {
                         //Transaksi Reversal
                         $.ajax({
-                            url: "https://backendrki.rkicoop.co.id/api/fello",
+                            url: "https://api-rki.rkicoop.co.id/api/fello",
                             type: "POST",
                             data: {
                                 cmd: "felloPlnReversalExecute",
@@ -775,7 +775,7 @@
                                         //Repeat Reversal
                                         if (data["bit39"] == "18") {
                                             $.ajax({
-                                                url: "https://backendrki.rkicoop.co.id/api/fello",
+                                                url: "https://api-rki.rkicoop.co.id/api/fello",
                                                 type: "POST",
                                                 data: {
                                                     cmd: "felloPlnReversalExecute",
@@ -877,7 +877,7 @@
             });
         } else {
             $.ajax({
-                url: "https://backendrki.rkicoop.co.id/api/fello",
+                url: "https://api-rki.rkicoop.co.id/api/fello",
                 type: "POST",
                 data: {
                     cmd: "felloMultiBillerReversal",
@@ -891,7 +891,7 @@
                         salert("Tidak Ada Data", "warning", "Warning");
                     } else {
                         $.ajax({
-                            url: "https://backendrki.rkicoop.co.id/api/fello",
+                            url: "https://api-rki.rkicoop.co.id/api/fello",
                             type: "POST",
                             data: {
                                 cmd: "felloMultiBillerReversalExecute",
@@ -943,7 +943,7 @@
                                         //Untuk Reversal Repeat
                                         if (data[39] == "18") {
                                             $.ajax({
-                                                url: "https://backendrki.rkicoop.co.id/api/fello",
+                                                url: "https://api-rki.rkicoop.co.id/api/fello",
                                                 type: "POST",
                                                 data: {
                                                     cmd: "felloMultiBillerReversalExecute",
@@ -1047,7 +1047,7 @@
         if (a[0].className.search("active") > 0) {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+                "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
                 {
                     cmd: "selPpobResult",
                     tgl_awal: $("#t1_tgl_awal").val(),
@@ -1190,7 +1190,7 @@
         } else if (a[1].className.search("active") > 0) {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/pos/QueryPos",
+                "https://api-rki.rkicoop.co.id/api/pos/QueryPos",
                 {
                     cmd: "selPpobMobileResult",
                     tgl_awal: $("#t2_tgl_awal").val(),

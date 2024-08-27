@@ -22,7 +22,7 @@
     }
 
     function selKoperasi() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+        $.post("https://api-rki.rkicoop.co.id/api/master/QueryMaster", {
             cmd: "selKoperasi",
             kop_id: $("#login_kop_id").val()
         }, function (data, status) {
@@ -134,7 +134,7 @@
     }
 
     function searchBarang(idx) {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+        $.post("https://api-rki.rkicoop.co.id/api/master/QueryMaster", {
             cmd: "selBarang",
             toko_id: $("#login_toko_id").val(),
             kop_id: $("#login_kop_id").val()
@@ -167,7 +167,7 @@
     }
 
     function searchSuplier() {
-        $.post("https://backendrki.rkicoop.co.id/api/master/QueryMaster", {
+        $.post("https://api-rki.rkicoop.co.id/api/master/QueryMaster", {
             cmd: "selPembeli",
             toko_id: $("#login_toko_id").val(),
             kop_id: $("#login_kop_id").val(),
@@ -232,7 +232,7 @@
 
 
     function showPodetail(dono, tanggl, suplier) {
-        $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+        $.post("https://api-rki.rkicoop.co.id/api/erp/QueryErp", {
             cmd: "selDoDetail",
             kop_id: $('#login_kop_id').val(),
             do_no: dono
@@ -317,7 +317,7 @@
     function getNumber() {
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
-            $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+            $.post("https://api-rki.rkicoop.co.id/api/erp/QueryErp", {
                 cmd: "selNomorDo"
             }, function (data, status) {
                 const myArr = JSON.parse(data);
@@ -343,7 +343,7 @@
             salert("Not Setting Tab 2!", 'warning', 'Warning');
         } else if (a[1].className.search("active") > 0) {
             swalStartLoading();
-            $.post("https://backendrki.rkicoop.co.id/api/erp/QueryErp", {
+            $.post("https://api-rki.rkicoop.co.id/api/erp/QueryErp", {
                 cmd: "selDoMaster",
                 kop_id: $('#login_kop_id').val(),
                 tgl_awal: $('#t2_tgl_awal').val(),
@@ -395,7 +395,7 @@
                 salert("Harap Tekan Tombol New Terlebih Dahulu !", 'error', 'Error');
             } else {
                 swalStartLoading();
-                $.post("https://backendrki.rkicoop.co.id/api/erp/InsUpDelErp", {
+                $.post("https://api-rki.rkicoop.co.id/api/erp/InsUpDelErp", {
                     cmd: "InsDo",
                     userIns: $('#login_userId').val(),
                     kop_id: $('#login_kop_id').val(),

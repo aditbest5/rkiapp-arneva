@@ -64,7 +64,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selNomorKodeBarang",
                 },
@@ -122,7 +122,7 @@
 
     function _del(param) {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
             {
                 kop_id: $("#login_kop_id").val(),
                 cmd: "delPriceFello",
@@ -175,7 +175,7 @@
         $("#t2_kode_barang").val("");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selPriceFello",
                 kop_id: $("#login_kop_id").val(),
@@ -302,7 +302,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "InsFelloPrice",
                         userIns: $("#login_userId").val(),

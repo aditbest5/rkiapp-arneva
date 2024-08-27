@@ -9,7 +9,7 @@
 
     function selCoa() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCodeDetail",
                 kop_id: $("#login_kop_id").val(),
@@ -53,7 +53,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -108,7 +108,7 @@
         } else {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selCoaL2",
                     kop_id: kop_id,
@@ -193,7 +193,7 @@
         } else {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selCoaL3",
                     kop_id: kop_id,
@@ -291,7 +291,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selUserNomorCoa",
                     kop_id: $("#login_kop_id").val(),
@@ -319,7 +319,7 @@
             });
         } else if (a[2].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selUserNomorCoa2nd",
                     kop_id: $("#login_kop_id").val(),
@@ -348,7 +348,7 @@
             });
         } else if (a[3].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selUserNomorCoa3rd",
                     kop_id: $("#login_kop_id").val(),
@@ -447,7 +447,7 @@
             if (result.isConfirmed) {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                     {
                         cmd: "delUser",
                         userId: userId,
@@ -494,7 +494,7 @@
             }
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selAkun",
                     kop_id: kop_id,
@@ -600,7 +600,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "insGroupCoa",
                         userIns: userIns,
@@ -663,7 +663,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "insGroupCoaL2",
                         userIns: userIns,
@@ -728,7 +728,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "insGroupCoaL3",
                         userIns: userIns,

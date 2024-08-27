@@ -25,7 +25,7 @@
     function selCoaL2() {
         $("#t2_coa_2nd").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCoaL2",
                 kop_id: $("#login_kop_id").val(),
@@ -55,7 +55,7 @@
     function selJeniTransaksi() {
         $("#t2_jenis_transaksi").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selJenisTranKas",
                 kop_id: $("#login_kop_id").val(),
@@ -84,7 +84,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -155,7 +155,7 @@
         } else {
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                 {
                     cmd: "appTran",
                     userIns: $("#login_userId").val(),
@@ -226,7 +226,7 @@
         var a = document.getElementsByName("tab-idx");
         if (a[0].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selNomorTransaksi",
                     tipe: "AR",
@@ -257,7 +257,7 @@
             //alert("tab 2");
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selTrTran",
                     tgl_awal: $("#t1_tgl_awal").val(),
@@ -379,7 +379,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                    "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                     {
                         cmd: "InsTrKas",
                         userIns: userIns,

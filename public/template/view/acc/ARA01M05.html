@@ -12,7 +12,7 @@
     function selCoaL2() {
         $("#t2_coa_2nd").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCoaL2",
                 kop_id: $("#login_kop_id").val(),
@@ -42,7 +42,7 @@
     function selJeniTransaksi() {
         $("#t2_jenis_transaksi").empty();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selJenisTranKas",
                 kop_id: $("#login_kop_id").val(),
@@ -92,7 +92,7 @@
                 swalStartLoading();
                 var total_real_amount = 0;
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                    "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                     {
                         cmd: "selShu",
                         tgl_awal: tgl_awal,
@@ -188,7 +188,7 @@
                 swalStartLoading();
                 var total_real_amount = 0;
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                    "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                     {
                         cmd: "selShuAnggota",
                         tgl_awal: tgl_awal,

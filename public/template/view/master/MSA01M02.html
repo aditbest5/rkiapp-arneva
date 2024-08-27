@@ -9,7 +9,7 @@
 
     function koperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -58,7 +58,7 @@
         }
         //alert(param[2]);
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCodeDetail",
                 kop_id: kopid,
@@ -195,7 +195,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selCodeDetailNomor",
                     kop_id: $("#login_kop_id").val(),
@@ -340,7 +340,7 @@
         var mstCode = $("#t2_masterCode").val();
         var param2 = [mstCode, ""];
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
             {
                 cmd: "delCodeDetail",
                 masterCode: param[1],
@@ -379,7 +379,7 @@
             //alert("tab 2");
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selCodeMaster",
                 },
@@ -539,7 +539,7 @@
 
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "InsCodeDetail",
                         userIns: userIns,

@@ -14,7 +14,7 @@
 
     function tipeUser() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selTipeUser",
                 kop_id: $("#login_kop_id").val(),
@@ -51,7 +51,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -91,7 +91,7 @@
             .empty()
             .append('<option   value="" >Chosee..</option>');
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selToko",
                 kop_id: kop_id,
@@ -148,7 +148,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+                "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
                 {
                     cmd: "selUserNomor",
                 },
@@ -210,7 +210,7 @@
     function _del(param) {
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+            "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
             {
                 cmd: "delUser",
                 userId: param[0],
@@ -248,7 +248,7 @@
         var tipeUser = $("#tipeUser").val();
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selUser",
                 tipeUser: tipeUser,
@@ -359,7 +359,7 @@
             if (userPwd == cfmPass) {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/master/InsUpDelMaster",
+                    "https://api-rki.rkicoop.co.id/api/master/InsUpDelMaster",
                     {
                         cmd: "InsUser",
                         userIns: userIns,
@@ -443,10 +443,10 @@
                 downloadExcell("#tableHeader", isiTable);
             } else if (a[1].className.search("active") > 0) {
                 alert("Not Setting Tab 1!");
-    
+
             }
         }
-    
+
         function openAll() {
             var a = document.getElementsByName("tab-idx");
             if (a[0].className.search("active") > 0) {
@@ -456,7 +456,7 @@
                 alert("Not Setting Tab 1!");
             }
         }
-    
+
         function gridAll() {
             var a = document.getElementsByName("tab-idx");
             if (a[0].className.search("active") > 0) {

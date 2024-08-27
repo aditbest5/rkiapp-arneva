@@ -61,7 +61,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -94,7 +94,7 @@
         } else {
             */
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selAnggota",
                 kop_id: $("#modal_nama_koperasi").val(),
@@ -192,7 +192,7 @@
         var nomor_pinjaman = $("#t2_nomor_pinjaman").val();
         var nomor_pengajuan = $("#t2_nomor_pengajuan").val();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+            "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
             {
                 cmd: "updAngsuran",
                 userIns: $("#login_userId").val(),
@@ -348,7 +348,7 @@
             }
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selAngsuran",
                     tgl_awal: $("#t1_tgl_awal").val(),

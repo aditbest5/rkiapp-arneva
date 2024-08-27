@@ -23,7 +23,7 @@
 
     function selDefault() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+            "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
             {
                 cmd: "selDefaultPengajuan",
                 kop_id: $("#login_kop_id").val(),
@@ -71,7 +71,7 @@
 
     function selKoperasi() {
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selKoperasi",
                 kop_id: $("#login_kop_id").val(),
@@ -152,7 +152,7 @@
         } else {
             */
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selAnggota",
                 kop_id: $("#login_kop_id").val(),
@@ -215,7 +215,7 @@
         //alert("tab 2");
         swalStartLoading();
         $.post(
-            "https://backendrki.rkicoop.co.id/api/master/QueryMaster",
+            "https://api-rki.rkicoop.co.id/api/master/QueryMaster",
             {
                 cmd: "selCodeDetail",
                 kop_id: $("#login_kop_id").val(),
@@ -325,7 +325,7 @@
             salert("Not Setting Tab 1!", "warning", "Warning");
         } else if (a[1].className.search("active") > 0) {
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selNomorPengajuan",
                 },
@@ -351,7 +351,7 @@
             //alert("tab 2");
             swalStartLoading();
             $.post(
-                "https://backendrki.rkicoop.co.id/api/koperasi/QueryKoperasi",
+                "https://api-rki.rkicoop.co.id/api/koperasi/QueryKoperasi",
                 {
                     cmd: "selPengajuan",
                     tgl_awal: $("#t1_tgl_awal").val(),
@@ -507,7 +507,7 @@
             } else {
                 swalStartLoading();
                 $.post(
-                    "https://backendrki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
+                    "https://api-rki.rkicoop.co.id/api/koperasi/InsUpDelKoperasi",
                     {
                         cmd: "InsTrPengajuanPinjaman",
                         userIns: userIns,
