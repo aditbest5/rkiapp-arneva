@@ -264,65 +264,186 @@
         var ket = $('#modalTranReason').val();
         var nomor_meja = $('#nomor_meja').val();
 
-        if ($('#modalTranJumlahUang').val() == "" || $('#modalTranJumlahUang').val() == 0) {
-            alert("Harap Isi Jumlah Uang Dahulu !!");
-            return;
-        }
+        var items = [];
+        $('#itemPos .row').each(function () {
+            var name = $(this).find('.col-5').text().trim();
+            var quantity = parseInt($(this).find('.col-1').text().trim());
+            var price = parseInt($(this).find('.col-2').text().trim().replace(/\D/g, ''));
 
-        if (parseInt(dibayar) - parseInt(real_amount) < 0) {
-            alert("Uang Yang Dibayarkan Masih Kurang ! \n Tolong Cek Jumlah Uang Dulu");
-            return;
-        }
-
-        swalStartLoading();
-
+            // Hanya tambahkan item jika name, quantity, dan price adalah nilai yang valid
+            if (name && !isNaN(quantity) && !isNaN(price)) {
+                items.push({ name: name, quantity: quantity, category: "Food", "url": "www.rkiapp.com", price: price });
+            }
+        });
+        console.log(items)
         var d = new Date();
         var mnth = parseInt(d.getMonth()) + 1;
         var nowe = d.getFullYear() + "-" + mnth + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds();
-        $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
-            cmd: "insPosSimpleMaster",
-            userIns: $('#login_userId').val(),
-            kop_id: $("#login_kop_id").val(),
-            toko_id: $("#login_toko_id").val(),
-            noAnngota: $("#login_userId").val(),
-            pk: pktr,
-            nama_customer: nama_customer,
-            amount: amount,
-            ppn: ppn,
-            discount: discount,
-            real_amount: real_amount,
-            dibayar: dibayar,
-            kembalian: kembalian,
-            total_item: total_item,
-            tipe_bayar: tipe_bayar,
-            ket: ket,
-            nomor_meja: nomor_meja,
-            nowe: nowe
-        },
-            function (data, status) {
-                //alert("Data: " + data + "\nStatus: " + status);
-                var c = 1;
-                var b = "";
-                const myArr = JSON.parse(data);
-                //console.log(myArr.length);
-                if (myArr["sts"] == "OK") {
-                    hideModalTran();
-                    //salert("Save Complete !", 'success', 'Success');
-                    if ($("#strukYn").val() == "000001") {
-                        printStruck(real_amount, dibayar, kembalian, myArr["msg"]);
-                    } else if ($("#strukYn").val() == "000002") {
-                        printStruck(real_amount, dibayar, kembalian, myArr["msg"]);
+        if (tipe_bayar == '000007') {
+            swalStartLoading();
+            $.post("https://rkiapp.com/api/pos/InsUpDelPos", {
+                cmd: "insPosSimpleMaster",
+                userIns: $('#login_userId').val(),
+                kop_id: $("#login_kop_id").val(),
+                pk: pktr,
+                nama_customer: nama_customer,
+                amount: amount,
+                ppn: ppn,
+                discount: discount,
+                real_amount: real_amount,
+                dibayar: dibayar,
+                kembalian: kembalian,
+                total_item: total_item,
+                tipe_bayar: tipe_bayar,
+                ket: ket,
+                nowe: nowe,
+                toko_id: $("#login_toko_id").val(),
+                noAnngota: $('#login_userId').val(),
+                nomor_meja: 1,
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    //console.log(myArr.length);
+                    if (myArr["sts"] == "OK") {
+                        hideModalTran();
+                        //salert("Save Complete !", 'success', 'Success');
+                        $.ajax({
+                            url: "https://xendit-api.arnevats.com/v1/api/xendit/create-payment",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                "amount": real_amount,
+                                "fees": [
+                                    {
+                                        "type": "ADMIN",
+                                        "value": 5000
+                                    }
+                                ],
+                                'success_redirect_url': 'https://rkiapp.com',
+                                'failure_redirect_url': 'https://rkiapp.com',
+                                "customer": {
+                                    "given_names": "John",
+                                    "surname": "Doe",
+                                    "email": "johndoe@example.com",
+                                    "mobile_number": "+6287774441111",
+                                    "addresses": [
+                                        {
+                                            "city": "Jakarta Selatan",
+                                            "country": "Indonesia",
+                                            "postal_code": "12345",
+                                            "state": "Daerah Khusus Ibukota Jakarta",
+                                            "street_line1": "Jalan Makan",
+                                            "street_line2": "Kecamatan Kebayoran Baru"
+                                        }
+                                    ]
+                                },
+                                "description": "Pembayaran dengan Xendit",
+                                "currency": "IDR",
+                                "items": items,
+                                "metadata": {
+                                    "userIns": $('#login_userId').val().toString(),
+                                    "kop_id": $("#login_kop_id").val().toString(),
+                                    "pk": pktr.toString(),
+                                    "nama_customer": nama_customer.toString(),
+                                    "amount": amount.toString(),
+                                    "ppn": ppn.toString(),
+                                    "discount": discount.toString(),
+                                    "real_amount": real_amount.toString(),
+                                    "dibayar": dibayar.toString(),
+                                    "kembalian": kembalian.toString(),
+                                    "total_item": total_item.toString(),
+                                    "tipe_bayar": tipe_bayar.toString(),
+                                    "ket": ket.toString(),
+                                    "nowe": nowe.toString()
+                                }
+
+                            }),
+                            success: function (data, status) {
+                                console.log(data, status);
+                                var url = data.invoiceUrl;
+                                window.location.href = url;
+                                swalFinishLoading();
+
+                            },
+                            error: function (e) {
+                                console.log(e);
+                                // Handle error here
+                                swalFinishLoading();
+                            }
+                        });
+                    } else {
+                        swalFinishLoading();
+                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
                     }
-                    salertFunction(myArr["desc"], 'success', 'Success', "cancelBill", "");
-                } else {
+                }).fail(function (e) {
+                    console.log(e);
+                    // Handle error here
                     swalFinishLoading();
-                    salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
-                }
-            }).fail(function (e) {
-                console.log(e);
-                // Handle error here
-                swalFinishLoading();
-            });
+                });
+            $('#totalBelanjaVal').prop('disabled', true);
+
+        }else {
+
+            if ($('#modalTranJumlahUang').val() == "" || $('#modalTranJumlahUang').val() == 0) {
+                alert("Harap Isi Jumlah Uang Dahulu !!");
+                return;
+            }
+
+            if (parseInt(dibayar) - parseInt(real_amount) < 0) {
+                alert("Uang Yang Dibayarkan Masih Kurang ! \n Tolong Cek Jumlah Uang Dulu");
+                return;
+            }
+            swalStartLoading();
+
+            $.post("https://rkiapp.com/api/pos/InsUpDelPos", {
+                cmd: "insPosSimpleMaster",
+                userIns: $('#login_userId').val(),
+                kop_id: $("#login_kop_id").val(),
+                pk: pktr,
+                nama_customer: nama_customer,
+                amount: amount,
+                ppn: ppn,
+                discount: discount,
+                real_amount: real_amount,
+                dibayar: dibayar,
+                kembalian: kembalian,
+                total_item: total_item,
+                tipe_bayar: tipe_bayar,
+                ket: ket,
+                nowe: nowe,
+                toko_id: $("#login_toko_id").val(),
+                noAnngota: $('#login_userId').val(),
+                nomor_meja: 1,
+            },
+                function (data, status) {
+                    //alert("Data: " + data + "\nStatus: " + status);
+                    var c = 1;
+                    var b = "";
+                    const myArr = JSON.parse(data);
+                    //console.log(myArr.length);
+                    if (myArr["sts"] == "OK") {
+                        hideModalTran();
+                        //salert("Save Complete !", 'success', 'Success');
+                        if ($("#strukYn").val() == "000001") {
+                            printStruck(real_amount, dibayar, kembalian, myArr["msg"]);
+                        } else if ($("#strukYn").val() == "000002") {
+                            printStruck(real_amount, dibayar, kembalian, myArr["msg"]);
+                        }
+                        salertFunction(myArr["desc"], 'success', 'Success', "cancelBill", "");
+                    } else {
+                        swalFinishLoading();
+                        salert("Error ! " + myArr["desc"] + "\n" + myArr["msg"], 'error', 'Error');
+                    }
+                }).fail(function (e) {
+                    console.log(e);
+                    // Handle error here
+                    swalFinishLoading();
+                });
+        }
+
     }
 
 
@@ -925,6 +1046,7 @@
                                 <option value="000004">KARTU KREDIT</option>
                                 <option value="000005">KARTU DEBIT</option>
                                 <option value="000006">VIRTUAL ACCOUNT</option>
+                                <option value="000007">XENDIT</option>
                             </select>
                         </div>
                     </div>
