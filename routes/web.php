@@ -53,10 +53,10 @@ Route::get('/menu', function () {
 
 
 
-// patokan
-Route::get('/Login', [AuthController::class], 'login');
-Route::get('/Register', [AuthController::class], 'register');
-Route::get('/Home', [HomeController::class], 'home');
+// // patokan
+// Route::get('/Login', [AuthController::class], 'login');
+// Route::get('/Register', [AuthController::class], 'register');
+// Route::get('/Home', [HomeController::class], 'home');
 //Route::methodnya('/link/{parameter}',[namaclass::class],'function');
 // Route::get('/umum/{cmd}', [UmumController::class, 'run']);
 //Route::post('/umum/{cmd}', [UmumController::class, 'run']);

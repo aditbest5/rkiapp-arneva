@@ -281,7 +281,7 @@
         var nowe = d.getFullYear() + "-" + mnth + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds();
         if (tipe_bayar == '000007') {
             swalStartLoading();
-            $.post("https://rkiapp.com/api/pos/InsUpDelPos", {
+            $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
                 cmd: "insPosSimpleMaster",
                 userIns: $('#login_userId').val(),
                 kop_id: $("#login_kop_id").val(),
@@ -306,7 +306,7 @@
                     var c = 1;
                     var b = "";
                     const myArr = JSON.parse(data);
-                    //console.log(myArr.length);
+                    console.log(myArr);
                     if (myArr["sts"] == "OK") {
                         hideModalTran();
                         //salert("Save Complete !", 'success', 'Success');
@@ -319,7 +319,7 @@
                                 "fees": [
                                     {
                                         "type": "ADMIN",
-                                        "value": 5000
+                                        "value": 500
                                     }
                                 ],
                                 'success_redirect_url': 'https://rkiapp.com',
@@ -398,7 +398,7 @@
             }
             swalStartLoading();
 
-            $.post("https://rkiapp.com/api/pos/InsUpDelPos", {
+            $.post("https://api-rki.rkicoop.co.id/api/pos/InsUpDelPos", {
                 cmd: "insPosSimpleMaster",
                 userIns: $('#login_userId').val(),
                 kop_id: $("#login_kop_id").val(),
@@ -423,7 +423,7 @@
                     var c = 1;
                     var b = "";
                     const myArr = JSON.parse(data);
-                    //console.log(myArr.length);
+                    console.log(myArr);
                     if (myArr["sts"] == "OK") {
                         hideModalTran();
                         //salert("Save Complete !", 'success', 'Success');
